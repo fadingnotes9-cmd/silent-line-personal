@@ -1,0 +1,21 @@
+{
+  "name": "Kalkulator",
+  "short_name": "Kalkulator",
+  "description": "Kalkulator sederhana untuk perhitungan sehari-hari",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "lang": "id",
+  "categories": ["utilities", "productivity"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

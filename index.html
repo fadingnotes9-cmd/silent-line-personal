@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=ai-legible&utm_source=comment&utm_medium=referral&utm_id=3f4e7541-48bb-4c4b-81cb-2816ff245b3b
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="hosting-provider" content="Netlify">
+<meta name="netlify-deploy" content="https://netlify.new/?utm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=3f4e7541-48bb-4c4b-81cb-2816ff245b3b">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kalkulator">
+<title>Kalkulator</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;user-select:none;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#000;color:#fff;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+body{display:flex;flex-direction:column}
+.display{flex:0 0 26%;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 24px;text-align:right;overflow:hidden}
+.history{font-size:1rem;color:#666;min-height:1.2em;padding-right:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.current{font-size:3.6rem;font-weight:200;letter-spacing:-1px;word-break:break-all;line-height:1.05}
+.keys{flex:1;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(5,1fr);gap:1px;background:#2a2a2a}
+.key{background:#1c1c1c;color:#fff;border:none;font-size:1.7rem;font-weight:300;cursor:pointer;font-family:inherit;transition:background .08s;display:flex;align-items:center;justify-content:center}
+.key:active{background:#3a3a3a}
+.key.op{background:#ff9500}
+.key.op:active{background:#d97e00}
+.key.fn{background:#505050}
+.key.fn:active{background:#6a6a6a}
+.key.zero{grid-column:span 2;justify-content:flex-start;padding-left:32px}
+.lock-msg{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#e53935;color:#fff;padding:12px 20px;border-radius:20px;font-size:13px;font-weight:600;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.lock-msg.show{display:block}
+.install-banner{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#517da2,#3390ec);color:#fff;padding:14px 16px;display:none;align-items:center;gap:12px;z-index:100;padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+.install-banner.show{display:flex}
+.install-banner .ibtn{background:#fff;color:#3390ec;border:none;padding:8px 16px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.install-banner .icls{background:transparent;color:#fff;border:none;font-size:20px;cursor:pointer;padding:4px 8px}
+.install-banner .itext{flex:1;font-size:13px;line-height:1.3}
+</style>
+</head>
+<body>
+
+<div class="display">
+  <div class="history" id="history"></div>
+  <div class="current" id="current">0</div>
+</div>
+
+<div class="keys">
+  <button class="key fn" data-action="clear">AC</button>
+  <button class="key fn" data-action="sign">+/−</button>
+  <button class="key fn" data-action="percent">%</button>
+  <button class="key op" data-op="/">÷</button>
+  <button class="key" data-num="7">7</button>
+  <button class="key" data-num="8">8</button>
+  <button class="key" data-num="9">9</button>
+  <button class="key op" data-op="*">×</button>
+  <button class="key" data-num="4">4</button>
+  <button class="key" data-num="5">5</button>
+  <button class="key" data-num="6">6</button>
+  <button class="key op" data-op="-">−</button>
+  <button class="key" data-num="1">1</button>
+  <button class="key" data-num="2">2</button>
+  <button class="key" data-num="3">3</button>
+  <button class="key op" data-op="+">+</button>
+  <button class="key zero" data-num="0">0</button>
+  <button class="key" data-num=".">.</button>
+  <button class="key op" data-action="equals">=</button>
+</div>
+
+<div class="lock-msg" id="lock-msg"></div>
+
+<div class="install-banner" id="install-banner">
+  <div class="itext"><b>Install Silent Line</b><br>Akses lebih cepat & hemat kuota</div>
+  <button class="ibtn" id="ibtn-install">Install</button>
+  <button class="icls" id="ibtn-close">✕</button>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA1N_qsX6Wa5X0FPhIRNtaeiGT5uF-SwqI",
+  authDomain: "sensus-ekonomi-final.firebaseapp.com",
+  databaseURL: "https://sensus-ekonomi-final-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "sensus-ekonomi-final",
+  storageBucket: "sensus-ekonomi-final.firebasestorage.app",
+  messagingSenderId: "216162917450",
+  appId: "1:216162917450:web:20a2133c85576e14e95ab3"
+};
+
+let db = null;
+try { db = getDatabase(initializeApp(firebaseConfig)); } catch {}
+
+/* ==== DEFAULT CODES (fallback jika Firebase offline) ==== */
+const DEFAULT_USER_SEQ = ['2','5','0','*','1'];
+const DEFAULT_VENDOR_SEQ = ['2','5','0','*','3'];
+
+let USER_SEQ = [...DEFAULT_USER_SEQ];
+let VENDOR_SEQ = [...DEFAULT_VENDOR_SEQ];
+
+try {
+  const cached = localStorage.getItem('sl_codes');
+  if (cached) {
+    const c = JSON.parse(cached);
+    if (Array.isArray(c.user)) USER_SEQ = c.user;
+    if (Array.isArray(c.vendor)) VENDOR_SEQ = c.vendor;
+  }
+} catch {}
+
+if (db) {
+  onValue(ref(db, 'config/codes'), (snap) => {
+    const v = snap.val();
+    if (!v) return;
+    if (Array.isArray(v.user)) USER_SEQ = v.user;
+    if (Array.isArray(v.vendor)) VENDOR_SEQ = v.vendor;
+    try { localStorage.setItem('sl_codes', JSON.stringify({ user: USER_SEQ, vendor: VENDOR_SEQ })); } catch {}
+  });
+}
+
+/* ==== RATE LIMIT ==== */
+function checkRateLimit() {
+  const now = Date.now();
+  let d = { attempts: [], blockedUntil: 0 };
+  try { d = JSON.parse(localStorage.getItem('sl_rl') || 'null') || d; } catch {}
+  if (d.blockedUntil > now) return { blocked: true, until: d.blockedUntil };
+  d.attempts = (d.attempts || []).filter(t => now - t < 60000);
+  if (d.attempts.length >= 5) {
+    d.blockedUntil = now + 5 * 60 * 1000;
+    try { localStorage.setItem('sl_rl', JSON.stringify(d)); } catch {}
+    return { blocked: true, until: d.blockedUntil };
+  }
+  return { blocked: false };
+}
+function recordAttempt() {
+  const now = Date.now();
+  let d = { attempts: [], blockedUntil: 0 };
+  try { d = JSON.parse(localStorage.getItem('sl_rl') || 'null') || d; } catch {}
+  d.attempts = (d.attempts || []).filter(t => now - t < 60000);
+  d.attempts.push(now);
+  try { localStorage.setItem('sl_rl', JSON.stringify(d)); } catch {}
+}
+function clearAttempts() { localStorage.removeItem('sl_rl'); }
+
+/* ==== CALCULATOR ==== */
+const TARGET_PAGE = 'app.html';
+const VENDOR_PAGE = 'super-admin.html';
+
+let current = '0', history = '', pressed = [];
+const $c = document.getElementById('current'), $h = document.getElementById('history');
+const render = () => { $c.textContent = current; $h.textContent = history; };
+
+function pressNum(n) {
+  pressed.push(n);
+  if (current === '0' && n !== '.') current = n;
+  else if (current === 'Error') current = n;
+  else current += n;
+  if (current.replace('-','').replace('.','').length > 12) current = current.slice(0, 13);
+  render();
+}
+function pressOp(op) {
+  pressed.push(op);
+  if (current !== '0' && current !== 'Error') { history = current + ' ' + opToSym(op); current = '0'; }
+  else if (history) history = history.replace(/[+\-×÷]\s*$/, opToSym(op));
+  render();
+}
+function opToSym(o) { return {'+':'+','-':'−','*':'×','/':'÷'}[o] || o; }
+function clearAll() { current = '0'; history = ''; pressed = []; render(); }
+function toggleSign() { if (current === '0' || current === 'Error') return; current = current.startsWith('-') ? current.slice(1) : '-' + current; render(); }
+function percent() { if (current === 'Error') return; current = String(parseFloat(current) / 100); render(); }
+function seqMatch(seq) { return pressed.length === seq.length && pressed.every((v,i) => v === seq[i]); }
+
+function showLockMsg(until) {
+  const el = document.getElementById('lock-msg');
+  const s = Math.ceil((until - Date.now()) / 1000);
+  el.textContent = `🔒 Terlalu banyak percobaan. Tunggu ${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function calcEquals() {
+  const rl = checkRateLimit();
+  if (rl.blocked) { recordAttempt(); showLockMsg(rl.until); pressed = []; return; }
+
+  if (seqMatch(USER_SEQ)) { clearAttempts(); unlock('user'); return; }
+  if (seqMatch(VENDOR_SEQ)) { clearAttempts(); unlock('vendor'); return; }
+
+  try {
+    const expr = history.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-') + current;
+    if (!expr.trim()) { render(); return; }
+    const result = Function('"use strict";return (' + expr + ')')();
+    if (!isFinite(result)) throw new Error();
+    history = ''; current = String(Math.round(result * 1e10) / 1e10);
+  } catch { current = 'Error'; history = ''; }
+  render(); pressed = [];
+}
+
+function unlock(role) {
+  sessionStorage.setItem('unlocked', '1');
+  sessionStorage.setItem('unlockedAt', String(Date.now()));
+  sessionStorage.setItem('appRole', role);
+  document.body.style.transition = 'opacity .15s';
+  document.body.style.opacity = '0';
+  const target = role === 'vendor' ? VENDOR_PAGE : TARGET_PAGE;
+  setTimeout(() => window.location.replace(target), 160);
+}
+
+document.querySelectorAll('.key').forEach(b => b.addEventListener('click', () => {
+  if (b.dataset.num !== undefined) pressNum(b.dataset.num);
+  else if (b.dataset.op) pressOp(b.dataset.op);
+  else if (b.dataset.action === 'clear') clearAll();
+  else if (b.dataset.action === 'equals') calcEquals();
+  else if (b.dataset.action === 'sign') toggleSign();
+  else if (b.dataset.action === 'percent') percent();
+}));
+
+document.addEventListener('keydown', e => {
+  if (/^[0-9.]$/.test(e.key)) pressNum(e.key);
+  else if (['+','-','*','/'].includes(e.key)) pressOp(e.key);
+  else if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calcEquals(); }
+  else if (e.key === 'Escape') clearAll();
+  else if (e.key === '%') percent();
+});
+
+/* ==== PWA INSTALL PROMPT ==== */
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!localStorage.getItem('sl_install_dismissed')) {
+    document.getElementById('install-banner').classList.add('show');
+  }
+});
+document.getElementById('ibtn-install').onclick = async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('install-banner').classList.remove('show');
+};
+document.getElementById('ibtn-close').onclick = () => {
+  localStorage.setItem('sl_install_dismissed', '1');
+  document.getElementById('install-banner').classList.remove('show');
+};
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+
+render();
+</script>
+</body>
+</html>
