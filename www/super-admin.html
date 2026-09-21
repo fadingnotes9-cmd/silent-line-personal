@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=ai-legible&utm_source=comment&utm_medium=referral&utm_id=3f4e7541-48bb-4c4b-81cb-2816ff245b3b
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="hosting-provider" content="Netlify">
+<meta name="netlify-deploy" content="https://netlify.new/?utm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=3f4e7541-48bb-4c4b-81cb-2816ff245b3b">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SL Vendor</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--p:#7b1fa2;--pd:#4a148c;--pl:#f3e5f5;--blue:#5b8def;--t:#1a202c;--t2:#718096;--bd:#e2e8f0;--bg:#f7f8fa;--dg:#f56565;--dgL:#fff5f5;--wn:#ed8936;--ok:#48bb78}
+html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--t);min-height:100dvh;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:16px;padding-bottom:100px}
+.header{background:linear-gradient(135deg,#7b1fa2 0%,#4a148c 100%);color:#fff;padding:24px 20px;border-radius:20px;margin-bottom:16px;position:relative;box-shadow:0 8px 24px rgba(123,31,162,.25)}
+.header h1{font-size:22px;font-weight:800;display:flex;align-items:center;gap:10px}
+.header .sub{font-size:13px;opacity:.9;margin-top:6px}
+.header .acts{position:absolute;top:20px;right:20px;display:flex;gap:8px}
+.top-btn{background:rgba(255,255,255,.2);border:none;color:#fff;padding:8px 14px;border-radius:10px;cursor:pointer;font-size:13px;font-family:inherit;font-weight:600}
+.top-btn:active{background:rgba(255,255,255,.35)}
+.card{background:#fff;border-radius:16px;padding:20px;margin-bottom:12px;border:1px solid var(--bd);box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.card h3{font-size:13px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13px;color:var(--t2);margin-bottom:6px;font-weight:600}
+.field input{width:100%;padding:13px 15px;border:2px solid var(--bd);border-radius:12px;font-size:14px;font-family:inherit;background:#fff;transition:all .2s}
+.field input:focus{border-color:var(--p);outline:none;box-shadow:0 0 0 4px rgba(123,31,162,.08)}
+.field input.search{padding-left:44px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:14px center;background-size:20px}
+.field .helper{font-size:12px;color:var(--t2);margin-top:6px;line-height:1.5}
+.btn{padding:12px 20px;border-radius:12px;border:none;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;width:100%;box-shadow:0 4px 12px rgba(123,31,162,.25)}
+.btn.danger{background:var(--dg);color:#fff}
+.btn.warn{background:var(--wn);color:#fff}
+.btn.success{background:var(--ok);color:#fff}
+.btn.ghost{background:#f0f2f5;color:var(--t)}
+.btn.sm{padding:8px 14px;font-size:13px;border-radius:10px}
+
+/* BOTTOM NAV */
+.tabs{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--bd);display:flex;z-index:50;padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.06);max-width:720px;margin:0 auto}
+.tabs button{flex:1;padding:8px 4px;border:none;background:transparent;font-family:inherit;font-size:10.5px;font-weight:600;color:var(--t2);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;transition:all .2s;border-radius:12px}
+.tabs button.active{color:var(--p);background:var(--pl)}
+.tabs button .tab-icon{font-size:20px;line-height:1;transition:transform .2s}
+.tabs button.active .tab-icon{transform:scale(1.1)}
+.tabs button .tab-badge{position:absolute;top:2px;right:50%;transform:translateX(16px);background:var(--dg);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;font-weight:700;min-width:16px;text-align:center}
+.tab-content{display:none}
+.tab-content.active{display:block;animation:fadeIn .25s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.license{background:#fff;border-radius:14px;padding:16px;margin-bottom:10px;border:1px solid var(--bd);border-left:4px solid var(--ok);transition:all .2s}
+.license.suspended{border-left-color:var(--wn);background:#fffbeb}
+.license.expired{border-left-color:var(--dg);opacity:.75;background:var(--dgL)}
+.license.stale{border-left-color:#a0aec0;background:#f7fafc}
+.license .key{font-family:'Courier New',monospace;font-size:15px;font-weight:700;color:var(--p);word-break:break-all;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.license .owner{font-size:14px;font-weight:700;margin-top:6px}
+.license .meta{font-size:12.5px;color:var(--t2);line-height:1.7;margin-top:8px}
+.license .meta b{color:var(--t)}
+.license .actions{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.license .actions button{padding:7px 13px;font-size:12px;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:600;transition:all .15s}
+.pill{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700}
+.pill.active{background:#c6f6d5;color:#22543d}
+.pill.suspended{background:#fefcbf;color:#744210}
+.pill.expired{background:#fed7d7;color:#742a2a}
+.pill.room{background:#bee3f8;color:#2a4365}
+.pill.stale{background:#e2e8f0;color:#4a5568}
+.notif{position:fixed;top:16px;left:50%;transform:translateX(-50%);padding:12px 22px;border-radius:14px;font-size:13.5px;font-weight:600;z-index:9999;display:none;box-shadow:0 8px 24px rgba(0,0,0,.15);max-width:90vw}
+.notif.show{display:block;animation:slideDown .3s}
+@keyframes slideDown{from{transform:translate(-50%,-20px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+.notif.info{background:#2d3748;color:#fff}
+.notif.success{background:linear-gradient(135deg,#48bb78,#38a169);color:#fff}
+.notif.warn{background:linear-gradient(135deg,#ed8936,#dd6b20);color:#fff}
+.notif.error{background:linear-gradient(135deg,#f56565,#e53e3e);color:#fff}
+.key-display{background:linear-gradient(135deg,#faf5ff,#f3e5f5);border:2px dashed var(--p);border-radius:14px;padding:20px;text-align:center;margin-top:14px}
+.key-display .k{font-family:'Courier New',monospace;font-size:22px;font-weight:800;color:var(--p);letter-spacing:2px;word-break:break-all}
+.alert-item{background:#fff8e1;border-left:4px solid var(--wn);padding:12px;border-radius:10px;margin-bottom:8px;font-size:13px;line-height:1.5}
+.alert-item .time{font-size:11px;color:var(--t2);margin-top:4px}
+.alert-item code{background:rgba(0,0,0,.06);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px}
+.empty-state{text-align:center;color:var(--t2);font-size:14px;padding:40px 20px}
+.empty-state .icon{font-size:40px;opacity:.4;margin-bottom:12px;display:block}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat-box{background:#fff;border-radius:14px;padding:16px;text-align:center;border:1px solid var(--bd);box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.stat-box .num{font-size:26px;font-weight:800;color:var(--p)}
+.stat-box .lbl{font-size:11px;color:var(--t2);margin-top:4px;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.hint-text{font-size:12px;color:var(--t2);text-align:center;margin-top:14px;line-height:1.6}
+
+/* GATES */
+.gate-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:24px;background:linear-gradient(160deg,#f3e5f5,#fff)}
+.gate-logo{width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,#7b1fa2,#4a148c);display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff;font-weight:800;margin-bottom:20px;box-shadow:0 12px 32px rgba(123,31,162,.35)}
+.gate-title{font-size:22px;font-weight:800;color:var(--t);text-align:center}
+.gate-sub{font-size:13px;color:var(--t2);text-align:center;margin:8px 0 20px;line-height:1.5}
+.gate-input{width:100%;max-width:320px;padding:16px;border:2px solid var(--bd);border-radius:14px;font-size:20px;text-align:center;letter-spacing:8px;font-family:monospace;font-weight:700;background:#fff}
+.gate-input:focus{border-color:var(--p);outline:none;box-shadow:0 0 0 4px rgba(123,31,162,.1)}
+.gate-actions{display:flex;flex-direction:column;gap:8px;width:100%;max-width:320px;margin-top:16px}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal.show{display:flex}
+.modal-box{background:#fff;border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.modal-title{font-size:20px;font-weight:800}
+.modal-sub{font-size:12px;color:var(--t2)}
+.modal-close{background:#f0f2f5;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px}
+.section-box{background:#f7f8fa;border-radius:12px;padding:14px;margin-bottom:12px}
+.section-box h4{font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;margin-bottom:10px}
+.row-between{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.row-between:last-child{margin-bottom:0}
+.code-preview{background:#0a0a0a;color:#a0c0a0;padding:12px 16px;border-radius:10px;font-family:'Courier New',monospace;font-size:13px;text-align:center;letter-spacing:2px;margin-top:8px;word-break:break-all}
+</style>
+</head>
+<body>
+
+<script>
+(function(){
+  const u = sessionStorage.getItem('unlocked') === '1';
+  const r = sessionStorage.getItem('appRole');
+  const t = parseInt(sessionStorage.getItem('unlockedAt') || '0', 10);
+  if (!u || r !== 'vendor' || Date.now() - t > 2*60*60*1000) {
+    sessionStorage.clear();
+    window.location.replace('index.html');
+  }
+})();
+</script>
+
+<div class="notif" id="notif"></div>
+
+<!-- GATE 1: PIN KEDUA -->
+<div class="gate-wrap" id="gate1">
+  <div class="gate-logo">🔐</div>
+  <div class="gate-title">Keamanan Lapis 1</div>
+  <div class="gate-sub" id="gate1-hint">Masukkan PIN kedua</div>
+  <input type="password" class="gate-input" id="gate1-input" maxlength="8" inputmode="numeric" autocomplete="off" placeholder="••••">
+  <div class="gate-actions">
+    <button class="btn primary" id="gate1-btn">Lanjut</button>
+    <button class="btn ghost" onclick="location.replace('index.html')">← Kembali ke Kalkulator</button>
+  </div>
+</div>
+
+<!-- GATE 2: PIN VENDOR -->
+<div class="gate-wrap" id="gate2" style="display:none">
+  <div class="gate-logo">🔑</div>
+  <div class="gate-title">Keamanan Lapis 2</div>
+  <div class="gate-sub" id="gate2-hint">Masukkan PIN vendor</div>
+  <input type="password" class="gate-input" id="gate2-input" maxlength="20" inputmode="numeric" autocomplete="off" placeholder="••••••">
+  <div class="gate-actions">
+    <button class="btn primary" id="gate2-btn">Masuk Panel</button>
+    <button class="btn ghost" onclick="location.replace('index.html')">← Kembali</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="view-main" style="display:none">
+  <div class="wrap">
+    <div class="header">
+      <h1>🔐 Silent Line</h1>
+      <div class="sub">Vendor Panel — Kontrol penuh</div>
+      <div class="acts">
+        <button class="top-btn" id="btn-back-calc">← Kalkulator</button>
+        <button class="top-btn" id="btn-logout">Logout</button>
+      </div>
+    </div>
+
+    <!-- TAB: BUAT -->
+    <div class="tab-content active" data-content="create">
+      <div class="card">
+        <h3>Buat Lisensi Baru</h3>
+        <div class="field"><label>Nama Pembeli</label><input type="text" id="new-owner" maxlength="50" placeholder="misal: PT Sensus Nusantara"></div>
+        <div class="field"><label>Kontak Pembeli</label><input type="text" id="new-contact" maxlength="50" placeholder="misal: 0812-xxxx"></div>
+        <div class="field"><label>Batas Device</label><input type="number" id="new-max" value="10" min="1" max="1000"></div>
+        <div class="field"><label>Masa Aktif (hari)</label><input type="number" id="new-days" value="365" min="1"></div>
+        <button class="btn primary" id="btn-create">🔑 Generate Lisensi</button>
+        <div id="key-result" style="display:none" class="key-display">
+          <div style="font-size:11px;color:var(--t2);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;font-weight:700">License Key</div>
+          <div class="k" id="key-value">-</div>
+          <div style="font-size:12px;color:var(--t2);margin-top:8px">Berikan ke pembeli</div>
+          <button class="btn ghost sm" id="btn-copy-key" style="margin-top:12px">📋 Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: LISENSI -->
+    <div class="tab-content" data-content="licenses">
+      <div class="card">
+        <h3>Semua Lisensi (<span id="lic-count">0</span>)</h3>
+        <div class="field"><input type="text" class="search" id="lic-search" placeholder="Cari lisensi / pemilik..."></div>
+        <div id="lic-list"></div>
+      </div>
+    </div>
+
+    <!-- TAB: ROOM -->
+    <div class="tab-content" data-content="rooms">
+      <div class="card">
+        <h3>Semua Room (<span id="room-count">0</span>)</h3>
+        <div class="field"><input type="text" class="search" id="room-search" placeholder="Cari room / pemilik / lisensi..."></div>
+        <div id="room-list"></div>
+      </div>
+    </div>
+
+    <!-- TAB: NOTIF -->
+    <div class="tab-content" data-content="alerts">
+      <div class="card">
+        <h3>Notifikasi Sistem</h3>
+        <div id="alert-list"></div>
+        <div class="empty-state" id="alert-empty" style="display:none"><span class="icon">🔔</span>Tidak ada notifikasi</div>
+      </div>
+    </div>
+
+    <!-- TAB: STATISTIK -->
+    <div class="tab-content" data-content="stats">
+      <div class="stat-grid">
+        <div class="stat-box"><div class="num" id="s-lic-total">0</div><div class="lbl">Lisensi</div></div>
+        <div class="stat-box"><div class="num" id="s-lic-active">0</div><div class="lbl">Aktif</div></div>
+        <div class="stat-box"><div class="num" id="s-rooms">0</div><div class="lbl">Room</div></div>
+        <div class="stat-box"><div class="num" id="s-dev">0</div><div class="lbl">Device</div></div>
+        <div class="stat-box"><div class="num" id="s-online">0</div><div class="lbl">Online</div></div>
+        <div class="stat-box"><div class="num" id="s-msgs">0</div><div class="lbl">Pesan</div></div>
+      </div>
+      <div class="card">
+        <h3>Export</h3>
+        <button class="btn primary" id="btn-export-csv">📥 Export Lisensi ke CSV</button>
+      </div>
+    </div>
+
+    <!-- TAB: SETELAN -->
+    <div class="tab-content" data-content="settings">
+
+      <!-- Kode User / Pembeli -->
+      <div class="card">
+        <h3>🔓 Kode Kalkulator — Pembeli</h3>
+        <div class="helper" style="margin-bottom:10px;color:var(--t2);font-size:12px;line-height:1.5">
+          Kode yang ditekan pembeli di kalkulator untuk membuka aplikasi Silent Line.
+        </div>
+        <div class="field">
+          <label>Urutan tombol (dipisah koma)</label>
+          <input type="text" id="input-user-seq" placeholder="2,5,0,*,1" autocomplete="off">
+        </div>
+        <div class="code-preview" id="preview-user">Ketik: 2 → 5 → 0 → × → 1 → =</div>
+        <button class="btn primary" id="btn-save-user-code" style="margin-top:10px">💾 Simpan Kode Pembeli</button>
+        <div class="helper" style="margin-top:10px">
+          Gunakan: <b>angka 0-9</b>, <b>+</b>, <b>-</b>, <b>*</b> (kali), <b>/</b> (bagi).<br>
+          Contoh: <b>2,5,0,*,1</b> → tekan 2-5-0-×-1-=
+        </div>
+      </div>
+
+      <!-- Kode Vendor -->
+      <div class="card">
+        <h3>🔐 Kode Kalkulator — Vendor (Anda)</h3>
+        <div class="helper" style="margin-bottom:10px;color:var(--t2);font-size:12px;line-height:1.5">
+          <b>⚠️ Rahasia!</b> Kode ini untuk masuk ke panel ini. Jangan bagikan ke siapa pun, termasuk pembeli.
+        </div>
+        <div class="field">
+          <label>Urutan tombol (dipisah koma)</label>
+          <input type="text" id="input-vendor-seq" placeholder="2,5,0,*,3" autocomplete="off">
+        </div>
+        <div class="code-preview" id="preview-vendor">Ketik: 2 → 5 → 0 → × → 3 → =</div>
+        <button class="btn primary" id="btn-save-vendor-code" style="margin-top:10px">💾 Simpan Kode Vendor</button>
+        <div class="helper" style="margin-top:10px">
+          Setelah diubah, Anda harus <b>tutup & buka ulang kalkulator</b> agar kode baru aktif.
+        </div>
+      </div>
+
+      <!-- Keamanan Super Admin -->
+      <div class="card">
+        <h3>🛡️ Keamanan Super Admin</h3>
+
+        <div style="background:#f7f8fa;border-radius:12px;padding:14px;margin-bottom:12px">
+          <div style="font-size:13px;font-weight:700;margin-bottom:8px">Lapis 1 — PIN Kedua</div>
+          <div style="font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:10px">
+            Diminta pertama kali setelah kode kalkulator benar.
+          </div>
+          <div class="field" style="margin-bottom:8px">
+            <input type="password" id="pin2-old" placeholder="PIN lama" maxlength="8" inputmode="numeric">
+          </div>
+          <div class="field" style="margin-bottom:8px">
+            <input type="password" id="pin2-new" placeholder="PIN baru (min 4 digit)" maxlength="8" inputmode="numeric">
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <input type="password" id="pin2-confirm" placeholder="Konfirmasi PIN baru" maxlength="8" inputmode="numeric">
+          </div>
+          <button class="btn primary" id="btn-change-pin2" style="margin-top:10px">Simpan PIN Kedua</button>
+        </div>
+
+        <div style="background:#f7f8fa;border-radius:12px;padding:14px">
+          <div style="font-size:13px;font-weight:700;margin-bottom:8px">Lapis 2 — PIN Vendor</div>
+          <div style="font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:10px">
+            Diminta terakhir. Ini kunci utama panel.
+          </div>
+          <div class="field" style="margin-bottom:8px">
+            <input type="password" id="pinv-old" placeholder="PIN lama" maxlength="20" inputmode="numeric">
+          </div>
+          <div class="field" style="margin-bottom:8px">
+            <input type="password" id="pinv-new" placeholder="PIN baru (min 6 digit)" maxlength="20" inputmode="numeric">
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <input type="password" id="pinv-confirm" placeholder="Konfirmasi PIN baru" maxlength="20" inputmode="numeric">
+          </div>
+          <button class="btn primary" id="btn-change-pinv" style="margin-top:10px">Simpan PIN Vendor</button>
+        </div>
+
+        <div class="helper" style="margin-top:14px">
+          <b>Tips keamanan:</b><br>
+          • Gunakan PIN yang berbeda dari PIN bank / HP<br>
+          • Jangan screenshot halaman ini<br>
+          • Ganti PIN setiap 3 bulan
+        </div>
+      </div>
+
+      <!-- Info Sistem -->
+      <div class="card">
+        <h3>ℹ️ Info Sistem</h3>
+        <div class="row-between"><span>Versi</span><b>v2.2.1</b></div>
+        <div class="row-between"><span>Lapis keamanan</span><b>2 PIN</b></div>
+        <div class="row-between"><span>Kode kalkulator</span><b>User + Vendor</b></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="tabs">
+    <button class="active" data-tab="create"><span class="tab-icon">➕</span><span>Buat</span></button>
+    <button data-tab="licenses"><span class="tab-icon">🔑</span><span>Lisensi</span></button>
+    <button data-tab="rooms"><span class="tab-icon">🏠</span><span>Room</span></button>
+    <button data-tab="alerts"><span class="tab-icon">🔔</span><span>Notif</span><span class="tab-badge" id="alert-badge" style="display:none">0</span></button>
+    <button data-tab="stats"><span class="tab-icon">📊</span><span>Statistik</span></button>
+    <button data-tab="settings"><span class="tab-icon">⚙️</span><span>Setelan</span></button>
+  </div>
+</div>
+
+<!-- ROOM MODAL -->
+<div class="modal" id="room-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="modal-title">Room -</div>
+        <div class="modal-sub" id="modal-sub">-</div>
+      </div>
+      <button class="modal-close" onclick="closeRoomModal()">✕</button>
+    </div>
+    <div class="section-box">
+      <h4>Pengaturan Room</h4>
+      <div class="row-between"><span>Batas device</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="number" id="modal-max" style="width:70px;padding:6px;text-align:center;border:1.5px solid var(--bd);border-radius:8px;font-family:inherit" min="1" max="1000">
+          <button class="btn ghost sm" onclick="saveRoomMax()">Set</button>
+        </div>
+      </div>
+      <div class="row-between"><span>Kunci room</span><button class="btn warn sm" id="modal-lock">Toggle</button></div>
+      <div class="row-between"><span>Masa aktif</span><button class="btn ghost sm" onclick="extendRoom()">➕ Perpanjang</button></div>
+    </div>
+    <div class="section-box">
+      <h4>Aksi Cepat</h4>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn ghost sm" onclick="broadcastRoom()">📢 Broadcast</button>
+        <button class="btn warn sm" onclick="forceLogoutRoom()">🚪 Force Logout</button>
+        <button class="btn warn sm" onclick="clearRoomChat()">🧹 Hapus Chat</button>
+        <button class="btn danger sm" onclick="deleteRoom()">🗑 Hapus Room</button>
+      </div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;margin-bottom:10px">Device (<span id="modal-dev-count">0</span>)</div>
+    <div id="modal-dev-list"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+import { getDatabase, ref, onValue, set, remove, update, serverTimestamp, push, query, limitToLast, goOffline, goOnline } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA1N_qsX6Wa5X0FPhIRNtaeiGT5uF-SwqI",
+  authDomain: "sensus-ekonomi-final.firebaseapp.com",
+  databaseURL: "https://sensus-ekonomi-final-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "sensus-ekonomi-final",
+  storageBucket: "sensus-ekonomi-final.firebasestorage.app",
+  messagingSenderId: "216162917450",
+  appId: "1:216162917450:web:20a2133c85576e14e95ab3"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const $ = id => document.getElementById(id);
+const now = () => Date.now();
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function sha256(s) {
+  const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,'0')).join('');
+}
+
+function toast(text, type='info', ms=2500) {
+  const el = $('notif');
+  el.textContent = text;
+  el.className = 'notif show ' + type;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), ms);
+}
+
+function genKey() {
+  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const p = () => Array.from({length:4}, () => c[Math.floor(Math.random()*c.length)]).join('');
+  return 'SL-' + p() + '-' + p();
+}
+
+/* Code preview */
+function updatePreview(inputId, previewId, fallback) {
+  const v = $(inputId).value.split(',').map(s => s.trim()).filter(Boolean);
+  if (!v.length) { $(previewId).textContent = fallback; return; }
+  const sym = { '+':'+', '-':'−', '*':'×', '/':'÷' };
+  $(previewId).textContent = 'Ketik: ' + v.map(x => sym[x] || x).join(' → ') + ' → =';
+}
+$('input-user-seq').addEventListener('input', () => updatePreview('input-user-seq', 'preview-user', 'Ketik: 2 → 5 → 0 → × → 1 → ='));
+$('input-vendor-seq').addEventListener('input', () => updatePreview('input-vendor-seq', 'preview-vendor', 'Ketik: 2 → 5 → 0 → × → 3 → ='));
+
+/* ===== GATE 1 ===== */
+$('gate1-btn').onclick = async () => {
+  const pin = $('gate1-input').value.trim();
+  if (!pin || pin.length < 4) return toast('PIN min 4 digit', 'error');
+  const snap = await new Promise(r => onValue(ref(db, 'config/vendorSecondPinHash'), r, { onlyOnce: true }));
+  const stored = snap.val();
+  if (!stored) {
+    await set(ref(db, 'config/vendorSecondPinHash'), await sha256(pin));
+    toast('✅ PIN kedua dibuat', 'success');
+    gotoGate2();
+    return;
+  }
+  if (stored !== await sha256(pin)) return toast('❌ PIN salah', 'error');
+  gotoGate2();
+};
+
+function gotoGate2() {
+  $('gate1').style.display = 'none';
+  $('gate2').style.display = 'flex';
+  $('gate1-input').value = '';
+}
+
+/* ===== GATE 2 ===== */
+$('gate2-btn').onclick = async () => {
+  const pin = $('gate2-input').value.trim();
+  if (!pin || pin.length < 4) return toast('PIN min 4 digit', 'error');
+  const snap = await new Promise(r => onValue(ref(db, 'config/vendorPinHash'), r, { onlyOnce: true }));
+  const stored = snap.val();
+  if (!stored) {
+    if (pin.length < 6) return toast('PIN vendor pertama min 6 digit', 'error');
+    await set(ref(db, 'config/vendorPinHash'), await sha256(pin));
+    toast('✅ PIN vendor dibuat', 'success');
+    enterMain();
+    return;
+  }
+  if (stored !== await sha256(pin)) return toast('❌ PIN salah', 'error');
+  enterMain();
+};
+
+function enterMain() {
+  $('gate1').style.display = 'none';
+  $('gate2').style.display = 'none';
+  $('view-main').style.display = 'block';
+  setupListeners();
+}
+
+/* ===== NAV ===== */
+$('btn-back-calc').onclick = () => {
+  if (!confirm('Kembali ke kalkulator?')) return;
+  sessionStorage.clear();
+  location.replace('index.html');
+};
+$('btn-logout').onclick = () => {
+  if (!confirm('Logout?')) return;
+  sessionStorage.clear();
+  location.replace('index.html');
+};
+
+document.querySelectorAll('.tabs button').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('.tabs button').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelector(`.tab-content[data-content="${b.dataset.tab}"]`).classList.add('active');
+    window.scrollTo(0, 0);
+  };
+});
+
+/* ===== CREATE ===== */
+$('btn-create').onclick = async () => {
+  const owner = $('new-owner').value.trim();
+  const contact = $('new-contact').value.trim();
+  const max = parseInt($('new-max').value, 10) || 10;
+  const days = parseInt($('new-days').value, 10) || 365;
+  if (!owner) return toast('Nama pembeli wajib', 'error');
+  const key = genKey();
+  const validUntil = now() + days * 24 * 60 * 60 * 1000;
+  await set(ref(db, `licenses/${key}`), {
+    ownerName: owner, ownerContact: contact,
+    maxDevices: max, validUntil, status: 'active',
+    roomId: null, usedAt: null,
+    createdAt: serverTimestamp(), createdBy: 'vendor'
+  });
+  $('key-result').style.display = 'block';
+  $('key-value').textContent = key;
+  $('key-value').dataset.key = key;
+  toast('✅ Lisensi dibuat', 'success');
+  $('new-owner').value = '';
+  $('new-contact').value = '';
+};
+
+$('btn-copy-key').onclick = () => {
+  navigator.clipboard.writeText($('key-value').dataset.key).then(() => toast('📋 Copied', 'success'));
+};
+
+/* ===== SAVE CODES ===== */
+$('btn-save-user-code').onclick = async () => {
+  const u = $('input-user-seq').value.split(',').map(s => s.trim()).filter(Boolean);
+  if (u.length < 3) return toast('Min 3 elemen', 'error');
+  await update(ref(db, 'config/codes'), { user: u, updatedAt: serverTimestamp() });
+  toast('✅ Kode pembeli disimpan. Pembeli perlu buka ulang app.', 'success', 4000);
+};
+
+$('btn-save-vendor-code').onclick = async () => {
+  const v = $('input-vendor-seq').value.split(',').map(s => s.trim()).filter(Boolean);
+  if (v.length < 3) return toast('Min 3 elemen', 'error');
+  await update(ref(db, 'config/codes'), { vendor: v, updatedAt: serverTimestamp() });
+  toast('✅ Kode vendor disimpan. Tutup & buka ulang kalkulator.', 'success', 4000);
+};
+
+/* ===== CHANGE PINS ===== */
+$('btn-change-pin2').onclick = async () => {
+  const o = $('pin2-old').value.trim();
+  const n = $('pin2-new').value.trim();
+  const c = $('pin2-confirm').value.trim();
+  if (n.length < 4) return toast('PIN baru min 4 digit', 'error');
+  if (n !== c) return toast('Konfirmasi tidak cocok', 'error');
+  const s = await new Promise(r => onValue(ref(db, 'config/vendorSecondPinHash'), r, { onlyOnce: true }));
+  if (s.val() !== await sha256(o)) return toast('❌ PIN lama salah', 'error');
+  await update(ref(db, 'config'), { vendorSecondPinHash: await sha256(n) });
+  $('pin2-old').value = ''; $('pin2-new').value = ''; $('pin2-confirm').value = '';
+  toast('✅ PIN kedua diubah', 'success');
+};
+
+$('btn-change-pinv').onclick = async () => {
+  const o = $('pinv-old').value.trim();
+  const n = $('pinv-new').value.trim();
+  const c = $('pinv-confirm').value.trim();
+  if (n.length < 6) return toast('PIN baru min 6 digit', 'error');
+  if (n !== c) return toast('Konfirmasi tidak cocok', 'error');
+  const s = await new Promise(r => onValue(ref(db, 'config/vendorPinHash'), r, { onlyOnce: true }));
+  if (s.val() !== await sha256(o)) return toast('❌ PIN lama salah', 'error');
+  await update(ref(db, 'config'), { vendorPinHash: await sha256(n) });
+  $('pinv-old').value = ''; $('pinv-new').value = ''; $('pinv-confirm').value = '';
+  toast('✅ PIN vendor diubah', 'success');
+};
+
+/* ===== LISTENERS ===== */
+let allLicenses = {}, allRooms = {};
+
+function setupListeners() {
+  onValue(ref(db, 'licenses'), snap => { allLicenses = snap.val() || {}; renderLicenses(); updateStats(); });
+  onValue(ref(db, 'rooms'), snap => { allRooms = snap.val() || {}; renderRooms(); updateStats(); });
+  onValue(query(ref(db, 'vendorNotifications'), limitToLast(50)), snap => {
+    const list = $('alert-list'); list.innerHTML = '';
+    const data = snap.val() || {};
+    const entries = Object.entries(data).sort((a,b) => (b[1].at || 0) - (a[1].at || 0));
+    $('alert-empty').style.display = entries.length ? 'none' : 'block';
+    const badge = $('alert-badge');
+    badge.textContent = entries.length;
+    badge.style.display = entries.length ? 'inline-block' : 'none';
+    entries.forEach(([id, a]) => {
+      const d = document.createElement('div');
+      d.className = 'alert-item';
+      const t = new Date(a.at || 0).toLocaleString('id-ID');
+      if (a.type === 'license_duplicate_attempt') {
+        d.innerHTML = `⚠️ <b>Lisensi dicoba di 2 room</b><br>License: <code>${esc(a.licenseKey)}</code><br>Room asli: <b>${esc(a.existingRoom || '-')}</b><br>Room mencoba: <b>${esc(a.attemptRoom)}</b><div class="time">${t}</div>`;
+      } else {
+        d.innerHTML = `<b>${esc(a.type)}</b><div class="time">${t}</div>`;
+      }
+      list.appendChild(d);
+    });
+  });
+  onValue(ref(db, 'config/codes'), snap => {
+    const v = snap.val();
+    if (v && Array.isArray(v.user)) { $('input-user-seq').value = v.user.join(','); updatePreview('input-user-seq', 'preview-user', ''); }
+    else { $('input-user-seq').value = '2,5,0,*,1'; updatePreview('input-user-seq', 'preview-user', ''); }
+    if (v && Array.isArray(v.vendor)) { $('input-vendor-seq').value = v.vendor.join(','); updatePreview('input-vendor-seq', 'preview-vendor', ''); }
+    else { $('input-vendor-seq').value = '2,5,0,*,3'; updatePreview('input-vendor-seq', 'preview-vendor', ''); }
+  }, { onlyOnce: true });
+
+  /* Monitor koneksi */
+  onValue(ref(db, '.info/connected'), snap => {
+    const ok = snap.val() === true;
+    if (!ok) toast('⚠ Koneksi terputus', 'warn', 2000);
+  });
+}
+
+function renderLicenses() {
+  const list = $('lic-list'); list.innerHTML = '';
+  const search = ($('lic-search').value || '').trim().toLowerCase();
+  let entries = Object.entries(allLicenses);
+  if (search) entries = entries.filter(([k, d]) => k.toLowerCase().includes(search) || (d.ownerName || '').toLowerCase().includes(search) || (d.ownerContact || '').toLowerCase().includes(search));
+  entries.sort((a,b) => (b[1].createdAt || 0) - (a[1].createdAt || 0));
+  $('lic-count').textContent = entries.length;
+  if (!entries.length) { list.innerHTML = `<div class="empty-state"><span class="icon">🔑</span>${search ? 'Tidak ditemukan' : 'Belum ada lisensi'}</div>`; return; }
+  entries.forEach(([key, d]) => {
+    const expired = d.validUntil && d.validUntil < now();
+    const suspended = d.status === 'suspended';
+    const eff = suspended ? 'suspended' : (expired ? 'expired' : 'active');
+    const validDate = d.validUntil ? new Date(d.validUntil).toLocaleDateString('id-ID') : '-';
+    const card = document.createElement('div');
+    card.className = 'license ' + (suspended ? 'suspended' : (expired ? 'expired' : ''));
+    card.innerHTML = `
+      <div class="key">${esc(key)} <span class="pill ${eff}">${eff.toUpperCase()}</span></div>
+      <div class="owner">${esc(d.ownerName || '?')}</div>
+      <div class="meta">
+        👤 ${esc(d.ownerContact || '-')}<br>
+        📊 Max: <b>${d.maxDevices || '?'}</b> device • 📅 S/d: <b>${validDate}</b><br>
+        ${d.roomId ? `🏠 Room: <b>${esc(d.roomId)}</b> <span class="pill room">BOUND</span>` : '<i>Belum dipakai</i>'}
+      </div>
+      <div class="actions">
+        ${suspended ? `<button class="btn success sm" data-activate="${key}">✅ Aktifkan</button>` : `<button class="btn warn sm" data-suspend="${key}">⏸ Suspend</button>`}
+        <button class="btn ghost sm" data-extend="${key}">➕ Extend</button>
+        ${d.roomId ? `<button class="btn ghost sm" data-unbind="${key}">🔓 Unbind</button>` : ''}
+        <button class="btn danger sm" data-del="${key}">🗑 Hapus</button>
+      </div>
+    `;
+    list.appendChild(card);
+    const b1 = card.querySelector('[data-activate]');
+    const b2 = card.querySelector('[data-suspend]');
+    const b3 = card.querySelector('[data-unbind]');
+    if (b1) b1.onclick = () => activateLic(key);
+    if (b2) b2.onclick = () => suspendLic(key);
+    if (b3) b3.onclick = () => unbindLic(key);
+    card.querySelector('[data-extend]').onclick = () => extendLic(key, d);
+    card.querySelector('[data-del]').onclick = () => deleteLic(key);
+  });
+}
+
+function renderRooms() {
+  const list = $('room-list'); list.innerHTML = '';
+  const search = ($('room-search').value || '').trim().toLowerCase();
+  let entries = Object.entries(allRooms);
+  if (search) entries = entries.filter(([id, r]) => {
+    const o = (r.meta?.ownerName || '').toLowerCase();
+    const l = (r.meta?.licenseKey || '').toLowerCase();
+    return id.toLowerCase().includes(search) || o.includes(search) || l.includes(search);
+  });
+  entries.sort((a,b) => (b[1].meta?.createdAt || 0) - (a[1].meta?.createdAt || 0));
+  $('room-count').textContent = entries.length;
+  if (!entries.length) { list.innerHTML = `<div class="empty-state"><span class="icon">🏠</span>${search ? 'Tidak ditemukan' : 'Belum ada room'}</div>`; return; }
+  entries.forEach(([roomId, r]) => {
+    const m = r.meta || {};
+    const devices = r.devices ? Object.entries(r.devices).filter(([_,d]) => !d.blocked).length : 0;
+    const blocked = r.devices ? Object.entries(r.devices).filter(([_,d]) => d.blocked).length : 0;
+    const pres = r.presence ? Object.keys(r.presence).length : 0;
+    const msgs = r.messages ? Object.keys(r.messages).length : 0;
+    const validDate = m.validUntil ? new Date(m.validUntil).toLocaleDateString('id-ID') : '-';
+    const expired = m.validUntil && m.validUntil < now();
+    const stale = m.lastActivityAt && (now() - m.lastActivityAt) > 90*24*60*60*1000;
+    const lastAct = m.lastActivityAt ? Math.floor((now() - m.lastActivityAt) / 86400000) + ' hari lalu' : '-';
+    const card = document.createElement('div');
+    card.className = 'license ' + (expired ? 'expired' : (stale ? 'stale' : ''));
+    card.innerHTML = `
+      <div class="key">Room ${esc(roomId)} ${expired ? '<span class="pill expired">EXPIRED</span>' : (stale ? '<span class="pill stale">STALE</span>' : '<span class="pill active">AKTIF</span>')}</div>
+      <div class="owner">${esc(m.ownerName || '-')}</div>
+      <div class="meta">
+        🔑 <code>${esc(m.licenseKey || '-')}</code><br>
+        📱 <b>${devices}</b> device • <b>${pres}</b> online • <b>${blocked}</b> blocked<br>
+        💬 <b>${msgs}</b> pesan • 📅 S/d: <b>${validDate}</b><br>
+        🕐 Aktivitas terakhir: <b>${lastAct}</b>
+      </div>
+      <div class="actions">
+        <button class="btn ghost sm" data-manage="${roomId}">⚙️ Kelola</button>
+        <button class="btn warn sm" data-clear="${roomId}">🧹 Hapus Chat</button>
+        <button class="btn danger sm" data-del-room="${roomId}">🗑 Hapus Room</button>
+      </div>
+    `;
+    list.appendChild(card);
+    card.querySelector('[data-manage]').onclick = () => openRoomModal(roomId);
+    card.querySelector('[data-clear]').onclick = () => clearRoomChat(roomId);
+    card.querySelector('[data-del-room]').onclick = () => deleteRoom(roomId);
+  });
+}
+
+function updateStats() {
+  const lic = Object.values(allLicenses);
+  const rooms = Object.entries(allRooms);
+  let active = 0, devTotal = 0, onlineTotal = 0, msgTotal = 0;
+  lic.forEach(l => { if (l.status === 'active' && (!l.validUntil || l.validUntil > now())) active++; });
+  rooms.forEach(([_, r]) => {
+    if (r.devices) devTotal += Object.keys(r.devices).length;
+    if (r.presence) onlineTotal += Object.keys(r.presence).length;
+    if (r.messages) msgTotal += Object.keys(r.messages).length;
+  });
+  $('s-lic-total').textContent = lic.length;
+  $('s-lic-active').textContent = active;
+  $('s-rooms').textContent = rooms.length;
+  $('s-dev').textContent = devTotal;
+  $('s-online').textContent = onlineTotal;
+  $('s-msgs').textContent = msgTotal;
+}
+
+$('lic-search').addEventListener('input', renderLicenses);
+$('room-search').addEventListener('input', renderRooms);
+
+/* ===== ROOM MODAL ===== */
+let curRoomId = null, curRoomMeta = null;
+
+async function openRoomModal(roomId) {
+  curRoomId = roomId;
+  const snap = await new Promise(r => onValue(ref(db, `rooms/${roomId}/meta`), r, { onlyOnce: true }));
+  curRoomMeta = snap.val() || {};
+  $('modal-title').textContent = 'Room ' + roomId;
+  $('modal-sub').textContent = curRoomMeta.ownerName || '-';
+  $('modal-max').value = curRoomMeta.maxDevices || 5;
+  const lockBtn = $('modal-lock');
+  if (curRoomMeta.locked) { lockBtn.textContent = '🔒 Locked'; lockBtn.style.background = 'var(--wn)'; lockBtn.style.color = '#fff'; }
+  else { lockBtn.textContent = '🔓 Unlocked'; lockBtn.style.background = '#f0f2f5'; lockBtn.style.color = 'var(--t)'; }
+  renderModalDevices();
+  $('room-modal').classList.add('show');
+}
+
+window.closeRoomModal = function() { $('room-modal').classList.remove('show'); curRoomId = null; curRoomMeta = null; };
+
+async function renderModalDevices() {
+  if (!curRoomId) return;
+  const snap = await new Promise(r => onValue(ref(db, `rooms/${curRoomId}/devices`), r, { onlyOnce: true }));
+  const data = snap.val() || {};
+  const entries = Object.entries(data);
+  const list = $('modal-dev-list');
+  $('modal-dev-count').textContent = entries.length;
+  list.innerHTML = '';
+  if (!entries.length) { list.innerHTML = '<div class="empty-state">Belum ada device</div>'; return; }
+  entries.forEach(([devId, d]) => {
+    const card = document.createElement('div');
+    card.className = 'license ' + (d.blocked ? 'expired' : '');
+    card.style.marginBottom = '8px';
+    card.innerHTML = `
+      <div class="owner">${esc(d.name || 'Anonim')} ${d.blocked ? '<span class="pill expired">BLOCKED</span>' : ''}</div>
+      <div class="meta">🆔 <code>${esc(devId.slice(0,16))}...</code><br>📱 ${esc(d.info?.model || '?')} • ${esc(d.info?.os || '?')}</div>
+      <div class="actions">
+        ${d.blocked ? `<button class="btn success sm" data-unblock="${devId}">🔓 Buka</button>` : `<button class="btn warn sm" data-block="${devId}">🚫 Blokir</button>`}
+        <button class="btn ghost sm" data-kick="${devId}">🚪 Kick</button>
+      </div>
+    `;
+    list.appendChild(card);
+    const b = card.querySelector('[data-block]');
+    const u = card.querySelector('[data-unblock]');
+    if (b) b.onclick = () => blockDev(devId);
+    if (u) u.onclick = () => unblockDev(devId);
+    card.querySelector('[data-kick]').onclick = () => kickDev(devId);
+  });
+}
+
+window.saveRoomMax = async () => {
+  const v = parseInt($('modal-max').value, 10);
+  if (!v || v < 1) return toast('Minimal 1', 'error');
+  await update(ref(db, `rooms/${curRoomId}/meta`), { maxDevices: v });
+  toast('✅ Batas: ' + v, 'success');
+};
+
+$('modal-lock').onclick = async () => {
+  if (!curRoomId) return;
+  const nl = !curRoomMeta.locked;
+  await update(ref(db, `rooms/${curRoomId}/meta`), { locked: nl });
+  curRoomMeta.locked = nl;
+  const btn = $('modal-lock');
+  if (nl) { btn.textContent = '🔒 Locked'; btn.style.background = 'var(--wn)'; btn.style.color = '#fff'; }
+  else { btn.textContent = '🔓 Unlocked'; btn.style.background = '#f0f2f5'; btn.style.color = 'var(--t)'; }
+  toast(nl ? '🔒 Dikunci' : '🔓 Dibuka', 'info');
+};
+
+window.extendRoom = async () => {
+  if (!curRoomId) return;
+  const add = prompt('Perpanjang berapa hari?', '365');
+  if (!add || isNaN(add) || add <= 0) return;
+  const base = (curRoomMeta.validUntil && curRoomMeta.validUntil > now()) ? curRoomMeta.validUntil : now();
+  const nd = base + parseInt(add,10) * 86400000;
+  await update(ref(db, `rooms/${curRoomId}/meta`), { validUntil: nd });
+  if (curRoomMeta.licenseKey) await update(ref(db, `licenses/${curRoomMeta.licenseKey}`), { validUntil: nd }).catch(()=>{});
+  curRoomMeta.validUntil = nd;
+  toast('✅ Sampai ' + new Date(nd).toLocaleDateString('id-ID'), 'success');
+};
+
+window.broadcastRoom = async () => {
+  if (!curRoomId) return;
+  const msg = prompt('Pengumuman:');
+  if (!msg || !msg.trim()) return;
+  await push(ref(db, `rooms/${curRoomId}/messages`), {
+    text: '📢 ' + msg.trim(), timestamp: now(),
+    deviceId: 'vendor-broadcast', senderName: 'VENDOR', isVendor: true
+  });
+  toast('📢 Terkirim', 'success');
+};
+
+window.forceLogoutRoom = async () => {
+  if (!curRoomId) return;
+  if (!confirm('Force logout semua device?')) return;
+  await remove(ref(db, `rooms/${curRoomId}/presence`));
+  toast('🚪 Force logout', 'success');
+  renderModalDevices();
+};
+
+window.clearRoomChat = async (rid) => {
+  const id = rid || curRoomId;
+  if (!id) return;
+  if (!confirm('Hapus semua chat?')) return;
+  if (!confirm('Konfirmasi.')) return;
+  await remove(ref(db, `rooms/${id}/messages`));
+  toast('🗑 Chat dihapus', 'success');
+};
+
+window.deleteRoom = async (rid) => {
+  const id = rid || curRoomId;
+  if (!id) return;
+  if (!confirm(`⚠️ HAPUS TOTAL Room ${id}?`)) return;
+  if (!confirm('Konfirmasi final.')) return;
+  const snap = await new Promise(r => onValue(ref(db, `rooms/${id}/meta`), r, { onlyOnce: true }));
+  const m = snap.val();
+  if (m && m.licenseKey) await update(ref(db, `licenses/${m.licenseKey}`), { roomId: null, usedAt: null }).catch(()=>{});
+  await remove(ref(db, `rooms/${id}`));
+  if (curRoomId === id) closeRoomModal();
+  toast('🗑 Room dihapus', 'success');
+};
+
+async function blockDev(devId) {
+  await update(ref(db, `rooms/${curRoomId}/devices/${devId}`), { blocked: true });
+  await remove(ref(db, `rooms/${curRoomId}/presence/${devId}`)).catch(()=>{});
+  toast('🚫 Diblokir', 'warn'); renderModalDevices();
+}
+async function unblockDev(devId) {
+  await update(ref(db, `rooms/${curRoomId}/devices/${devId}`), { blocked: false });
+  toast('✅ Dibuka', 'success'); renderModalDevices();
+}
+async function kickDev(devId) {
+  if (!confirm('Kick device ini?')) return;
+  await remove(ref(db, `rooms/${curRoomId}/presence/${devId}`));
+  toast('🚪 Kick', 'warn'); renderModalDevices();
+}
+
+/* ===== LICENSE ACTIONS ===== */
+async function suspendLic(k) { if (!confirm('Suspend ' + k + '?')) return; await update(ref(db, `licenses/${k}`), { status: 'suspended' }); toast('⏸', 'warn'); }
+async function activateLic(k) { await update(ref(db, `licenses/${k}`), { status: 'active' }); toast('✅', 'success'); }
+async function extendLic(k, d) {
+  const add = prompt('Perpanjang berapa hari?', '365');
+  if (!add || isNaN(add) || add <= 0) return;
+  const base = (d.validUntil && d.validUntil > now()) ? d.validUntil : now();
+  const nd = base + parseInt(add,10) * 86400000;
+  await update(ref(db, `licenses/${k}`), { validUntil: nd, status: 'active' });
+  if (d.roomId) await update(ref(db, `rooms/${d.roomId}/meta`), { validUntil: nd }).catch(()=>{});
+  toast('✅', 'success');
+}
+async function unbindLic(k) {
+  if (!confirm('Unbind dari room?')) return;
+  const s = await new Promise(r => onValue(ref(db, `licenses/${k}`), r, { onlyOnce: true }));
+  const d = s.val();
+  if (d.roomId) await update(ref(db, `rooms/${d.roomId}/meta`), { licenseKey: null }).catch(()=>{});
+  await update(ref(db, `licenses/${k}`), { roomId: null, usedAt: null });
+  toast('🔓', 'success');
+}
+async function deleteLic(k) {
+  if (!confirm('Hapus lisensi ' + k + '?')) return;
+  if (!confirm('Konfirmasi.')) return;
+  await remove(ref(db, `licenses/${k}`));
+  toast('🗑', 'info');
+}
+
+/* ===== EXPORT CSV ===== */
+$('btn-export-csv').onclick = () => {
+  const rows = [['License Key','Pemilik','Kontak','Max Device','Valid Until','Status','Room ID','Dibuat']];
+  Object.entries(allLicenses).forEach(([k, d]) => {
+    const exp = d.validUntil && d.validUntil < now();
+    const st = d.status === 'suspended' ? 'suspended' : (exp ? 'expired' : 'active');
+    rows.push([k, d.ownerName || '', d.ownerContact || '', d.maxDevices || '', d.validUntil ? new Date(d.validUntil).toLocaleDateString('id-ID') : '', st, d.roomId || '', d.createdAt ? new Date(d.createdAt).toLocaleString('id-ID') : '']);
+  });
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `silent-line-licenses-${Date.now()}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('📥 CSV diunduh', 'success');
+};
+
+/* ===== AUTO-LOGOUT ===== */
+let idleT;
+function resetIdle() {
+  clearTimeout(idleT);
+  idleT = setTimeout(() => {
+    sessionStorage.clear();
+    alert('Sesi vendor berakhir (idle 15 menit).');
+    location.replace('index.html');
+  }, 15 * 60 * 1000);
+}
+['click','touchstart','keydown','mousemove'].forEach(e => document.addEventListener(e, resetIdle));
+resetIdle();
+
+/* ===== RECONNECT ON FOREGROUND ===== */
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    try { goOffline(db); } catch {}
+    setTimeout(() => { try { goOnline(db); } catch {} }, 200);
+  }
+});
+
+/* ===== INIT ===== */
+const s1 = await new Promise(r => onValue(ref(db, 'config/vendorSecondPinHash'), r, { onlyOnce: true }));
+const s2 = await new Promise(r => onValue(ref(db, 'config/vendorPinHash'), r, { onlyOnce: true }));
+if (!s1.exists()) $('gate1-hint').textContent = 'Pertama kali — buat PIN kedua (min 4 digit)';
+if (!s2.exists()) $('gate2-hint').textContent = 'Pertama kali — buat PIN vendor (min 6 digit)';
+</script>
+</body>
+</html>
