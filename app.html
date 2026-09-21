@@ -847,8 +847,7 @@ function listenMessages() {
       set(ref(db, `rooms/${state.room}/readReceipts/${state.info.deviceId}`), { lastRead: now() });
     }
   }));
-  state.subs.push(onValue(mRef, snap => { if (!snap.exists()) { $('messages').innerHTML = ''; sent.clear(); window.__msgSeen = new Set(); } }
-  }));
+state.subs.push(onValue(mRef, snap => { if (!snap.exists()) { $('messages').innerHTML = ''; sent.clear(); window.__msgSeen = new Set(); } }));
 }
 
 function addMsg(id, m, isMe) {
