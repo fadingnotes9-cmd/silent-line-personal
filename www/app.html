@@ -322,7 +322,7 @@ body{
           <div id="reply-text"></div>
         </div>
         <div class="input-row">
-<button class="attach-btn" id="btn-attach" title="Kirim Gambar">📎</button>         
+<button class="attach-btn" id="btn-attach" onclick="tryCamera()" title="Kirim Gambar">📎</button>         
  <textarea id="msg-input" placeholder="Tulis pesan..." rows="1"></textarea>
           <button class="send-btn" id="btn-send">➤</button>
         </div>
@@ -466,22 +466,15 @@ function getRemembered() { try { return JSON.parse(localStorage.getItem('sl_room
 function saveRemembered(list) { try { localStorage.setItem('sl_rooms', JSON.stringify(list.slice(-10))); } catch {} }
 function addRemembered(room) {
   const list = getRemembered().filter(r => r.code !== room.code);
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    const btn = document.getElementById('btn-attach');
-    if (!btn) { alert('DEBUG-A: Tombol tidak ada di HTML'); return; }
-    const cap = window.Capacitor;
-    let info = 'Capacitor: ' + (cap ? 'ADA' : 'TIDAK ADA') + '\n';
-    if (cap) {
-      info += 'Plugins object: ' + (cap.Plugins ? 'ADA' : 'TIDAK ADA') + '\n';
-      if (cap.Plugins) {
-        const keys = Object.keys(cap.Plugins);
-        info += 'Plugin terdaftar: ' + (keys.length ? keys.join(', ') : 'KOSONG') + '\n';
-      }
-    }
-    info += 'window.Capacitor.Plugins.Camera: ' + (cap && cap.Plugins && cap.Plugins.Camera ? 'ADA' : 'TIDAK ADA');
-    btn.onclick = () => alert('DEBUG-B:\n\n' + info);
-  }, 1000);
+window.addEventListener('load', async () => {
+  const C = (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Camera) || null;
+  document.getElementById('btn-attach').onclick = async () => {
+    try {
+      const p = await C.getPhoto({quality:85,resultType:'base64',source:'PROMPT'});
+      const b = await (await fetch('data:image/jpeg;base64,'+p.base64String)).blob();
+      uploadPhoto(new File([b],'p.jpg',{type:'image/jpeg'}));
+    } catch(e) {}
+  };
 });
   list.push(room); saveRemembered(list); renderRemembered();
 }
@@ -779,6 +772,23 @@ msgInput.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 });
 
+window.sendPhotoMessage = async function(dataUrl, sizeKB) {
+  if (!state.room) return;
+  const payload = {
+    text: "📷 Foto (" + sizeKB + " KB)",
+    timestamp: Date.now(),
+    deviceId: state.info.deviceId,
+    senderName: state.name || "Anonim",
+    photoUrl: dataUrl
+  };
+  try {
+    await push(ref(db, "rooms/" + state.room + "/messages"), payload);
+    await update(ref(db, "rooms/" + state.room + "/meta"), { lastActivityAt: serverTimestamp() }).catch(function(){});
+  } catch(e) {
+    alert("Send error: " + e.message);
+  }
+};
+
 function sendMessage() {
   const text = msgInput.value.trim();
   if (!text || !state.room) return;
@@ -998,5 +1008,6 @@ if ('serviceWorker' in navigator) {
 renderRemembered();
 $('offline-banner').classList.toggle('show', !navigator.onLine);
 </script>
+<script src="camera.js"></script>
 </body>
 </html>
