@@ -467,7 +467,7 @@ function saveRemembered(list) { try { localStorage.setItem('sl_rooms', JSON.stri
 function addRemembered(room) {
   const list = getRemembered().filter(r => r.code !== room.code);
 window.addEventListener('load', async () => {
-  let C; try { C = (await import('@capacitor/camera')).Camera; } catch(e) { return; }
+  const C = (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Camera) || null;
   document.getElementById('btn-attach').onclick = async () => {
     try {
       const p = await C.getPhoto({quality:85,resultType:'base64',source:'PROMPT'});
