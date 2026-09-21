@@ -466,15 +466,22 @@ function getRemembered() { try { return JSON.parse(localStorage.getItem('sl_room
 function saveRemembered(list) { try { localStorage.setItem('sl_rooms', JSON.stringify(list.slice(-10))); } catch {} }
 function addRemembered(room) {
   const list = getRemembered().filter(r => r.code !== room.code);
-window.addEventListener('load', async () => {
-  const C = (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Camera) || null;
-  document.getElementById('btn-attach').onclick = async () => {
-    try {
-      const p = await C.getPhoto({quality:85,resultType:'base64',source:'PROMPT'});
-      const b = await (await fetch('data:image/jpeg;base64,'+p.base64String)).blob();
-      uploadPhoto(new File([b],'p.jpg',{type:'image/jpeg'}));
-    } catch(e) {}
-  };
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const btn = document.getElementById('btn-attach');
+    if (!btn) { alert('DEBUG-A: Tombol tidak ada di HTML'); return; }
+    const cap = window.Capacitor;
+    let info = 'Capacitor: ' + (cap ? 'ADA' : 'TIDAK ADA') + '\n';
+    if (cap) {
+      info += 'Plugins object: ' + (cap.Plugins ? 'ADA' : 'TIDAK ADA') + '\n';
+      if (cap.Plugins) {
+        const keys = Object.keys(cap.Plugins);
+        info += 'Plugin terdaftar: ' + (keys.length ? keys.join(', ') : 'KOSONG') + '\n';
+      }
+    }
+    info += 'window.Capacitor.Plugins.Camera: ' + (cap && cap.Plugins && cap.Plugins.Camera ? 'ADA' : 'TIDAK ADA');
+    btn.onclick = () => alert('DEBUG-B:\n\n' + info);
+  }, 1000);
 });
   list.push(room); saveRemembered(list); renderRemembered();
 }
