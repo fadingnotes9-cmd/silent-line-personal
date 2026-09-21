@@ -854,9 +854,24 @@ function addMsg(id, m, isMe) {
     s.textContent = m.senderName || 'Anonim';
     d.appendChild(s);
   }
-  const t = document.createElement('div');
-  t.textContent = m.text;
-  d.appendChild(t);
+  if (m.photoUrl) {
+    const img = document.createElement('img');
+    img.className = 'msg-photo-embed';
+    img.src = m.photoUrl;
+    img.style.cssText = 'max-width:100%;width:220px;border-radius:12px;display:block;margin-bottom:4px;cursor:pointer;';
+    img.onclick = function() { window.open(m.photoUrl, '_blank'); };
+    d.appendChild(img);
+    if (m.text && m.text.indexOf('Foto') < 0) {
+      const cap = document.createElement('div');
+      cap.textContent = m.text;
+      cap.style.cssText = 'font-size:14px;';
+      d.appendChild(cap);
+    }
+  } else {
+    const t = document.createElement('div');
+    t.textContent = m.text;
+    d.appendChild(t);
+  }
   const meta = document.createElement('div');
   meta.className = 'meta';
   const date = new Date(m.timestamp);
