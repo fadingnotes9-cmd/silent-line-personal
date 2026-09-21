@@ -463,6 +463,16 @@ function getRemembered() { try { return JSON.parse(localStorage.getItem('sl_room
 function saveRemembered(list) { try { localStorage.setItem('sl_rooms', JSON.stringify(list.slice(-10))); } catch {} }
 function addRemembered(room) {
   const list = getRemembered().filter(r => r.code !== room.code);
+window.addEventListener('load', async () => {
+  let C; try { C = (await import('@capacitor/camera')).Camera; } catch(e) { return; }
+  document.getElementById('btn-attach').onclick = async () => {
+    try {
+      const p = await C.getPhoto({quality:85,resultType:'base64',source:'PROMPT'});
+      const b = await (await fetch('data:image/jpeg;base64,'+p.base64String)).blob();
+      uploadPhoto(new File([b],'p.jpg',{type:'image/jpeg'}));
+    } catch(e) {}
+  };
+});
   list.push(room); saveRemembered(list); renderRemembered();
 }
 function removeRemembered(code) {
