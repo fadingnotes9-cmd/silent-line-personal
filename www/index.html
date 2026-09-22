@@ -93,7 +93,6 @@ const firebaseConfig = {
 let db = null;
 try { db = getDatabase(initializeApp(firebaseConfig)); } catch {}
 
-const VENDOR_SEQ = ['2','5','0','*','3'];
 const DEFAULT_USER = ['2','5','0','*','1'];
 let USER_SEQ = [...DEFAULT_USER];
 
@@ -112,7 +111,6 @@ if (db) {
 }
 
 const TARGET_PAGE = 'app.html';
-const VENDOR_PAGE = 'super-admin.html';
 
 let current = '0', history = '', pressed = [];
 const $c = document.getElementById('current');
@@ -167,7 +165,6 @@ function seqMatch(seq) {
 
 function calcEquals() {
   if (seqMatch(USER_SEQ)) { unlock('user'); return; }
-  if (seqMatch(VENDOR_SEQ)) { unlock('vendor'); return; }
   try {
     const expr = history.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-') + current;
     if (!expr.trim()) { render(); return; }
@@ -188,7 +185,7 @@ function unlock(role) {
   sessionStorage.setItem('appRole', role);
   document.body.style.transition = 'opacity .15s';
   document.body.style.opacity = '0';
-  const target = role === 'vendor' ? VENDOR_PAGE : TARGET_PAGE;
+  const target = TARGET_PAGE;
   setTimeout(() => window.location.replace(target), 160);
 }
 
