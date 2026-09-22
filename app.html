@@ -951,7 +951,7 @@ function closeSheet() {
   sheet.classList.remove('show');
   setTimeout(() => overlay.classList.remove('show'), 250);
 }
-$('btn-menu').onclick = openSheet;
+$('btn-menu').onclick = () => window.openSettings();
 overlay.onclick = closeSheet;
 $('sheet-cancel').onclick = closeSheet;
 $('sheet-back-calc').onclick = () => { closeSheet(); setTimeout(goCalc, 100); };
@@ -1034,6 +1034,7 @@ renderRemembered();
 $('offline-banner').classList.toggle('show', !navigator.onLine);
 </script>
 <script src="camera.js"></script>
+<script src="settings.js"></script>
 <!-- __fallbackTabHandler -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
