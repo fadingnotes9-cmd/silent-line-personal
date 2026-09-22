@@ -265,6 +265,7 @@ window.addEventListener('unhandledrejection', function(e) {
     <div class="header">
       <button class="hbtn" id="btn-login-back">←</button>
       <div class="h-info"><div class="h-title">Silent Line</div></div>
+      <button class="hbtn" id="btn-settings-login" title="Pengaturan">⚙</button>
     </div>
     <div class="login-wrap">
       <div class="login-logo">SL</div>
@@ -579,6 +580,7 @@ function goCalc() {
   setTimeout(() => location.replace('index.html'), 160);
 }
 $('btn-login-back').onclick = goCalc;
+$('btn-settings-login').onclick = () => window.openSettings();
 $('btn-back-calc').onclick = goCalc;
 
 document.querySelectorAll('.tabs button').forEach(b => {
