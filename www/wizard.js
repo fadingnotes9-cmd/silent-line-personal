@@ -1,11 +1,10 @@
 /* ============================================
    SETUP WIZARD — Silent Line Personal
-   4 slide onboarding untuk user baru
+   4 slide: Welcome, Buat Kode, Konfirmasi, Selesai
    ============================================ */
 
 (function() {
-  const hasCode = localStorage.getItem('sl_user_code');
-  if (hasCode) return;
+  if (localStorage.getItem('sl_user_code')) return;
 
   // ========== CSS ==========
   const css = `
@@ -25,15 +24,8 @@
     .wz-dot.done { background: #48bb78; }
     .wz-slide { display: none; flex-direction: column; flex: 1; }
     .wz-slide.active { display: flex; }
-    .wz-logo {
-      width: 84px; height: 84px; border-radius: 24px;
-      background: linear-gradient(135deg, #5b8def, #3a6fd8);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 32px; color: #fff; font-weight: 700; letter-spacing: 1px;
-      margin: 0 auto 24px; box-shadow: 0 12px 32px rgba(91,141,239,.35);
-    }
     .wz-title { font-size: 24px; font-weight: 800; color: #1a202c; text-align: center; margin-bottom: 12px; }
-    .wz-subtitle { font-size: 15px; color: #718096; text-align: center; line-height: 1.6; margin-bottom: 32px; padding: 0 20px; }
+    .wz-subtitle { font-size: 15px; color: #718096; text-align: center; line-height: 1.6; margin-bottom: 24px; padding: 0 20px; }
     .wz-body { flex: 1; }
     .wz-actions { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
     .wz-btn {
@@ -46,9 +38,9 @@
     .wz-btn:active { transform: scale(.98); }
     .wz-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .wz-btn.ghost { background: transparent; color: #718096; box-shadow: none; font-weight: 500; }
+    .wz-btn.danger { background: linear-gradient(135deg, #f56565, #e53e3e); }
     .wz-brand { font-size: 11px; color: #cbd5e0; letter-spacing: 2px; text-align: center; font-weight: 700; margin-top: 16px; }
 
-    /* Kode slot */
     .wz-slots { display: flex; gap: 12px; justify-content: center; margin: 24px 0; }
     .wz-slot {
       width: 56px; height: 72px; border-radius: 12px;
@@ -59,8 +51,13 @@
     }
     .wz-slot.filled { border-color: #5b8def; background: #e8f0ff; }
     .wz-slot.focused { border-color: #5b8def; box-shadow: 0 0 0 4px rgba(91,141,239,.15); }
+    .wz-slot.error { border-color: #f56565; background: #fff5f5; animation: shake 0.3s; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
 
-    /* Mini calculator */
     .wz-calc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 16px 0; }
     .wz-key {
       padding: 16px 0; background: #fff; border: 1px solid #e2e8f0;
@@ -72,13 +69,19 @@
     .wz-key.op { color: #5b8def; }
     .wz-key.fn { color: #ed8936; font-size: 16px; }
 
-    /* Warning */
     .wz-warning {
       background: #fffaf0; border: 1px solid #ed8936;
       border-radius: 12px; padding: 12px 14px;
       font-size: 13px; color: #744210; line-height: 1.5;
       margin-top: 16px;
     }
+    .wz-error-msg {
+      background: #fff5f5; border: 1px solid #f56565;
+      border-radius: 12px; padding: 12px 14px;
+      font-size: 13px; color: #c53030; line-height: 1.5;
+      margin-top: 16px; display: none;
+    }
+    .wz-error-msg.show { display: block; }
   `;
   const style = document.createElement('style');
   style.textContent = css;
@@ -94,10 +97,9 @@
         <div class="wz-dot" data-step="4"></div>
       </div>
 
-      <!-- SLIDE 1: Welcome -->
+      <!-- SLIDE 1 -->
       <div class="wz-slide active" data-slide="1">
         <div class="wz-body">
-          <div class="wz-logo">SL</div>
           <div class="wz-title">Selamat Datang</div>
           <div class="wz-subtitle">
             Silent Line adalah aplikasi chat privat yang tampil sebagai kalkulator.
@@ -111,7 +113,7 @@
         <div class="wz-brand">SILENT LINE v2.2.1</div>
       </div>
 
-      <!-- SLIDE 2: Buat Kode -->
+      <!-- SLIDE 2 -->
       <div class="wz-slide" data-slide="2">
         <div class="wz-body">
           <div class="wz-title">Buat Kode Rahasia</div>
@@ -120,13 +122,13 @@
             <br>
             Kode ini untuk membuka chat di HP Anda.
           </div>
-          <div class="wz-slots" id="wz-slots">
+          <div class="wz-slots" id="wz-slots-2">
             <div class="wz-slot" data-slot="1">·</div>
             <div class="wz-slot" data-slot="2">·</div>
             <div class="wz-slot" data-slot="3">·</div>
             <div class="wz-slot" data-slot="4">·</div>
           </div>
-          <div class="wz-calc" id="wz-calc">
+          <div class="wz-calc" id="wz-calc-2">
             <button class="wz-key" data-val="1">1</button>
             <button class="wz-key" data-val="2">2</button>
             <button class="wz-key" data-val="3">3</button>
@@ -153,6 +155,47 @@
           <button class="wz-btn ghost" id="wz-back-2">Kembali</button>
         </div>
       </div>
+
+      <!-- SLIDE 3: Konfirmasi -->
+      <div class="wz-slide" data-slide="3">
+        <div class="wz-body">
+          <div class="wz-title">Konfirmasi Kode</div>
+          <div class="wz-subtitle">
+            Ketuk ulang kode Anda untuk konfirmasi.
+          </div>
+          <div class="wz-slots" id="wz-slots-3">
+            <div class="wz-slot" data-slot="1">·</div>
+            <div class="wz-slot" data-slot="2">·</div>
+            <div class="wz-slot" data-slot="3">·</div>
+            <div class="wz-slot" data-slot="4">·</div>
+          </div>
+          <div class="wz-calc" id="wz-calc-3">
+            <button class="wz-key" data-val="1">1</button>
+            <button class="wz-key" data-val="2">2</button>
+            <button class="wz-key" data-val="3">3</button>
+            <button class="wz-key op" data-val="+">+</button>
+            <button class="wz-key" data-val="4">4</button>
+            <button class="wz-key" data-val="5">5</button>
+            <button class="wz-key" data-val="6">6</button>
+            <button class="wz-key op" data-val="-">−</button>
+            <button class="wz-key" data-val="7">7</button>
+            <button class="wz-key" data-val="8">8</button>
+            <button class="wz-key" data-val="9">9</button>
+            <button class="wz-key op" data-val="*">×</button>
+            <button class="wz-key fn" data-act="clear">AC</button>
+            <button class="wz-key" data-val="0">0</button>
+            <button class="wz-key fn" data-act="back">⌫</button>
+            <button class="wz-key op" data-val="/">÷</button>
+          </div>
+          <div class="wz-error-msg" id="wz-error-3">
+            ❌ Kode tidak cocok. Silakan coba lagi.
+          </div>
+        </div>
+        <div class="wz-actions">
+          <button class="wz-btn" id="wz-next-3" disabled>Konfirmasi</button>
+          <button class="wz-btn ghost" id="wz-back-3">Kembali</button>
+        </div>
+      </div>
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', html);
@@ -163,10 +206,11 @@
 
   // ========== STATE ==========
   const state = {
-    code: [] // Array of 4 tombol
+    code: [],      // Kode dari slide 2
+    confirm: []    // Kode dari slide 3
   };
 
-  // ========== NAVIGASI SLIDE ==========
+  // ========== NAVIGASI ==========
   function goToSlide(n) {
     document.querySelectorAll('.wz-slide').forEach(function(el) {
       el.classList.remove('active');
@@ -174,12 +218,69 @@
     var slide = document.querySelector('.wz-slide[data-slide="' + n + '"]');
     if (slide) slide.classList.add('active');
 
-    // Update progress dots
     document.querySelectorAll('.wz-dot').forEach(function(dot) {
       var step = parseInt(dot.dataset.step);
       dot.classList.remove('active', 'done');
       if (step < n) dot.classList.add('done');
       else if (step === n) dot.classList.add('active');
+    });
+
+    // Reset input slide 3 saat masuk
+    if (n === 3) {
+      state.confirm = [];
+      renderSlots(3);
+    }
+  }
+
+  // ========== SLOT RENDER ==========
+  function renderSlots(slideNum) {
+    var container = document.getElementById('wz-slots-' + slideNum);
+    if (!container) return;
+    var slots = container.querySelectorAll('.wz-slot');
+    var data = slideNum === 2 ? state.code : state.confirm;
+
+    slots.forEach(function(s, i) {
+      if (data[i]) {
+        s.textContent = data[i];
+        s.classList.add('filled');
+      } else {
+        s.textContent = '·';
+        s.classList.remove('filled');
+      }
+      s.classList.remove('focused', 'error');
+    });
+    if (data.length < 4) {
+      var next = slots[data.length];
+      if (next) next.classList.add('focused');
+    }
+
+    var btn = document.getElementById('wz-next-' + slideNum);
+    if (btn) btn.disabled = data.length !== 4;
+  }
+
+  // ========== CALCULATOR HANDLER ==========
+  function bindCalc(slideNum) {
+    var calc = document.getElementById('wz-calc-' + slideNum);
+    if (!calc) return;
+    calc.addEventListener('click', function(e) {
+      var btn = e.target.closest('.wz-key');
+      if (!btn) return;
+      var data = slideNum === 2 ? state.code : state.confirm;
+
+      if (btn.dataset.act === 'clear') {
+        data.length = 0;
+        renderSlots(slideNum);
+        return;
+      }
+      if (btn.dataset.act === 'back') {
+        data.pop();
+        renderSlots(slideNum);
+        return;
+      }
+      if (btn.dataset.val && data.length < 4) {
+        data.push(btn.dataset.val);
+        renderSlots(slideNum);
+      }
     });
   }
 
@@ -188,58 +289,51 @@
     goToSlide(2);
   });
 
-  // ========== SLIDE 2: INPUT KODE ==========
-  function renderSlots() {
-    var slots = document.querySelectorAll('.wz-slot');
-    slots.forEach(function(s, i) {
-      if (state.code[i]) {
-        s.textContent = state.code[i];
-        s.classList.add('filled');
-      } else {
-        s.textContent = '·';
-        s.classList.remove('filled');
-      }
-      s.classList.remove('focused');
-    });
-    // Fokus slot berikutnya
-    if (state.code.length < 4) {
-      var next = slots[state.code.length];
-      if (next) next.classList.add('focused');
-    }
-    // Enable/disable Lanjut
-    var btn = document.getElementById('wz-next-2');
-    if (btn) btn.disabled = state.code.length !== 4;
-  }
-
-  document.getElementById('wz-calc').addEventListener('click', function(e) {
-    var btn = e.target.closest('.wz-key');
-    if (!btn) return;
-
-    if (btn.dataset.act === 'clear') {
-      state.code = [];
-      renderSlots();
-      return;
-    }
-    if (btn.dataset.act === 'back') {
-      state.code.pop();
-      renderSlots();
-      return;
-    }
-    if (btn.dataset.val && state.code.length < 4) {
-      state.code.push(btn.dataset.val);
-      renderSlots();
-    }
-  });
-
+  // ========== SLIDE 2 ==========
   document.getElementById('wz-next-2').addEventListener('click', function() {
-    console.log('Slide 2: kode =', state.code);
-    // Nanti: go to slide 3
+    if (state.code.length !== 4) return;
+    goToSlide(3);
   });
 
   document.getElementById('wz-back-2').addEventListener('click', function() {
     goToSlide(1);
   });
 
-  // Init
-  renderSlots();
+  // ========== SLIDE 3 ==========
+  document.getElementById('wz-next-3').addEventListener('click', function() {
+    if (state.confirm.length !== 4) return;
+
+    var match = state.code.every(function(v, i) { return v === state.confirm[i]; });
+
+    if (!match) {
+      // Tampilkan error
+      var err = document.getElementById('wz-error-3');
+      err.classList.add('show');
+      var container = document.getElementById('wz-slots-3');
+      container.querySelectorAll('.wz-slot').forEach(function(s) {
+        s.classList.add('error');
+      });
+      setTimeout(function() {
+        err.classList.remove('show');
+        state.confirm = [];
+        renderSlots(3);
+      }, 1500);
+      return;
+    }
+
+    // Kode cocok → lanjut slide 4
+    console.log('Kode dikonfirmasi:', state.code.join(''));
+    // Nanti: go to slide 4
+    alert('✅ Kode cocok! Lanjut ke slide 4 (belum dibuat)');
+  });
+
+  document.getElementById('wz-back-3').addEventListener('click', function() {
+    goToSlide(2);
+  });
+
+  // ========== INIT ==========
+  bindCalc(2);
+  bindCalc(3);
+  renderSlots(2);
+  renderSlots(3);
 })();
