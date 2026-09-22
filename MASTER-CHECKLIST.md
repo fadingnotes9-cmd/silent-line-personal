@@ -4,7 +4,7 @@
 - [x] 1.1 Hapus super-admin.html
 - [x] 1.2 Hapus fitur license dari app.html
 - [x] 1.3 Hapus device approval (auto-approve sudah ada)
-- [ ] 1.4 Rename "petugas" → "user"
+- [x] 1.4 Rename "petugas" → "user"
 - [ ] 1.5 Update icon & branding
 - [ ] 1.6 Test build pertama
 
