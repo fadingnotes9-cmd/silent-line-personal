@@ -28,7 +28,7 @@
 
 Task:
 - [x] Hapus super-admin.html
-- [ ] Hapus fitur license dari app.html
+- [x] Hapus fitur license dari app.html
 - [ ] Hapus device approval
 - [ ] Rename "petugas" → "user"
 - [ ] Update icon & branding
