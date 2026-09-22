@@ -38,7 +38,6 @@
     .wz-btn:active { transform: scale(.98); }
     .wz-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .wz-btn.ghost { background: transparent; color: #718096; box-shadow: none; font-weight: 500; }
-    .wz-btn.danger { background: linear-gradient(135deg, #f56565, #e53e3e); }
     .wz-brand { font-size: 11px; color: #cbd5e0; letter-spacing: 2px; text-align: center; font-weight: 700; margin-top: 16px; }
 
     .wz-slots { display: flex; gap: 12px; justify-content: center; margin: 24px 0; }
@@ -82,6 +81,39 @@
       margin-top: 16px; display: none;
     }
     .wz-error-msg.show { display: block; }
+
+    /* Slide 4: Success */
+    .wz-success-icon {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #48bb78, #38a169);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px; color: #fff;
+      margin: 40px auto 24px;
+      box-shadow: 0 12px 32px rgba(72,187,120,.3);
+      animation: pop 0.5s ease-out;
+    }
+    @keyframes pop {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .wz-code-display {
+      display: flex; gap: 12px; justify-content: center;
+      margin: 24px 0;
+    }
+    .wz-code-display .wz-slot {
+      background: #e8f0ff; border-color: #5b8def;
+      animation: fadeIn 0.3s backwards;
+    }
+    .wz-code-display .wz-slot:nth-child(1) { animation-delay: 0.1s; }
+    .wz-code-display .wz-slot:nth-child(2) { animation-delay: 0.2s; }
+    .wz-code-display .wz-slot:nth-child(3) { animation-delay: 0.3s; }
+    .wz-code-display .wz-slot:nth-child(4) { animation-delay: 0.4s; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   `;
   const style = document.createElement('style');
   style.textContent = css;
@@ -156,7 +188,7 @@
         </div>
       </div>
 
-      <!-- SLIDE 3: Konfirmasi -->
+      <!-- SLIDE 3 -->
       <div class="wz-slide" data-slide="3">
         <div class="wz-body">
           <div class="wz-title">Konfirmasi Kode</div>
@@ -196,6 +228,31 @@
           <button class="wz-btn ghost" id="wz-back-3">Kembali</button>
         </div>
       </div>
+
+      <!-- SLIDE 4: Selesai -->
+      <div class="wz-slide" data-slide="4">
+        <div class="wz-body">
+          <div class="wz-success-icon">✓</div>
+          <div class="wz-title">Siap!</div>
+          <div class="wz-subtitle">
+            Kode rahasia Anda sudah tersimpan.
+            <br>
+            Ingat kode ini untuk membuka chat:
+          </div>
+          <div class="wz-code-display" id="wz-code-display">
+            <div class="wz-slot">·</div>
+            <div class="wz-slot">·</div>
+            <div class="wz-slot">·</div>
+            <div class="wz-slot">·</div>
+          </div>
+          <div class="wz-warning">
+            💡 <b>Tips:</b> Catat kode di tempat aman. Kalau lupa, reset aplikasi.
+          </div>
+        </div>
+        <div class="wz-actions">
+          <button class="wz-btn" id="wz-finish">Mulai Gunakan</button>
+        </div>
+      </div>
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', html);
@@ -206,8 +263,8 @@
 
   // ========== STATE ==========
   const state = {
-    code: [],      // Kode dari slide 2
-    confirm: []    // Kode dari slide 3
+    code: [],
+    confirm: []
   };
 
   // ========== NAVIGASI ==========
@@ -225,7 +282,6 @@
       else if (step === n) dot.classList.add('active');
     });
 
-    // Reset input slide 3 saat masuk
     if (n === 3) {
       state.confirm = [];
       renderSlots(3);
@@ -306,7 +362,6 @@
     var match = state.code.every(function(v, i) { return v === state.confirm[i]; });
 
     if (!match) {
-      // Tampilkan error
       var err = document.getElementById('wz-error-3');
       err.classList.add('show');
       var container = document.getElementById('wz-slots-3');
@@ -321,14 +376,43 @@
       return;
     }
 
-    // Kode cocok → lanjut slide 4
-    console.log('Kode dikonfirmasi:', state.code.join(''));
-    // Nanti: go to slide 4
-    alert('✅ Kode cocok! Lanjut ke slide 4 (belum dibuat)');
+    // === KODE COCOK → SIMPAN KE LOCALSTORAGE ===
+    try {
+      localStorage.setItem('sl_user_code', JSON.stringify(state.code));
+      console.log('✅ Kode tersimpan:', state.code.join(''));
+    } catch (e) {
+      console.error('Gagal simpan kode:', e);
+    }
+
+    // Update tampilan slide 4 dengan kode user
+    var display = document.getElementById('wz-code-display');
+    display.innerHTML = '';
+    state.code.forEach(function(c) {
+      var slot = document.createElement('div');
+      slot.className = 'wz-slot';
+      slot.textContent = c;
+      display.appendChild(slot);
+    });
+
+    goToSlide(4);
   });
 
   document.getElementById('wz-back-3').addEventListener('click', function() {
     goToSlide(2);
+  });
+
+  // ========== SLIDE 4: FINISH ==========
+  document.getElementById('wz-finish').addEventListener('click', function() {
+    // Tutup wizard
+    var overlay = document.getElementById('wz-overlay');
+    overlay.style.transition = 'opacity 0.3s';
+    overlay.style.opacity = '0';
+    setTimeout(function() {
+      overlay.classList.remove('active');
+      overlay.style.display = 'none';
+    }, 300);
+
+    console.log('✅ Wizard selesai. Kode user:', state.code.join(''));
   });
 
   // ========== INIT ==========
