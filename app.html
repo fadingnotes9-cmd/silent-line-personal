@@ -284,13 +284,11 @@ window.addEventListener('unhandledrejection', function(e) {
 
         <div class="tab-content active" data-content="create">
           <div class="field">
-            <label>Kode Lisensi</label>
-            <input type="text" id="create-license" placeholder="SL-XXXX-XXXX" maxlength="20" autocomplete="off" style="text-transform:uppercase">
-            <div class="helper" id="create-helper">Diperlukan untuk membuat room baru</div>
-          </div>
-          <div class="field">
             <label>Nama Anda (opsional)</label>
             <input type="text" id="create-name" placeholder="misal: Andi" maxlength="20" autocomplete="off">
+          </div>
+          <div class="field">
+            <div class="helper" id="create-helper">Kode room akan dibuat otomatis</div>
           </div>
           <button class="btn" id="btn-create-room">Buat Room Baru</button>
         </div>
@@ -468,10 +466,8 @@ function toast(text, type='info', ms=2500) {
   el._t = setTimeout(() => el.classList.remove('show'), ms);
 }
 
-async function deriveRoomCode(licenseKey) {
-  const hash = await sha256('room:' + licenseKey.toUpperCase());
-  const num = parseInt(hash.slice(0, 8), 16) % 100000000;
-  return String(num).padStart(8, '0');
+function generateRoomCode() {
+  return String(Math.floor(10000000 + Math.random() * 90000000));
 }
 
 function getRemembered() { try { return JSON.parse(localStorage.getItem('sl_rooms') || '[]'); } catch { return []; } }
@@ -595,54 +591,52 @@ document.querySelectorAll('.tabs button').forEach(b => {
 });
 
 $('btn-create-room').onclick = async () => {
-  const lic = $('create-license').value.trim().toUpperCase();
   const name = $('create-name').value.trim();
   const helper = $('create-helper');
   helper.className = 'helper';
-  if (!lic || lic.length < 8) { helper.className = 'helper err'; helper.textContent = 'Masukkan kode lisensi yang valid'; return; }
-  helper.textContent = 'Memvalidasi lisensi...';
-  const licSnap = await new Promise(r => onValue(ref(db, `licenses/${lic}`), r, { onlyOnce: true }));
-  const licData = licSnap.val();
-  if (!licData) { helper.className = 'helper err'; helper.textContent = '✗ Lisensi tidak ditemukan'; return; }
-  if (licData.status === 'suspended') { helper.className = 'helper err'; helper.textContent = '🚫 Lisensi di-suspend'; return; }
-  if (licData.status === 'expired' || (licData.validUntil && licData.validUntil < now())) {
-    helper.className = 'helper err'; helper.textContent = '✗ Lisensi sudah expired'; return;
+  helper.textContent = 'Membuat room...';
+
+  const roomCode = generateRoomCode();
+
+  try {
+    await set(ref(db, `rooms/${roomCode}/meta`), {
+      maxDevices: 10,
+      validUntil: 0,
+      ownerName: name || 'User',
+      creatorDeviceId: state.info.deviceId,
+      locked: false,
+      createdAt: serverTimestamp(),
+      lastActivityAt: serverTimestamp()
+    });
+
+    await set(ref(db, `rooms/${roomCode}/devices/${state.info.deviceId}`), {
+      name: name || 'Device-1',
+      info: state.info,
+      joinedAt: serverTimestamp(),
+      lastSeen: serverTimestamp(),
+      blocked: false
+    });
+
+    state.room = roomCode;
+    state.name = name || 'Device-1';
+    state.isCreator = true;
+    state.meta = {
+      maxDevices: 10,
+      validUntil: 0,
+      ownerName: name || 'User',
+      creatorDeviceId: state.info.deviceId
+    };
+
+    addRemembered({ code: roomCode, name: state.name, isCreator: true });
+    $('new-room-code').textContent = roomCode;
+    $('modal-room-created').classList.add('show');
+  } catch (err) {
+    console.error(err);
+    helper.className = 'helper err';
+    helper.textContent = 'Gagal membuat room. Coba lagi.';
   }
-  const roomCode = await deriveRoomCode(lic);
-  const roomSnap = await new Promise(r => onValue(ref(db, `rooms/${roomCode}/meta`), r, { onlyOnce: true }));
-  if (roomSnap.exists()) {
-    const meta = roomSnap.val();
-    if (meta.licenseKey === lic) {
-      state.room = roomCode; state.name = name || 'Anonim';
-      state.isCreator = meta.creatorDeviceId === state.info.deviceId;
-      state.meta = meta;
-      addRemembered({ code: roomCode, name: state.name, isCreator: state.isCreator });
-      enterChat(); return;
-    }
-    helper.className = 'helper err'; helper.textContent = '✗ Terjadi konflik. Hubungi vendor.'; return;
-  }
-  await set(ref(db, `rooms/${roomCode}/meta`), {
-    licenseKey: lic, maxDevices: licData.maxDevices || 5,
-    validUntil: licData.validUntil || 0, ownerName: licData.ownerName || 'Unknown',
-    creatorDeviceId: state.info.deviceId, locked: false,
-    createdAt: serverTimestamp(), lastActivityAt: serverTimestamp()
-  });
-  await set(ref(db, `rooms/${roomCode}/devices/${state.info.deviceId}`), {
-    name: name || 'Device-1', info: state.info, joinedAt: serverTimestamp(),
-    lastSeen: serverTimestamp(), blocked: false
-  });
-  await update(ref(db, `licenses/${lic}`), { roomId: roomCode, usedAt: serverTimestamp() });
-  state.room = roomCode; state.name = name || 'Device-1';
-  state.isCreator = true;
-  state.meta = { licenseKey: lic, maxDevices: licData.maxDevices, validUntil: licData.validUntil, ownerName: licData.ownerName, creatorDeviceId: state.info.deviceId };
-  addRemembered({ code: roomCode, name: state.name, isCreator: true });
-  $('new-room-code').textContent = roomCode;
-  $('modal-room-created').classList.add('show');
 };
 
-$('btn-copy-room').onclick = () => {
-  navigator.clipboard.writeText($('new-room-code').textContent).then(() => toast('📋 Kode room dicopy', 'success'));
-};
 $('btn-continue').onclick = () => {
   $('modal-room-created').classList.remove('show');
   enterChat();
@@ -971,7 +965,7 @@ $('sheet-leave').onclick = () => {
     state.subs = []; state.reply = null;
     $('messages').innerHTML = '';
     showScreen('login');
-    $('create-license').value = ''; $('create-name').value = '';
+    $('create-name').value = '';
     $('join-room').value = ''; $('join-name').value = '';
     $('create-helper').textContent = 'Diperlukan untuk membuat room baru';
     $('create-helper').className = 'helper';
