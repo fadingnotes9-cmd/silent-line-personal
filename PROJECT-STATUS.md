@@ -29,7 +29,7 @@
 Task:
 - [x] Hapus super-admin.html
 - [x] Hapus fitur license dari app.html
-- [ ] Hapus device approval
+- [x] Hapus device approval
 - [ ] Rename "petugas" → "user"
 - [ ] Update icon & branding
 - [ ] Test build pertama
