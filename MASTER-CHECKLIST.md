@@ -6,7 +6,7 @@
 - [x] 1.3 Hapus device approval (auto-approve sudah ada)
 - [x] 1.4 Rename "petugas" → "user"
 - [x] 1.5 Update icon & branding
-- [ ] 1.6 Test build pertama
+- [x] 1.6 Test build pertama (auto via GitHub Actions)
 
 ## FASE 2: Setup Wizard (7 task)
 - [ ] 2.1 Slide 1: Selamat datang

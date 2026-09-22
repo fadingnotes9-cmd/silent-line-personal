@@ -32,7 +32,7 @@ Task:
 - [x] Hapus device approval
 - [x] Rename "petugas" → "user"
 - [x] Update icon & branding
-- [ ] Test build pertama
+- [x] Test build pertama
 
 ---
 
