@@ -368,6 +368,19 @@
       return;
     }
 
+    // ===== UBAH KODE =====
+    if (action === 'change-code') {
+      closeSettings();
+      setTimeout(function() {
+        if (window.openChangeCode) {
+          window.openChangeCode();
+        } else {
+          alert('Fitur ubah kode tidak tersedia');
+        }
+      }, 300);
+      return;
+    }
+
     // Placeholder untuk action lain
     console.log('Settings action:', action);
     alert('Fitur sedang dikembangkan:\n\n' + item.querySelector('.st-item-label').textContent.trim());
