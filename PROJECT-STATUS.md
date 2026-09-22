@@ -31,7 +31,7 @@ Task:
 - [x] Hapus fitur license dari app.html
 - [x] Hapus device approval
 - [x] Rename "petugas" → "user"
-- [ ] Update icon & branding
+- [x] Update icon & branding
 - [ ] Test build pertama
 
 ---
