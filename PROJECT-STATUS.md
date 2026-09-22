@@ -27,7 +27,7 @@
 **Fase 1: Fondasi** — belum dimulai
 
 Task:
-- [ ] Hapus super-admin.html
+- [x] Hapus super-admin.html
 - [ ] Hapus fitur license dari app.html
 - [ ] Hapus device approval
 - [ ] Rename "petugas" → "user"
