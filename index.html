@@ -96,19 +96,22 @@ try { db = getDatabase(initializeApp(firebaseConfig)); } catch {}
 const DEFAULT_USER = ['2','5','0','*','1'];
 let USER_SEQ = [...DEFAULT_USER];
 
+// Prioritas 1: baca kode dari wizard (sl_user_code)
+try {
+  const wizardCode = localStorage.getItem('sl_user_code');
+  if (wizardCode) {
+    const wc = JSON.parse(wizardCode);
+    if (Array.isArray(wc) && wc.length > 0) USER_SEQ = wc;
+  }
+} catch {}
+
+// Prioritas 2: fallback ke cache lama (sl_codes)
 try {
   const c = localStorage.getItem('sl_codes');
   if (c) { const p = JSON.parse(c); if (Array.isArray(p.user)) USER_SEQ = p.user; }
 } catch {}
 
-if (db) {
-  onValue(ref(db, 'config/codes'), (snap) => {
-    const v = snap.val();
-    if (!v) return;
-    if (Array.isArray(v.user)) USER_SEQ = v.user;
-    try { localStorage.setItem('sl_codes', JSON.stringify({ user: USER_SEQ })); } catch {}
-  });
-}
+// (Firebase config/codes dihapus - pakai wizard kode)
 
 const TARGET_PAGE = 'app.html';
 
@@ -216,5 +219,6 @@ if ('serviceWorker' in navigator) {
 
 render();
 </script>
+<script src="wizard.js"></script>
 </body>
 </html>

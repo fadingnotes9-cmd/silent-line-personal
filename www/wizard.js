@@ -403,16 +403,16 @@
 
   // ========== SLIDE 4: FINISH ==========
   document.getElementById('wz-finish').addEventListener('click', function() {
-    // Tutup wizard
     var overlay = document.getElementById('wz-overlay');
     overlay.style.transition = 'opacity 0.3s';
     overlay.style.opacity = '0';
     setTimeout(function() {
       overlay.classList.remove('active');
       overlay.style.display = 'none';
+      // Reload supaya index.html baca kode baru dari localStorage
+      console.log('✅ Wizard selesai. Reload...');
+      location.reload();
     }, 300);
-
-    console.log('✅ Wizard selesai. Kode user:', state.code.join(''));
   });
 
   // ========== INIT ==========
