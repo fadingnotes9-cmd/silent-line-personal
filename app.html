@@ -485,7 +485,27 @@ window.addEventListener('load', async () => {
     } catch(e) {}
   };
 });
-  list.push(room); saveRemembered(list); renderRemembered();
+  list.push(room); saveRemembered(list); // ===== EXPOSE FUNCTION KE SETTINGS =====
+window.state = state;
+window.updateProfileName = async function(newName) {
+  state.name = newName;
+  // Kalau sedang di room, update di Firebase juga
+  if (state.room && state.info) {
+    try {
+      await update(ref(db, 'rooms/' + state.room + '/devices/' + state.info.deviceId), {
+        name: newName
+      });
+      await set(ref(db, 'rooms/' + state.room + '/presence/' + state.info.deviceId), {
+        name: newName, lastSeen: serverTimestamp()
+      });
+      console.log('✅ Nama updated di Firebase:', newName);
+    } catch(e) {
+      console.error('Gagal update nama:', e);
+    }
+  }
+};
+
+renderRemembered();
 }
 function removeRemembered(code) {
   saveRemembered(getRemembered().filter(r => r.code !== code)); renderRemembered();
@@ -593,7 +613,9 @@ document.querySelectorAll('.tabs button').forEach(b => {
 });
 
 $('btn-create-room').onclick = async () => {
-  const name = $('create-name').value.trim();
+  let name = $('create-name').value.trim();
+  if (!name) name = localStorage.getItem('sl_user_name') || '';
+  if (name) localStorage.setItem('sl_user_name', name);
   const helper = $('create-helper');
   helper.className = 'helper';
   helper.textContent = 'Membuat room...';
@@ -1059,6 +1081,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+// Prefill nama dari localStorage
+setTimeout(function() {
+  var savedName = localStorage.getItem('sl_user_name');
+  if (savedName) {
+    var cn = document.getElementById('create-name');
+    var jn = document.getElementById('join-name');
+    if (cn) cn.value = savedName;
+    if (jn) jn.value = savedName;
+  }
+}, 300);
 </script>
 </body>
 </html>
