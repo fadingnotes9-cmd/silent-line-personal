@@ -12,13 +12,13 @@
 - ✅ Fase 1: Fondasi — SELESAI
 - ✅ Fase 2: Setup Wizard — SELESAI
 - ✅ Fase 3: Settings Panel — SELESAI
-- ⏳ Fase 4: Multi-Room
+- ✅ Fase 4: Multi-Room — 7/8 task selesai (4.8 test)
 - ⏳ Fase 5: Proteksi
 - ⏳ Fase 6: Optimasi Firebase
 - ⏳ Fase 7: Play Store Prep
 - ⏳ Fase 8: Marketing
 
-**Progress:** 4/8 fase (50%)
+**Progress:** 4/8 fase selesai + Fase 4 hampir tamat
 
 ---
 
@@ -51,16 +51,15 @@
 
 ---
 
-## FASE 4 — BERIKUTNYA (Multi-Room)
+## FASE 4 — MULTI-ROOM
 
-Task:
-- ⏳ 4.1 Room Manager screen
-- ⏳ 4.2 Simpan room ke localStorage
-- ⏳ 4.3 Quick switch
-- ⏳ 4.4 Limit 3 room tersimpan
-- ⏳ 4.5 Tambah room
-- ⏳ 4.6 Hapus room
-- ⏳ 4.7 Rename room
+- ✅ 4.1 Room Manager screen (dari fork)
+- ✅ 4.2 Simpan ke localStorage `sl_rooms`
+- ✅ 4.3 Quick switch (klik room → isi form join)
+- ✅ 4.4 Limit 3 room + guard (blokir + disable tombol)
+- ✅ 4.5 Tambah room
+- ✅ 4.6 Hapus room (tombol ✕)
+- ⏭️ 4.7 Rename room (SKIP)
 - ⏳ 4.8 Test multi-room
 
 ---
@@ -75,7 +74,7 @@ Task:
 
 - Fork dari: https://github.com/fadingnotes9-cmd/silent-line
 - Enterprise status: FROZEN
-- Build terakhir: Fase 3.9 (Test end-to-end)
+- Build terakhir: Fase 4.4 (Guard limit 3 room)
 - APK tested: settings, ubah kode, dark mode, notifikasi toggle
 
 ---

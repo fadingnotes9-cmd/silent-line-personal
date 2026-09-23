@@ -29,13 +29,13 @@
 - [x] 3.9 Test semua menu
 
 ## FASE 4: Multi-Room (8 task)
-- [ ] 4.1 Room Manager screen
-- [ ] 4.2 Simpan room ke localStorage
-- [ ] 4.3 Quick switch (1 aktif)
-- [ ] 4.4 Limit room (3 tersimpan)
-- [ ] 4.5 Tambah room
-- [ ] 4.6 Hapus room
-- [ ] 4.7 Rename room
+- [x] 4.1 Room Manager screen
+- [x] 4.2 Simpan room ke localStorage
+- [x] 4.3 Quick switch (klik room → isi form)
+- [x] 4.4 Limit room (3 tersimpan + guard)
+- [x] 4.5 Tambah room
+- [x] 4.6 Hapus room
+- [-] 4.7 Rename room (SKIP — tidak prioritas)
 - [ ] 4.8 Test multi-room
 
 ## FASE 5: Proteksi (7 task)
