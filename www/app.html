@@ -599,33 +599,22 @@ window.__slUpdateIdleTimer = function(minutes) {
 // Hapus semua room di Firebase yang device ini adalah creator-nya
 window.__slPurgeMyRooms = async function() {
   const list = getRemembered().filter(function(r) { return r.isCreator === true; });
+  if (!list.length) return { deleted: 0, total: 0 };
   const deviceId = state.info.deviceId;
-  const debugLog = [
-    'Total creator rooms: ' + list.length,
-    'DeviceId: ' + (deviceId ? deviceId.slice(0, 22) + '...' : 'NULL')
-  ];
-  if (!list.length) return { deleted: 0, total: 0, log: debugLog };
   let deleted = 0;
   for (const r of list) {
     try {
       const metaSnap = await get(ref(db, 'rooms/' + r.code + '/meta'));
-      if (!metaSnap.exists()) {
-        debugLog.push(r.code + ': no meta (skip)');
-        deleted++;
-        continue;
-      }
+      if (!metaSnap.exists()) { deleted++; continue; }
       const meta = metaSnap.val();
-      const ok = meta.creatorDeviceId === deviceId;
-      debugLog.push(r.code + ': match=' + ok);
-      if (!ok) continue;
+      if (meta.creatorDeviceId !== deviceId) continue;
       await remove(ref(db, 'rooms/' + r.code));
-      debugLog.push(r.code + ': DELETED');
       deleted++;
     } catch (e) {
-      debugLog.push(r.code + ': ERR ' + (e && (e.code || e.message)));
+      console.warn('Gagal hapus room', r.code, e);
     }
   }
-  return { deleted: deleted, total: list.length, log: debugLog };
+  return { deleted: deleted, total: list.length };
 };
 
 (function() {
