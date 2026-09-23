@@ -420,7 +420,9 @@
       if (window.__slPurgeMyRooms) {
         window.__slPurgeMyRooms()
           .then(function(result) {
-            console.log("✅ Purge:", result.deleted + "/" + result.total + " room dihapus");
+            if (result && result.log) {
+              alert("Debug purge:\n\n" + result.log.join("\n"));
+            }
           })
           .catch(function(e) {
             console.error("Gagal purge room:", e);
