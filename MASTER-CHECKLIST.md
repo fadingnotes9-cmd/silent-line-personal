@@ -39,13 +39,14 @@
 - [x] 4.8 Test multi-room (SUKSES)
 
 ## FASE 5: Proteksi (7 task)
-- [ ] 5.1 Auto-lock idle
-- [ ] 5.2 Panic wipe
-- [ ] 5.3 Watermark nama user
-- [ ] 5.4 Google Play Licensing
-- [ ] 5.5 Server-side validation
-- [ ] 5.6 Device binding
-- [ ] 5.7 Test proteksi
+- [x] 5.1 Auto-lock idle (cycle off/1m/5m/15m)
+- [-] 5.2 Panic wipe (SKIP — risky untuk personal)
+- [-] 5.3 Watermark nama user (SKIP — kontra-produktif)
+- [~] 5.4 Google Play Licensing (TUNDA — butuh Play Console)
+- [x] 5.5 Firebase Auth + Rules + Purge room creator
+- [-] 5.6 Device binding (SKIP — user ganti HP blokir akses)
+- [x] 5.7 Test proteksi
+- [ ] 5.8 Native Notification (background push)
 
 ## FASE 6: Optimasi Firebase (6 task)
 - [ ] 6.1 Auto-hapus 6 jam

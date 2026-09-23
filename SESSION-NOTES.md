@@ -59,7 +59,39 @@
 
 ---
 
-## Sesi 3 — (belum)
+## Sesi 3 — 2026-09-23 (lanjutan)
+
+**Durasi:** ~3 jam
+
+**Yang Dikerjakan:**
+- Fase 4: Multi-Room SELESAI (4.1-4.6, 4.8; 4.7 skip)
+- Fase 4.2: Tombol ✕ di popup Room + handler Copy (fallback execCommand)
+- Fase 4.4: Guard limit 3 room (blokir + disable tombol)
+- Fase 5.1: Auto-lock idle (handler cycle + timer redirect ke kalkulator)
+- Fase 5.5: Firebase Anonymous Auth + Rules ketat + Purge room creator
+- Fase 5.5f: Fix cache bug join room (onValue+onlyOnce → get)
+- Fase 5.5g: Reset tidak hapus sl_device_id (identitas permanen)
+- Fase 5.5h: Cleanup debug alert
+
+**Masalah yang Ditemukan & Diperbaiki:**
+- Database Firebase awalnya TERBUKA TOTAL (read/write: true) → ditutup dengan Auth + Rules
+- Bug cache onValue+onlyOnce bikin room bisa resurrect → ganti get()
+- Device ID berubah setelah reset → purge gagal → jangan hapus sl_device_id
+
+**Catatan Penting:**
+- Firebase Rules sekarang: `rooms/*` butuh `auth != null`
+- Test: reset aplikasi → join kode lama → HARUS "Room tidak ditemukan"
+- Room lama (test) sudah dibersihkan manual via Firebase Console
+
+**Status Akhir:**
+- Fase 5: 3/7 done (5.1, 5.5, 5.7), 3 skip, 1 tunda
+- Progress: 5/8 fase (62.5%)
+
+---
+
+## Sesi 4 — (belum)
+
+**Rencana:** Fase 5.8 Native Notification (background push) → sisa Fase 5
 
 **Rencana:** Fase 4 Multi-Room (8 task)
 
