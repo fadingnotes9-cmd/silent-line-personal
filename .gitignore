@@ -7,3 +7,8 @@ node_modules/
 task*.js
 fix*.js
 add-wizard.js
+
+# Task/fix scripts (arsip, jangan commit)
+task*.js
+fix*.js
+add-wizard.js
