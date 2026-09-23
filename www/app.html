@@ -669,6 +669,34 @@ $('btn-close-room-created').onclick = () => {
   $('modal-room-created').classList.remove('show');
 };
 
+$('btn-copy-room').onclick = async () => {
+  const code = $('new-room-code').textContent.trim();
+  if (!code || code === '-') return;
+  let ok = false;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(code);
+      ok = true;
+    }
+  } catch (e) {}
+  if (!ok) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = code;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+    } catch (e) {}
+  }
+  const btn = $('btn-copy-room');
+  const original = btn.textContent;
+  btn.textContent = ok ? '✓ Tersalin' : '✕ Gagal';
+  setTimeout(() => { btn.textContent = original; }, 1500);
+};
+
 $('btn-continue').onclick = () => {
   $('modal-room-created').classList.remove('show');
   enterChat();
