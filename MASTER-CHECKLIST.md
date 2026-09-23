@@ -46,7 +46,7 @@
 - [x] 5.5 Firebase Auth + Rules + Purge room creator
 - [-] 5.6 Device binding (SKIP — user ganti HP blokir akses)
 - [x] 5.7 Test proteksi
-- [ ] 5.8 Native Notification (background push)
+- [-] 5.8 Native Notification (SKIP — kontra stealth, bocor via notif)
 
 ## FASE 6: Optimasi Firebase (6 task)
 - [ ] 6.1 Auto-hapus 6 jam

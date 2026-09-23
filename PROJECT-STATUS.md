@@ -18,7 +18,7 @@
 - ⏳ Fase 7: Play Store Prep
 - ⏳ Fase 8: Marketing
 
-**Progress:** 5/8 fase selesai (62.5%) — Fase 5 hampir tamat
+**Progress:** 5/8 fase selesai (62.5%) — lanjut Fase 6
 
 ---
 
