@@ -800,7 +800,7 @@ $('btn-join-room').onclick = async () => {
   if (!room || room.length < 6) { helper.className = 'helper err'; helper.textContent = 'Kode room minimal 6 digit'; return; }
   if (!/^\d+$/.test(room)) { helper.className = 'helper err'; helper.textContent = 'Kode room harus angka'; return; }
   helper.textContent = 'Mencari room...';
-  const metaSnap = await new Promise(r => onValue(ref(db, `rooms/${room}/meta`), r, { onlyOnce: true }));
+  const metaSnap = await get(ref(db, `rooms/${room}/meta`));
   const meta = metaSnap.val();
   if (!meta) { helper.className = 'helper err'; helper.textContent = '✗ Room tidak ditemukan'; return; }
   if (meta.locked) { helper.className = 'helper err'; helper.textContent = '🔒 Room sedang dikunci'; return; }
@@ -811,7 +811,7 @@ $('btn-join-room').onclick = async () => {
   state.room = room; state.name = name;
   state.isCreator = meta.creatorDeviceId === state.info.deviceId;
   state.meta = meta;
-  const devSnap = await new Promise(r => onValue(ref(db, `rooms/${room}/devices/${state.info.deviceId}`), r, { onlyOnce: true }));
+  const devSnap = await get(ref(db, `rooms/${room}/devices/${state.info.deviceId}`));
   const existing = devSnap.val();
   if (existing) {
     if (existing.blocked) { helper.className = 'helper err'; helper.textContent = '🚫 Device Anda diblokir'; return; }
@@ -821,7 +821,7 @@ $('btn-join-room').onclick = async () => {
     toast('✅ Selamat datang kembali', 'success');
     enterChat(); return;
   }
-  const devsSnap = await new Promise(r => onValue(ref(db, `rooms/${room}/devices`), r, { onlyOnce: true }));
+  const devsSnap = await get(ref(db, `rooms/${room}/devices`));
   const devices = devsSnap.val() || {};
   const count = Object.keys(devices).length;
   const max = meta.maxDevices || 5;
@@ -1128,7 +1128,7 @@ $('sheet-leave').onclick = () => {
 $('sheet-info').onclick = () => {
   closeSheet();
   setTimeout(async () => {
-    const snap = await new Promise(r => onValue(ref(db, `rooms/${state.room}/devices`), r, { onlyOnce: true }));
+    const snap = await get(ref(db, `rooms/${state.room}/devices`));
     const data = snap.val() || {};
     const devices = Object.entries(data);
     let msg = `INFO ROOM ${state.room}\n${'='.repeat(28)}\n\n`;
