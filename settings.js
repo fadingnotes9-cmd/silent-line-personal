@@ -294,9 +294,16 @@
         totalSize += (String(localStorage[key]).length + key.length) * 2;
       }
     }
-    const sizeKB = Math.round(totalSize / 1024);
+    let sizeText;
+    if (totalSize < 1024) {
+      sizeText = totalSize + ' B';
+    } else if (totalSize < 1024 * 1024) {
+      sizeText = (totalSize / 1024).toFixed(1) + ' KB';
+    } else {
+      sizeText = (totalSize / (1024 * 1024)).toFixed(1) + ' MB';
+    }
     const el9 = document.getElementById('st-storage-val');
-    if (el9) el9.textContent = sizeKB + ' KB';
+    if (el9) el9.textContent = sizeText;
   }
 
   // ========== HANDLE ACTION ==========
