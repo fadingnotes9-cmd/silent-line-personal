@@ -11,7 +11,7 @@
 - ✅ Fase 0: Fork Repo — SELESAI
 - ✅ Fase 1: Fondasi — SELESAI
 - ✅ Fase 2: Setup Wizard — SELESAI
-- ⏳ Fase 3: Settings Panel — 7/9 task selesai
+- ⏳ Fase 3: Settings Panel — 8/9 task selesai
 - ⏳ Fase 4: Multi-Room
 - ⏳ Fase 5: Proteksi
 - ⏳ Fase 6: Optimasi Firebase
@@ -33,7 +33,7 @@
 - ⏸️ 3.5 Font size — DEFERRED (evaluasi di tahap 100%)
 - ✅ 3.6 Notifikasi toggle (in-app: sound + vibrate + persistensi)
 - ✅ 3.7 Reset aplikasi (2-step confirm + wipe localStorage sl_*)
-- ⏳ 3.8 Tentang
+- ✅ 3.8 Tentang (versi, privasi, terms)
 - ⏳ 3.9 Test
 
 ### Detail 3.6
@@ -44,16 +44,23 @@
 
 **Catatan:** Native push notification (background) masuk Fase 5+.
 
+### Detail 3.8
+- ✅ 3.8a Handler action `about` (alert versi + copyright)
+- ✅ 3.8b Handler action `privacy` (alert 4 poin kebijakan)
+- ✅ 3.8c Handler action `terms` (alert 4 poin syarat)
+
 ---
 
-## FASE 3.8 — BERIKUTNYA
+## FASE 3.9 — BERIKUTNYA
 
-**Tentang** — halaman info aplikasi (versi, kredit, privacy policy link).
+**Test end-to-end** — verifikasi semua fitur Fase 3 sebelum lanjut ke Fase 4.
 
 Task:
-- ⏳ 3.8a Tombol "Tentang" di panel Settings
-- ⏳ 3.8b Modal/panel berisi info versi, repo, kredit
-- ⏳ 3.8c Link ke privacy policy
+- ⏳ 3.9a Test wizard
+- ⏳ 3.9b Test chat (text + foto)
+- ⏳ 3.9c Test Settings (semua menu)
+- ⏳ 3.9d Test kamera
+- ⏳ 3.9e Test multi-room
 
 ---
 
@@ -67,7 +74,7 @@ Task:
 
 - Fork dari: https://github.com/fadingnotes9-cmd/silent-line
 - Enterprise status: FROZEN
-- Build terakhir: Fase 3.7 (Notifikasi + Reset)
+- Build terakhir: Fase 3.8 (Tentang)
 - APK tested: settings, ubah kode, dark mode, notifikasi toggle
 
 ---

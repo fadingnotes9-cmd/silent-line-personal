@@ -25,7 +25,7 @@
 - [~] 3.5 Chat (font size)
 - [x] 3.6 Notifikasi
 - [x] 3.7 Data (reset)
-- [ ] 3.8 Tentang (versi, privasi)
+- [x] 3.8 Tentang (versi, privasi)
 - [ ] 3.9 Test semua menu
 
 ## FASE 4: Multi-Room (8 task)
