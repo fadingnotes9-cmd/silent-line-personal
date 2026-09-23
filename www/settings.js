@@ -443,6 +443,19 @@
       return;
     }
 
+    // ===== AUTO-LOCK =====
+    if (action === "auto-lock") {
+      var curAL = localStorage.getItem("sl_auto_lock") || "0";
+      var cycle = { "0": "1", "1": "5", "5": "15", "15": "0" };
+      var nextAL = cycle[curAL] || "0";
+      localStorage.setItem("sl_auto_lock", nextAL);
+      var labelAL = { "0": "Off", "1": "1 menit", "5": "5 menit", "15": "15 menit" }[nextAL] || "Off";
+      var elAL = document.getElementById("st-auto-lock-val");
+      if (elAL) elAL.textContent = labelAL;
+      if (window.__slUpdateIdleTimer) window.__slUpdateIdleTimer(parseInt(nextAL, 10));
+      return;
+    }
+
     // ===== TENTANG =====
     if (action === "about") {
       alert("Silent Line Personal\n\nVersi: v2.2.1\nKoordinasi aman, tanpa jejak.\n\n\u00a9 2026 Silent Line");
