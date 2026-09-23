@@ -79,6 +79,7 @@ body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(saf
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
 import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js';
+import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA1N_qsX6Wa5X0FPhIRNtaeiGT5uF-SwqI",
@@ -91,7 +92,17 @@ const firebaseConfig = {
 };
 
 let db = null;
-try { db = getDatabase(initializeApp(firebaseConfig)); } catch {}
+
+// ===== FIREBASE AUTH (Fase 5.5) =====
+try {
+  const __app = initializeApp(firebaseConfig);
+  db = getDatabase(__app);
+  const __auth = getAuth(__app);
+  await signInAnonymously(__auth);
+  console.log('✅ Auth anonymous OK:', __auth.currentUser.uid);
+} catch (e) {
+  console.error('❌ Auth gagal:', e);
+}
 
 const DEFAULT_USER = ['2','5','0','*','1'];
 let USER_SEQ = [...DEFAULT_USER];
