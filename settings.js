@@ -462,6 +462,25 @@
       return;
     }
 
+    // ===== INFO PENYIMPANAN =====
+    if (action === "storage-info") {
+      var detail = [];
+      var totalBytes = 0;
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf("sl_") === 0) {
+          var v = String(localStorage.getItem(k) || "");
+          var bytes = (v.length + k.length) * 2;
+          totalBytes += bytes;
+          var sizeText = bytes < 1024 ? bytes + " B" : (bytes/1024).toFixed(1) + " KB";
+          detail.push("• " + k + ": " + sizeText);
+        }
+      }
+      var totalText = totalBytes < 1024 ? totalBytes + " B" : (totalBytes/1024).toFixed(1) + " KB";
+      alert("Info Penyimpanan\n\n" + (detail.length ? detail.join("\n") : "(belum ada data)") + "\n\nTotal: " + totalText + "\n\nData lokal saja. Foto/pesan di server tidak dihitung.");
+      return;
+    }
+
     // ===== AUTO-HAPUS PESAN =====
     if (action === "auto-delete") {
       var curAD = localStorage.getItem("sl_auto_delete") || "24";
