@@ -560,6 +560,38 @@ function showScreen(n) {
   state.screen = n;
 }
 
+// ===== AUTO-LOCK (Fase 5.1) =====
+let __slIdleTimer = null;
+let __slIdleMinutes = 0;
+const __slIdleEvents = ['touchstart','mousedown','keydown','scroll','click','mousemove'];
+
+function __slResetIdleTimer() {
+  if (__slIdleTimer) { clearTimeout(__slIdleTimer); __slIdleTimer = null; }
+  if (__slIdleMinutes <= 0) return;
+  __slIdleTimer = setTimeout(function() {
+    try { localStorage.setItem('sl_auto_locked', '1'); } catch {}
+    location.replace('index.html');
+  }, __slIdleMinutes * 60 * 1000);
+}
+
+function __slBindIdleEvents() {
+  __slIdleEvents.forEach(function(evt) {
+    document.addEventListener(evt, __slResetIdleTimer, { passive: true });
+  });
+}
+
+window.__slUpdateIdleTimer = function(minutes) {
+  __slIdleMinutes = minutes > 0 ? minutes : 0;
+  __slResetIdleTimer();
+};
+
+(function() {
+  const m = parseInt(localStorage.getItem('sl_auto_lock') || '0', 10);
+  __slIdleMinutes = m > 0 ? m : 0;
+  __slBindIdleEvents();
+  __slResetIdleTimer();
+})();
+
 window.addEventListener('online', () => { state.online = true; $('offline-banner').classList.remove('show'); flushQueue(); });
 window.addEventListener('offline', () => { state.online = false; $('offline-banner').classList.add('show'); });
 
