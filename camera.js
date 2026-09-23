@@ -1,4 +1,4 @@
-// Kompres gambar di canvas (max 200 KB)
+// Kompres gambar di canvas (max 100 KB)
 function compressImage(file, maxKB) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -32,7 +32,7 @@ function compressImage(file, maxKB) {
 
 window.uploadPhoto = async function(file) {
   try {
-    const dataUrl = await compressImage(file, 200);
+    const dataUrl = await compressImage(file, 100);
     const sizeKB = Math.round(dataUrl.length * 0.75 / 1024);
     if (typeof window.sendPhotoMessage === 'function') {
       await window.sendPhotoMessage(dataUrl, sizeKB);
