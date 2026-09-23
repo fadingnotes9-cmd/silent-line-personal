@@ -14,11 +14,11 @@
 - ✅ Fase 3: Settings Panel — SELESAI
 - ✅ Fase 4: Multi-Room — SELESAI
 - ⏳ Fase 5: Proteksi
-- ⏳ Fase 6: Optimasi Firebase
+- ✅ Fase 6: Optimasi Firebase — SELESAI (3/6, 3 skip)
 - ⏳ Fase 7: Play Store Prep
 - ⏳ Fase 8: Marketing
 
-**Progress:** 5/8 fase selesai (62.5%) — lanjut Fase 6
+**Progress:** 6/8 fase selesai (75%)
 
 ---
 
@@ -74,7 +74,7 @@
 
 - Fork dari: https://github.com/fadingnotes9-cmd/silent-line
 - Enterprise status: FROZEN
-- Build terakhir: Fase 5.5h (Cleanup debug + Firebase Rules)
+- Build terakhir: Fase 6.5 (Compress foto 100 KB)
 - APK tested: settings, ubah kode, dark mode, notifikasi toggle
 
 ---

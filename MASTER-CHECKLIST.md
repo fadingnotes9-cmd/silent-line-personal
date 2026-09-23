@@ -49,12 +49,12 @@
 - [-] 5.8 Native Notification (SKIP — kontra stealth, bocor via notif)
 
 ## FASE 6: Optimasi Firebase (6 task)
-- [ ] 6.1 Auto-hapus 6 jam
-- [ ] 6.2 Presence interval 30 detik
-- [ ] 6.3 Read receipt interval 15 detik
-- [ ] 6.4 Limit foto 5/hari
-- [ ] 6.5 Compress foto 100 KB
-- [ ] 6.6 Test beban Firebase
+- [-] 6.1 Auto-hapus 6 jam (SKIP — belum ada user)
+- [x] 6.2 Presence interval 30 detik
+- [x] 6.3 Read receipt interval 15 detik
+- [-] 6.4 Limit foto 5/hari (SKIP — belum ada user)
+- [x] 6.5 Compress foto 100 KB
+- [-] 6.6 Test beban Firebase (SKIP — belum ada beban)
 
 ## FASE 7: Play Store Prep (6 task)
 - [ ] 7.1 Privacy Policy

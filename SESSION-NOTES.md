@@ -89,7 +89,30 @@
 
 ---
 
-## Sesi 4 — (belum)
+## Sesi 4 — 2026-09-23 (lanjutan)
+
+**Durasi:** ~1 jam
+
+**Yang Dikerjakan:**
+- Fase 6.2: Presence interval 30s (dari 15s) — hemat ~50% kuota
+- Fase 6.3: Read receipt interval 15s (dari 8s)
+- Fase 6.5: Compress foto target 100 KB (dari 200 KB)
+- SKIP 5.8 (Native Notification) — kontra stealth, notif status bar = jejak
+
+**Keputusan Penting:**
+- Notifikasi background DIBATALKAN total — melanggar konsep "tanpa jejak"
+- Fase 6 SKIP 6.1/6.4/6.6 — prematur (belum ada user)
+
+**Status Akhir:**
+- Fase 6 SELESAI (3/6, 3 skip dengan alasan)
+- Progress: 6/8 fase (75%)
+- Build terakhir: `1b690f5`
+
+---
+
+## Sesi 5 — (belum)
+
+**Rencana:** Fase 7 Play Store Prep (Privacy Policy, Signing, AAB)
 
 **Rencana:** Fase 5.8 Native Notification (background push) → sisa Fase 5
 
