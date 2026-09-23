@@ -381,7 +381,17 @@
       return;
     }
 
-    // Placeholder untuk action lain
+    
+    // ===== TEMA =====
+    if (action === "theme") {
+      var next = window.SLTheme ? window.SLTheme.cycle() : "light";
+      var map = { light: "Terang", dark: "Gelap", auto: "Otomatis" };
+      var el = document.getElementById("st-theme-val");
+      if (el) el.textContent = map[next] || "Terang";
+      return;
+    }
+
+// Placeholder untuk action lain
     console.log('Settings action:', action);
     alert('Fitur sedang dikembangkan:\n\n' + item.querySelector('.st-item-label').textContent.trim());
   });
