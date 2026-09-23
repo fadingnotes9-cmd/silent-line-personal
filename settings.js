@@ -167,11 +167,6 @@
             <div class="st-item-label">Tema</div>
             <div class="st-item-value" id="st-theme-val">Terang</div>
           </button>
-          <button class="st-item" data-action="font-size">
-            <div class="st-item-icon blue">Aa</div>
-            <div class="st-item-label">Ukuran Font</div>
-            <div class="st-item-value" id="st-font-val">Sedang</div>
-          </button>
         </div>
 
         <div class="st-section">
