@@ -857,7 +857,7 @@ function setupPresence() {
     $('offline-banner').classList.toggle('show', !conn);
     if (conn && queue.length) flushQueue();
   }));
-  const iv = setInterval(() => { if (state.room) set(myRef, { name: state.name, lastSeen: serverTimestamp() }); }, 15000);
+  const iv = setInterval(() => { if (state.room) set(myRef, { name: state.name, lastSeen: serverTimestamp() }); }, 30000);
   state.subs.push(() => clearInterval(iv));
   state.subs.push(onValue(presRef, snap => {
     const curr = snap.exists() ? snap.val() : {};
@@ -877,7 +877,7 @@ function setupPresence() {
   }));
   const devRef = ref(db, `rooms/${state.room}/devices/${state.info.deviceId}/lastSeen`);
   set(devRef, serverTimestamp());
-  const iv2 = setInterval(() => { if (state.room) set(devRef, serverTimestamp()); }, 20000);
+  const iv2 = setInterval(() => { if (state.room) set(devRef, serverTimestamp()); }, 30000);
   state.subs.push(() => clearInterval(iv2));
 }
 
@@ -1058,7 +1058,7 @@ function setupReadReceipt() {
   const rRef = ref(db, `rooms/${state.room}/readReceipts`);
   const myRef = ref(db, `rooms/${state.room}/readReceipts/${state.info.deviceId}`);
   set(myRef, { lastRead: now() });
-  const iv = setInterval(() => { if (state.room) set(myRef, { lastRead: now() }); }, 8000);
+  const iv = setInterval(() => { if (state.room) set(myRef, { lastRead: now() }); }, 15000);
   state.subs.push(() => clearInterval(iv));
   state.subs.push(onValue(rRef, snap => {
     if (!snap.exists()) return;
