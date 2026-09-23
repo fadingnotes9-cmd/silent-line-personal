@@ -462,6 +462,18 @@
       return;
     }
 
+    // ===== AUTO-HAPUS PESAN =====
+    if (action === "auto-delete") {
+      var curAD = localStorage.getItem("sl_auto_delete") || "24";
+      var cycleAD = { "0": "1", "1": "6", "6": "24", "24": "168", "168": "0" };
+      var nextAD = cycleAD[curAD] || "24";
+      localStorage.setItem("sl_auto_delete", nextAD);
+      var labelAD = { "0": "Off", "1": "1 jam", "6": "6 jam", "24": "24 jam", "168": "7 hari" }[nextAD] || "24 jam";
+      var elAD = document.getElementById("st-delete-val");
+      if (elAD) elAD.textContent = labelAD;
+      return;
+    }
+
     // ===== TENTANG =====
     if (action === "about") {
       alert("Silent Line Personal\n\nVersi: v2.2.1\nKoordinasi aman, tanpa jejak.\n\n\u00a9 2026 Silent Line");
