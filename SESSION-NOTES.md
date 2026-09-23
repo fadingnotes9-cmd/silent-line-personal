@@ -62,3 +62,9 @@
 ## Sesi 3 — (belum)
 
 **Rencana:** Fase 4 Multi-Room (8 task)
+
+**Catatan awal Fase 4 (dari Sesi 2):**
+- `getRemembered()` dan `saveRemembered()` SUDAH ADA di app.html baris 475-476
+- Pakai key `sl_rooms`
+- Limit saat ini 10 room (`slice(-10)`) — Fase 4.4 perlu ubah jadi 3
+- Jadi Fase 4.2 (simpan room ke localStorage) sudah PARTIAL
