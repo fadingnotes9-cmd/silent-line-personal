@@ -473,7 +473,7 @@ function generateRoomCode() {
 }
 
 function getRemembered() { try { return JSON.parse(localStorage.getItem('sl_rooms') || '[]'); } catch { return []; } }
-function saveRemembered(list) { try { localStorage.setItem('sl_rooms', JSON.stringify(list.slice(-10))); } catch {} }
+function saveRemembered(list) { try { localStorage.setItem('sl_rooms', JSON.stringify(list.slice(-3))); } catch {} }
 function addRemembered(room) {
   const list = getRemembered().filter(r => r.code !== room.code);
 window.addEventListener('load', async () => {
