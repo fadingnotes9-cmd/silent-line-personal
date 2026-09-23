@@ -9,22 +9,22 @@
 - [x] 1.6 Test build pertama (auto via GitHub Actions)
 
 ## FASE 2: Setup Wizard (7 task)
-- [ ] 2.1 Slide 1: Selamat datang
-- [ ] 2.2 Slide 2: Buat kode rahasia
-- [ ] 2.3 Slide 3: Konfirmasi kode
-- [ ] 2.4 Slide 4: Selesai
-- [ ] 2.5 Simpan ke localStorage
-- [ ] 2.6 Validasi kode
-- [ ] 2.7 Test wizard
+- [x] 2.1 Slide 1: Selamat datang
+- [x] 2.2 Slide 2: Buat kode rahasia
+- [x] 2.3 Slide 3: Konfirmasi kode
+- [x] 2.4 Slide 4: Selesai
+- [x] 2.5 Simpan ke localStorage
+- [x] 2.6 Validasi kode
+- [x] 2.7 Test wizard
 
 ## FASE 3: Settings Panel (9 task)
-- [ ] 3.1 Menu Pengaturan utama
-- [ ] 3.2 Profil (ubah nama)
-- [ ] 3.3 Keamanan (ubah kode)
-- [ ] 3.4 Tampilan (dark mode)
-- [ ] 3.5 Chat (font size)
-- [ ] 3.6 Notifikasi
-- [ ] 3.7 Data (reset)
+- [x] 3.1 Menu Pengaturan utama
+- [x] 3.2 Profil (ubah nama)
+- [x] 3.3 Keamanan (ubah kode)
+- [x] 3.4 Tampilan (dark mode)
+- [~] 3.5 Chat (font size)
+- [x] 3.6 Notifikasi
+- [x] 3.7 Data (reset)
 - [ ] 3.8 Tentang (versi, privasi)
 - [ ] 3.9 Test semua menu
 
