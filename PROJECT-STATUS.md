@@ -31,22 +31,22 @@
 - ✅ 3.3 Fitur ubah kode rahasia
 - [x] 3.4 Dark mode
 - [~] 3.5 Font size — DEFERRED (evaluasi di tahap 100%)
-- [ ] 3.6 Notifikasi toggle
+- [x] 3.6 Notifikasi toggle
 - [ ] 3.7 Reset aplikasi
 - [ ] 3.8 Tentang
 - [ ] 3.9 Test
 
 ---
 
-## FASE 3.6 — BERIKUTNYA
+## FASE 3.7 — BERIKUTNYA
 
-**Notifikasi Toggle (Sound + Vibrate)**
+**Reset Aplikasi**
 
 Task:
-- [ ] 3.6a Toggle sound on/off
-- [ ] 3.6b Toggle vibrate on/off
-- [ ] 3.6c Efek lokal (beep + getar saat pesan masuk)
-- [ ] 3.6d Persistensi via localStorage
+- [x] 3.6a Toggle sound on/off
+- [x] 3.6b Toggle vibrate on/off
+- [x] 3.6c Efek lokal (beep + getar saat pesan masuk)
+- [x] 3.6d Persistensi via localStorage
 
 **Catatan:** Native push notification (background) masuk Fase 5+.
 

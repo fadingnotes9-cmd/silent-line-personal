@@ -382,6 +382,25 @@
     }
 
     
+
+    // ===== NOTIFIKASI =====
+    if (action === "toggle-sound") {
+      var cur = localStorage.getItem("sl_notif_sound") || "on";
+      var next = cur === "on" ? "off" : "on";
+      localStorage.setItem("sl_notif_sound", next);
+      var elS = document.getElementById("st-sound-val");
+      if (elS) elS.textContent = next === "on" ? "On" : "Off";
+      return;
+    }
+    if (action === "toggle-vibrate") {
+      var curV = localStorage.getItem("sl_notif_vibrate") || "on";
+      var nextV = curV === "on" ? "off" : "on";
+      localStorage.setItem("sl_notif_vibrate", nextV);
+      var elV = document.getElementById("st-vibrate-val");
+      if (elV) elV.textContent = nextV === "on" ? "On" : "Off";
+      return;
+    }
+
     // ===== TEMA =====
     if (action === "theme") {
       var next = window.SLTheme ? window.SLTheme.cycle() : "light";
@@ -397,4 +416,20 @@
   });
 
   console.log('✅ settings.js loaded');
+
+  // init notif labels
+  function __initNotifLabels() {
+    var s = localStorage.getItem("sl_notif_sound") || "on";
+    var v = localStorage.getItem("sl_notif_vibrate") || "on";
+    var elS = document.getElementById("st-sound-val");
+    var elV = document.getElementById("st-vibrate-val");
+    if (elS) elS.textContent = s === "on" ? "On" : "Off";
+    if (elV) elV.textContent = v === "on" ? "On" : "Off";
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", __initNotifLabels);
+  } else {
+    __initNotifLabels();
+  }
+
 })();

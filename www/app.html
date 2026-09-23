@@ -445,9 +445,10 @@ function getInfo() {
   return { model, os, browser, screen: screen.width+'×'+screen.height, deviceId: fp() };
 }
 
-function vibrate(p) { if (navigator.vibrate) navigator.vibrate(p); }
+function vibrate(p) { if (localStorage.getItem("sl_notif_vibrate") === "off") return; if (navigator.vibrate) navigator.vibrate(p); }
 let actx;
 function beep() {
+  if (localStorage.getItem("sl_notif_sound") === "off") return;
   try {
     actx = actx || new (window.AudioContext || window.webkitAudioContext)();
     const o = actx.createOscillator(), g = actx.createGain();
