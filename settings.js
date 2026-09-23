@@ -298,11 +298,11 @@
     const el6 = document.getElementById('st-delete-val');
     if (el6) el6.textContent = deleteText;
 
-    const sound = localStorage.getItem('sl_sound') !== 'off';
+    const sound = localStorage.getItem('sl_notif_sound') !== 'off';
     const el7 = document.getElementById('st-sound-val');
     if (el7) el7.textContent = sound ? 'On' : 'Off';
 
-    const vibrate = localStorage.getItem('sl_vibrate') !== 'off';
+    const vibrate = localStorage.getItem('sl_notif_vibrate') !== 'off';
     const el8 = document.getElementById('st-vibrate-val');
     if (el8) el8.textContent = vibrate ? 'On' : 'Off';
 
@@ -381,10 +381,88 @@
       return;
     }
 
-    // Placeholder untuk action lain
+    
+
+
+    // ===== RESET APLIKASI =====
+    if (action === "reset-app") {
+      var ok1 = confirm(
+        "⚠️ RESET APLIKASI\n\n" +
+        "Semua pengaturan akan dihapus:\n" +
+        "• Nama profil\n" +
+        "• Kode rahasia\n" +
+        "• Room tersimpan\n" +
+        "• Tema, notifikasi, dll.\n\n" +
+        "Data di server (room, pesan) TIDAK akan terhapus.\n\n" +
+        "Lanjutkan?"
+      );
+      if (!ok1) return;
+
+      var ok2 = prompt("Ketik RESET (huruf kapital) untuk konfirmasi:");
+      if (ok2 !== "RESET") {
+        alert("❌ Reset dibatalkan.");
+        return;
+      }
+
+      var keys = [];
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf("sl_") === 0) keys.push(k);
+      }
+      keys.forEach(function(k) { localStorage.removeItem(k); });
+
+      alert("✅ Reset selesai. Aplikasi akan dimuat ulang.");
+      setTimeout(function() { location.reload(); }, 400);
+      return;
+    }
+
+    // ===== NOTIFIKASI =====
+    if (action === "toggle-sound") {
+      var cur = localStorage.getItem("sl_notif_sound") || "on";
+      var next = cur === "on" ? "off" : "on";
+      localStorage.setItem("sl_notif_sound", next);
+      var elS = document.getElementById("st-sound-val");
+      if (elS) elS.textContent = next === "on" ? "On" : "Off";
+      return;
+    }
+    if (action === "toggle-vibrate") {
+      var curV = localStorage.getItem("sl_notif_vibrate") || "on";
+      var nextV = curV === "on" ? "off" : "on";
+      localStorage.setItem("sl_notif_vibrate", nextV);
+      var elV = document.getElementById("st-vibrate-val");
+      if (elV) elV.textContent = nextV === "on" ? "On" : "Off";
+      return;
+    }
+
+    // ===== TEMA =====
+    if (action === "theme") {
+      var next = window.SLTheme ? window.SLTheme.cycle() : "light";
+      var map = { light: "Terang", dark: "Gelap", auto: "Otomatis" };
+      var el = document.getElementById("st-theme-val");
+      if (el) el.textContent = map[next] || "Terang";
+      return;
+    }
+
+// Placeholder untuk action lain
     console.log('Settings action:', action);
     alert('Fitur sedang dikembangkan:\n\n' + item.querySelector('.st-item-label').textContent.trim());
   });
 
   console.log('✅ settings.js loaded');
+
+  // init notif labels
+  function __initNotifLabels() {
+    var s = localStorage.getItem("sl_notif_sound") || "on";
+    var v = localStorage.getItem("sl_notif_vibrate") || "on";
+    var elS = document.getElementById("st-sound-val");
+    var elV = document.getElementById("st-vibrate-val");
+    if (elS) elS.textContent = s === "on" ? "On" : "Off";
+    if (elV) elV.textContent = v === "on" ? "On" : "Off";
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", __initNotifLabels);
+  } else {
+    __initNotifLabels();
+  }
+
 })();
