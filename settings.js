@@ -443,6 +443,20 @@
       return;
     }
 
+    // ===== TENTANG =====
+    if (action === "about") {
+      alert("Silent Line Personal\n\nVersi: v2.2.1\nKoordinasi aman, tanpa jejak.\n\n\u00a9 2026 Silent Line");
+      return;
+    }
+    if (action === "privacy") {
+      alert("Kebijakan Privasi\n\n\u2022 Pesan hanya tersimpan di perangkat Anda.\n\u2022 Tidak ada pelacakan pengguna.\n\u2022 Tidak ada data yang dijual ke pihak ketiga.\n\u2022 Data dihapus otomatis sesuai pengaturan.");
+      return;
+    }
+    if (action === "terms") {
+      alert("Syarat & Ketentuan\n\n1. Untuk komunikasi privat.\n2. Dilarang untuk aktivitas ilegal.\n3. Pengguna bertanggung jawab atas konten.\n4. Layanan disediakan apa adanya.");
+      return;
+    }
+
 // Placeholder untuk action lain
     console.log('Settings action:', action);
     alert('Fitur sedang dikembangkan:\n\n' + item.querySelector('.st-item-label').textContent.trim());
