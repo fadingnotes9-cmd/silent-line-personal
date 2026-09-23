@@ -112,7 +112,22 @@
 
 ## Sesi 5 — (belum)
 
-**Rencana:** Fase 7 Play Store Prep (Privacy Policy, Signing, AAB)
+**Rencana Awal:** Fase 7 Play Store Prep
+
+**Yang Benar-benar Dikerjakan:**
+- Fase 3.10: Hapus Warna Aksen + Gaya Bubble (cleanup)
+- Fase 3.11: Info Penyimpanan tampil B/KB/MB (dari 0 KB)
+- Fase 3.12: Auto Hapus Pesan (cycle Off/1h/6h/24h/7d)
+- Fase 3.13: Handler storage-info (breakdown per key)
+- Fase 3.14: Hapus Ukuran Font (cleanup)
+
+**Rencana Sesi Berikutnya:**
+- Fase 7.1: Privacy Policy
+- Fase 7.2: Terms of Service
+- Fase 7.3: Signing key
+- Fase 7.4: APK → AAB
+- Fase 7.5: Target API 36
+- Fase 7.6: Test build AAB
 
 **Rencana:** Fase 5.8 Native Notification (background push) → sisa Fase 5
 
