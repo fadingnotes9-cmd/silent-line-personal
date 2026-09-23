@@ -264,11 +264,6 @@
     if (el2) el2.textContent = themeText;
 
 
-    const font = localStorage.getItem('sl_font_size') || 'medium';
-    const fontText = { 'small': 'Kecil', 'medium': 'Sedang', 'large': 'Besar' }[font] || 'Sedang';
-    const el4 = document.getElementById('st-font-val');
-    if (el4) el4.textContent = fontText;
-
 
     const autoDelete = localStorage.getItem('sl_auto_delete') || '24';
     const deleteText = { '0': 'Off', '6': '6 jam', '12': '12 jam', '24': '24 jam', '168': '7 hari' }[autoDelete] || '24 jam';
