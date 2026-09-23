@@ -514,6 +514,16 @@ renderRemembered();
 function removeRemembered(code) {
   saveRemembered(getRemembered().filter(r => r.code !== code)); renderRemembered();
 }
+function updateCreateButton() {
+  const btn = $('btn-create-room');
+  if (!btn) return;
+  const full = getRemembered().length >= 3;
+  btn.disabled = full;
+  btn.textContent = full ? 'Room Penuh (3/3) — Hapus dulu' : 'Buat Room Baru';
+  btn.style.opacity = full ? '0.5' : '1';
+  btn.style.cursor = full ? 'not-allowed' : 'pointer';
+}
+
 function renderRemembered() {
   const list = getRemembered();
   const el = $('rem-rooms'), container = $('rem-rooms-list');
@@ -534,6 +544,7 @@ function renderRemembered() {
     };
     container.appendChild(item);
   });
+  updateCreateButton();
 }
 
 const state = {
@@ -617,6 +628,10 @@ document.querySelectorAll('.tabs button').forEach(b => {
 });
 
 $('btn-create-room').onclick = async () => {
+  if (getRemembered().length >= 3) {
+    alert('Room penuh (3/3).\n\nHapus salah satu room dari daftar tersimpan dulu, lalu coba lagi.');
+    return;
+  }
   let name = $('create-name').value.trim();
   if (!name) name = localStorage.getItem('sl_user_name') || '';
   if (name) localStorage.setItem('sl_user_name', name);
