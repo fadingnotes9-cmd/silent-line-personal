@@ -1071,13 +1071,17 @@ function setupReadReceipt() {
 }
 
 async function purgeOld() {
-  const cutoff = now() - 24*60*60*1000;
+  const setting = parseInt(localStorage.getItem('sl_auto_delete') || '24', 10);
+  if (!setting || setting <= 0) return;
+  const cutoff = now() - setting * 60 * 60 * 1000;
   const r = ref(db, `rooms/${state.room}/messages`);
-  const snap = await new Promise(res => onValue(r, res, { onlyOnce: true }));
+  const snap = await get(r);
   if (!snap.exists()) return;
   const del = [];
   snap.forEach(c => { if ((c.val().timestamp || 0) < cutoff) del.push(c.ref); });
-  del.forEach(x => remove(x));
+  for (const x of del) {
+    await remove(x).catch(() => {});
+  }
 }
 
 const sheet = $('sheet'), overlay = $('sheet-overlay');
