@@ -1,6 +1,6 @@
 /* ============================================
    THEME MANAGER — Silent Line Personal
-   Light / Dark / Auto
+   Light / Dark / Auto  (v2 - fix global)
    ============================================ */
 (function () {
   "use strict";
@@ -9,62 +9,149 @@
   var root = document.documentElement;
 
   var css = `
-    :root {
-      --sl-bg: #f4f6f8;
-      --sl-surface: #ffffff;
-      --sl-border: #e4e9ee;
-      --sl-text: #1a202c;
-      --sl-text-sub: #718096;
-      --sl-header-bg: linear-gradient(135deg, #5b8def, #3a6fd8);
-      --sl-header-text: #ffffff;
-      --sl-item-hover: #f4f6f8;
-      --sl-danger: #c53030;
-    }
-
+    /* ===== DARK MODE — OVERRIDE CSS VARIABLES ===== */
     html.dark {
-      --sl-bg: #0f1419;
-      --sl-surface: #1a202c;
-      --sl-border: #2d3748;
-      --sl-text: #e2e8f0;
-      --sl-text-sub: #a0aec0;
-      --sl-header-bg: linear-gradient(135deg, #1a202c, #2d3748);
-      --sl-header-text: #e2e8f0;
-      --sl-item-hover: #2d3748;
-      --sl-danger: #fc8181;
+      --bg: #0f1419;
+      --chat: #0a0e13;
+      --sent: #1e3a5f;
+      --t: #e2e8f0;
+      --t2: #94a3b8;
+      --bd: #2d3748;
+      --pl: #1e293b;
+      --dgL: #2d1b1b;
     }
 
-    body {
-      background: var(--sl-bg);
-      color: var(--sl-text);
-      transition: background 0.2s, color 0.2s;
+    /* ===== FORCE BG & TEXT DI ROOT ===== */
+    html.dark body {
+      background: var(--bg);
+      color: var(--t);
+    }
+    html.dark .screen {
+      background: var(--bg);
+    }
+    html.dark .chat-bg {
+      background: var(--chat);
     }
 
-    .st-panel {
-      background: var(--sl-bg) !important;
-      color: var(--sl-text) !important;
+    /* ===== CONTAINER (hardcoded #fff) ===== */
+    html.dark .container {
+      background: var(--bg);
     }
-    .st-section {
-      background: var(--sl-surface) !important;
-      border-color: var(--sl-border) !important;
+
+    /* ===== LOGIN AREA ===== */
+    html.dark .login-wrap {
+      background: linear-gradient(160deg, #0f1419 0%, #131a22 50%, #0f1419 100%);
     }
-    .st-section-title {
-      color: var(--sl-text-sub) !important;
+    html.dark .login-title {
+      color: var(--t);
     }
-    .st-item {
-      color: var(--sl-text) !important;
-      border-bottom-color: var(--sl-border) !important;
+    html.dark .login-card {
+      background: #1a202c;
+      border-color: var(--bd);
+      box-shadow: 0 4px 24px rgba(0,0,0,.4);
     }
-    .st-item:active {
-      background: var(--sl-item-hover) !important;
+    html.dark .rem-rooms {
+      background: #1a202c;
+      border-color: var(--bd);
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
     }
-    .st-item-label .sub,
-    .st-item-value,
-    .st-item-arrow {
-      color: var(--sl-text-sub) !important;
+    html.dark .rem-rooms h4 {
+      color: var(--t2);
     }
-    .st-header {
-      background: var(--sl-header-bg) !important;
-      color: var(--sl-header-text) !important;
+    html.dark .rem-item {
+      background: var(--pl);
+    }
+    html.dark .rem-item .code {
+      color: var(--t);
+    }
+
+    /* ===== TABS ===== */
+    html.dark .tabs {
+      background: #0f1419;
+    }
+    html.dark .tabs button.active {
+      background: #2d3748;
+      color: #93b4f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,.3);
+    }
+
+    /* ===== INPUT ===== */
+    html.dark .field input,
+    html.dark .input-row input,
+    html.dark .input-row textarea {
+      background: #0f1419;
+      color: var(--t);
+      border-color: var(--bd);
+    }
+    html.dark .field input::placeholder,
+    html.dark .input-row input::placeholder {
+      color: #64748b;
+    }
+
+    /* ===== BUTTON GHOST ===== */
+    html.dark .btn.ghost {
+      background: #2d3748;
+      color: #93b4f0;
+    }
+
+    /* ===== BRAND FOOTER ===== */
+    html.dark .brand-footer {
+      color: #475569;
+    }
+
+    /* ===== CHAT AREA ===== */
+    html.dark .messages {
+      color: var(--t);
+    }
+    html.dark .chat-bottom {
+      background: #1a202c;
+      border-color: var(--bd);
+    }
+    html.dark .attach-btn {
+      background: #2d3748;
+      color: var(--t);
+    }
+
+    /* ===== BUBBLE (kalau pakai --sent & --bg) ===== */
+    /* Bubble terkirim pakai var(--sent), bubble diterima kemungkinan pakai #fff */
+    html.dark .bubble:not(.mine):not(.me):not(.sent) {
+      background: #1a202c;
+      color: var(--t);
+    }
+
+    /* ===== SHEET / MODAL ===== */
+    html.dark .sheet,
+    html.dark .modal-box {
+      background: #1a202c;
+      color: var(--t);
+    }
+    html.dark .sheet-item {
+      color: var(--t);
+      border-color: var(--bd);
+    }
+    html.dark .sheet-title {
+      color: var(--t);
+    }
+    html.dark .sheet-handle {
+      background: var(--bd);
+    }
+    html.dark .sheet-divider {
+      background: var(--bd);
+    }
+
+    /* ===== NOTIF / BANNER ===== */
+    html.dark .notif,
+    html.dark .offline-banner,
+    html.dark .reply-preview {
+      background: #1a202c;
+      color: var(--t);
+      border-color: var(--bd);
+    }
+
+    /* ===== SMOOTH TRANSITION ===== */
+    body, .container, .screen, .chat-bg, .login-card, .rem-rooms,
+    .login-wrap, .chat-bottom, .sheet, .modal-box, .field input {
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
   `;
 
