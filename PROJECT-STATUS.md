@@ -29,8 +29,8 @@
 - ✅ 3.1c Menu room (chat) terpisah dari Settings
 - ✅ 3.2 Fitur ubah nama profil
 - ✅ 3.3 Fitur ubah kode rahasia
-- [ ] 3.4 Dark mode
-- [ ] 3.5 Font size
+- [x] 3.4 Dark mode
+- [~] 3.5 Font size — DEFERRED (evaluasi di tahap 100%)
 - [ ] 3.6 Notifikasi toggle
 - [ ] 3.7 Reset aplikasi
 - [ ] 3.8 Tentang
@@ -38,14 +38,18 @@
 
 ---
 
-## FASE 3.4 — BERIKUTNYA
+## FASE 3.6 — BERIKUTNYA
 
-**Dark Mode + Font Size + Warna Aksen**
+**Notifikasi Toggle (Sound + Vibrate)**
 
 Task:
-- [ ] 3.4 Tema (Light/Dark/Auto)
-- [ ] 3.5 Font size (Kecil/Sedang/Besar)
-- [ ] 3.6 Warna aksen (5 pilihan)
+- [ ] 3.6a Toggle sound on/off
+- [ ] 3.6b Toggle vibrate on/off
+- [ ] 3.6c Efek lokal (beep + getar saat pesan masuk)
+- [ ] 3.6d Persistensi via localStorage
+
+**Catatan:** Native push notification (background) masuk Fase 5+.
+
 
 ---
 
