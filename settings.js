@@ -409,7 +409,8 @@
         var keys = [];
         for (var i = 0; i < localStorage.length; i++) {
           var k = localStorage.key(i);
-          if (k && k.indexOf("sl_") === 0) keys.push(k);
+          // Jangan hapus device ID (identitas device permanen)
+          if (k && k.indexOf("sl_") === 0 && k !== "sl_device_id") keys.push(k);
         }
         keys.forEach(function(k) { localStorage.removeItem(k); });
         alert("✅ Reset selesai. Aplikasi akan dimuat ulang.");
