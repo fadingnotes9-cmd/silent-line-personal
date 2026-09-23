@@ -595,6 +595,37 @@ window.__slUpdateIdleTimer = function(minutes) {
   __slResetIdleTimer();
 };
 
+// ===== PURGE MY ROOMS (Fase 5.5c) =====
+// Hapus semua room di Firebase yang device ini adalah creator-nya
+window.__slPurgeMyRooms = async function() {
+  const list = getRemembered().filter(function(r) { return r.isCreator === true; });
+  if (!list.length) return { deleted: 0, total: 0 };
+  const deviceId = state.info.deviceId;
+  let deleted = 0;
+  for (const r of list) {
+    try {
+      const metaSnap = await new Promise(function(resolve) {
+        onValue(ref(db, 'rooms/' + r.code + '/meta'), resolve, { onlyOnce: true });
+      });
+      const meta = metaSnap.exists() ? metaSnap.val() : null;
+      if (!meta) {
+        // Room sudah tidak ada di server, anggap sukses
+        deleted++;
+        continue;
+      }
+      if (meta.creatorDeviceId !== deviceId) {
+        // Bukan creator-nya, skip (safety)
+        continue;
+      }
+      await remove(ref(db, 'rooms/' + r.code));
+      deleted++;
+    } catch (e) {
+      console.warn('Gagal hapus room', r.code, e);
+    }
+  }
+  return { deleted: deleted, total: list.length };
+};
+
 (function() {
   const m = parseInt(localStorage.getItem('sl_auto_lock') || '0', 10);
   __slIdleMinutes = m > 0 ? m : 0;
