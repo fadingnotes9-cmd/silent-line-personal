@@ -167,11 +167,6 @@
             <div class="st-item-label">Tema</div>
             <div class="st-item-value" id="st-theme-val">Terang</div>
           </button>
-          <button class="st-item" data-action="accent">
-            <div class="st-item-icon blue">🎯</div>
-            <div class="st-item-label">Warna Aksen</div>
-            <div class="st-item-value" id="st-accent-val">Biru</div>
-          </button>
           <button class="st-item" data-action="font-size">
             <div class="st-item-icon blue">Aa</div>
             <div class="st-item-label">Ukuran Font</div>
@@ -181,11 +176,6 @@
 
         <div class="st-section">
           <div class="st-section-title">Chat</div>
-          <button class="st-item" data-action="bubble-style">
-            <div class="st-item-icon green">💬</div>
-            <div class="st-item-label">Gaya Bubble</div>
-            <div class="st-item-value" id="st-bubble-val">Bulat</div>
-          </button>
           <button class="st-item" data-action="auto-delete">
             <div class="st-item-icon green">⏳</div>
             <div class="st-item-label">Auto-Hapus Pesan</div>
@@ -278,20 +268,12 @@
     const el2 = document.getElementById('st-theme-val');
     if (el2) el2.textContent = themeText;
 
-    const accent = localStorage.getItem('sl_accent') || 'blue';
-    const accentText = { 'blue': 'Biru', 'green': 'Hijau', 'purple': 'Ungu', 'red': 'Merah', 'orange': 'Oranye' }[accent] || 'Biru';
-    const el3 = document.getElementById('st-accent-val');
-    if (el3) el3.textContent = accentText;
 
     const font = localStorage.getItem('sl_font_size') || 'medium';
     const fontText = { 'small': 'Kecil', 'medium': 'Sedang', 'large': 'Besar' }[font] || 'Sedang';
     const el4 = document.getElementById('st-font-val');
     if (el4) el4.textContent = fontText;
 
-    const bubble = localStorage.getItem('sl_bubble_style') || 'round';
-    const bubbleText = { 'round': 'Bulat', 'square': 'Kotak' }[bubble] || 'Bulat';
-    const el5 = document.getElementById('st-bubble-val');
-    if (el5) el5.textContent = bubbleText;
 
     const autoDelete = localStorage.getItem('sl_auto_delete') || '24';
     const deleteText = { '0': 'Off', '6': '6 jam', '12': '12 jam', '24': '24 jam', '168': '7 hari' }[autoDelete] || '24 jam';
