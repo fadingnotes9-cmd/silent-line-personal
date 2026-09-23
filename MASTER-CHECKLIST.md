@@ -36,7 +36,7 @@
 - [x] 4.5 Tambah room
 - [x] 4.6 Hapus room
 - [-] 4.7 Rename room (SKIP — tidak prioritas)
-- [ ] 4.8 Test multi-room
+- [x] 4.8 Test multi-room (SUKSES)
 
 ## FASE 5: Proteksi (7 task)
 - [ ] 5.1 Auto-lock idle
