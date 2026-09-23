@@ -153,6 +153,66 @@
     .login-wrap, .chat-bottom, .sheet, .modal-box, .field input {
       transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
+    /* ===== SETTINGS PANEL (.st-*) ===== */
+    html.dark .st-panel {
+      background: #0f1419 !important;
+      color: #e2e8f0 !important;
+    }
+    html.dark .st-header {
+      background: linear-gradient(135deg, #1e293b, #334155) !important;
+      color: #e2e8f0 !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,.4) !important;
+    }
+    html.dark .st-header-btn {
+      background: rgba(255,255,255,.1) !important;
+      color: #e2e8f0 !important;
+    }
+    html.dark .st-header-btn:active {
+      background: rgba(255,255,255,.2) !important;
+    }
+    html.dark .st-header-title {
+      color: #e2e8f0 !important;
+    }
+    html.dark .st-content {
+      background: #0f1419 !important;
+    }
+    html.dark .st-section {
+      background: #1a202c !important;
+      border-color: #2d3748 !important;
+    }
+    html.dark .st-section-title {
+      color: #94a3b8 !important;
+    }
+    html.dark .st-item {
+      color: #e2e8f0 !important;
+      border-bottom-color: #2d3748 !important;
+    }
+    html.dark .st-item:active {
+      background: #2d3748 !important;
+    }
+    html.dark .st-item-label .sub {
+      color: #94a3b8 !important;
+    }
+    html.dark .st-item-value {
+      color: #94a3b8 !important;
+    }
+    html.dark .st-item-arrow {
+      color: #64748b !important;
+    }
+    html.dark .st-item-icon.blue   { background: #1e3a5f !important; color: #93b4f0 !important; }
+    html.dark .st-item-icon.green  { background: #1c3a3a !important; color: #68d391 !important; }
+    html.dark .st-item-icon.orange { background: #3a2c1c !important; color: #f6ad55 !important; }
+    html.dark .st-item-icon.red    { background: #3a1e1e !important; color: #fc8181 !important; }
+    html.dark .st-item-icon.purple { background: #2d1e3a !important; color: #b794f4 !important; }
+    html.dark .st-item-icon.gray   { background: #2d3748 !important; color: #a0aec0 !important; }
+    html.dark .st-danger-zone .st-section-title {
+      color: #fc8181 !important;
+    }
+    html.dark .st-footer {
+      color: #475569 !important;
+    }
+
+
   `;
 
   var style = document.createElement("style");
