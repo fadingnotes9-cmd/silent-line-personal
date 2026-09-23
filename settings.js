@@ -393,7 +393,8 @@
         "• Kode rahasia\n" +
         "• Room tersimpan\n" +
         "• Tema, notifikasi, dll.\n\n" +
-        "Data di server (room, pesan) TIDAK akan terhapus.\n\n" +
+        "Room yang Anda buat akan DIHAPUS PERMANEN dari server.\n" +
+        "Room yang Anda ikuti (bukan milik Anda) tetap ada.\n\n" +
         "Lanjutkan?"
       );
       if (!ok1) return;
@@ -404,15 +405,30 @@
         return;
       }
 
-      var keys = [];
-      for (var i = 0; i < localStorage.length; i++) {
-        var k = localStorage.key(i);
-        if (k && k.indexOf("sl_") === 0) keys.push(k);
-      }
-      keys.forEach(function(k) { localStorage.removeItem(k); });
+      var doReset = function() {
+        var keys = [];
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          if (k && k.indexOf("sl_") === 0) keys.push(k);
+        }
+        keys.forEach(function(k) { localStorage.removeItem(k); });
+        alert("✅ Reset selesai. Aplikasi akan dimuat ulang.");
+        setTimeout(function() { location.reload(); }, 400);
+      };
 
-      alert("✅ Reset selesai. Aplikasi akan dimuat ulang.");
-      setTimeout(function() { location.reload(); }, 400);
+      // Purge room creator dari Firebase (Fase 5.5c)
+      if (window.__slPurgeMyRooms) {
+        window.__slPurgeMyRooms()
+          .then(function(result) {
+            console.log("✅ Purge:", result.deleted + "/" + result.total + " room dihapus");
+          })
+          .catch(function(e) {
+            console.error("Gagal purge room:", e);
+          })
+          .then(doReset);
+      } else {
+        doReset();
+      }
       return;
     }
 
