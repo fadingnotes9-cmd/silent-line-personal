@@ -223,7 +223,9 @@ body{
 /* ===== MODAL ===== */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
 .modal.show{display:flex}
-.modal-box{background:#fff;border-radius:20px;padding:24px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center}
+.modal-box{background:#fff;border-radius:20px;padding:24px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center;position:relative}
+.modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border:none;background:transparent;font-size:18px;color:var(--t2);cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;font-family:inherit}
+.modal-close:hover{background:rgba(0,0,0,.06)}
 .modal-box h3{font-size:18px;font-weight:700;margin-bottom:8px}
 .modal-box p{font-size:14px;color:var(--t2);margin-bottom:16px;line-height:1.5}
 .room-code-display{background:var(--pl);border:2px dashed var(--p);border-radius:12px;padding:16px;margin:12px 0}
@@ -370,6 +372,7 @@ window.addEventListener('unhandledrejection', function(e) {
 
 <div class="modal" id="modal-room-created">
   <div class="modal-box">
+    <button class="modal-close" id="btn-close-room-created" aria-label="Tutup">✕</button>
     <h3>🎉 Room Berhasil Dibuat!</h3>
     <p>Bagikan kode room ini ke device lain agar mereka bisa masuk:</p>
     <div class="room-code-display">
@@ -660,6 +663,10 @@ $('btn-create-room').onclick = async () => {
     helper.className = 'helper err';
     helper.textContent = 'Gagal membuat room. Coba lagi.';
   }
+};
+
+$('btn-close-room-created').onclick = () => {
+  $('modal-room-created').classList.remove('show');
 };
 
 $('btn-continue').onclick = () => {
