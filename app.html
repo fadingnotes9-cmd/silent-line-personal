@@ -389,6 +389,7 @@ window.addEventListener('unhandledrejection', function(e) {
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import {
   getDatabase, ref, push, onChildAdded, onValue, set, remove, update,
   onDisconnect, query, orderByChild, limitToLast, serverTimestamp, get,
@@ -406,6 +407,15 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+
+// ===== FIREBASE AUTH (Fase 5.5) =====
+const auth = getAuth(app);
+try {
+  await signInAnonymously(auth);
+  console.log('✅ Auth anonymous OK:', auth.currentUser.uid);
+} catch (e) {
+  console.error('❌ Auth gagal:', e);
+}
 
 const $ = id => document.getElementById(id);
 const now = () => Date.now();
