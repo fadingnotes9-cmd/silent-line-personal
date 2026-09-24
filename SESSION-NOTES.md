@@ -121,6 +121,9 @@
 - Fase 3.13: Handler storage-info (breakdown per key)
 - Fase 3.14: Hapus Ukuran Font (cleanup)
 
+- Fase 3.15: Hapus Akun (purge + delete auth + wipe device)
+- Fix mismatch handler delete-account
+
 **Rencana Sesi Berikutnya:**
 - Fase 7.1: Privacy Policy
 - Fase 7.2: Terms of Service

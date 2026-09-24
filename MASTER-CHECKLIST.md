@@ -27,6 +27,7 @@
 - [x] 3.7 Data (reset)
 - [x] 3.8 Tentang (versi, privasi)
 - [x] 3.9 Test semua menu
+- [x] 3.15 Hapus Akun (purge + delete auth + wipe device)
 
 ## FASE 4: Multi-Room (8 task)
 - [x] 4.1 Room Manager screen

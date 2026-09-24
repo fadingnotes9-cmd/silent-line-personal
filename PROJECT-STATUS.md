@@ -74,7 +74,7 @@
 
 - Fork dari: https://github.com/fadingnotes9-cmd/silent-line
 - Enterprise status: FROZEN
-- Build terakhir: Fase 3.14b (Cleanup Settings)
+- Build terakhir: Fase 3.15b (Hapus Akun)
 - APK tested: settings, ubah kode, dark mode, notifikasi toggle
 
 ---
