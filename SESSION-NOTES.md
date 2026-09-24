@@ -123,6 +123,9 @@
 
 - Fase 3.15: Hapus Akun (purge + delete auth + wipe device)
 - Fix mismatch handler delete-account
+- Fase 3.16: Hapus Ubah Nama dari Settings (redundan)
+- Fase 3.17: Smart ✕ di daftar room (LUPA / HAPUS)
+- Fase 3.18: Kelola Room Saya (query userRooms + hapus)
 
 **Rencana Sesi Berikutnya:**
 - Fase 7.1: Privacy Policy
@@ -131,8 +134,6 @@
 - Fase 7.4: APK → AAB
 - Fase 7.5: Target API 36
 - Fase 7.6: Test build AAB
-
-**Rencana:** Fase 5.8 Native Notification (background push) → sisa Fase 5
 
 **Rencana:** Fase 4 Multi-Room (8 task)
 
