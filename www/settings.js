@@ -150,6 +150,11 @@
             </div>
             <div class="st-item-value" id="st-auto-lock-val">Off</div>
           </button>
+          <button class="st-item" data-action="my-rooms">
+            <div class="st-item-icon purple">📋</div>
+            <div class="st-item-label">Kelola Room Saya</div>
+            <div class="st-item-arrow">›</div>
+          </button>
         </div>
 
         <div class="st-section">
@@ -489,6 +494,30 @@
       } else {
         finishDelete();
       }
+      return;
+    }
+
+    // ===== KELOLA ROOM SAYA (Fase 3.18) =====
+    if (action === "my-rooms") {
+      if (!window.__slGetMyRooms) { alert("❌ Fitur tidak tersedia. Coba restart aplikasi."); return; }
+      window.__slGetMyRooms().then(function(res) {
+        if (!res.ok) { alert("❌ Gagal ambil data: " + res.error); return; }
+        if (!res.rooms.length) { alert("📋 Anda belum membuat room apapun."); return; }
+        var list = res.rooms.map(function(r) { return "• " + r.code + " — " + (r.ownerName || 'Tanpa Nama'); }).join("\n");
+        var input = prompt("Room yang Anda buat (" + res.rooms.length + "):\n\n" + list + "\n\nKetik kode room untuk HAPUS PERMANEN, atau kosongkan untuk batal:", "");
+        if (!input) return;
+        var code = input.trim();
+        if (!/^[0-9]{6,10}$/.test(code)) { alert("❌ Kode tidak valid (harus 6-10 digit angka)"); return; }
+        if (!confirm("Yakin HAPUS PERMANEN room " + code + "?\n\nSemua pesan akan hilang.")) return;
+        if (window.__slDeleteRoom) {
+          window.__slDeleteRoom(code).then(function(delRes) {
+            if (delRes.ok) { alert("✅ Room " + code + " berhasil dihapus."); }
+            else { alert("❌ Gagal hapus: " + delRes.error); }
+          });
+        } else {
+          alert("❌ Fungsi hapus tidak tersedia");
+        }
+      });
       return;
     }
 
