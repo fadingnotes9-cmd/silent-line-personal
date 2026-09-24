@@ -550,7 +550,29 @@ function renderRemembered() {
     };
     item.querySelector('[data-del]').onclick = (e) => {
       e.stopPropagation();
-      if (confirm('Hapus room ini dari daftar tersimpan?')) removeRemembered(r.code);
+      if (r.isCreator) {
+        var msg = 'Room ' + r.code + '\n\n' +
+          'Ketik:\n' +
+          '• LUPA = lupakan dari daftar (room tetap ada)\n' +
+          '• HAPUS = hapus permanen dari server\n\n' +
+          '(Batal = tidak jadi)';
+        var choice = prompt(msg, 'LUPA');
+        if (choice === null) return;
+        choice = choice.trim().toUpperCase();
+        if (choice === 'HAPUS') {
+          if (!confirm('Yakin hapus permanen room ' + r.code + '?\n\nSemua pesan akan hilang.')) return;
+          if (window.__slDeleteRoom) {
+            window.__slDeleteRoom(r.code).then(function(res) {
+              if (res.ok) { removeRemembered(r.code); alert('✅ Room dihapus permanen'); }
+              else { alert('❌ Gagal hapus: ' + res.error); }
+            });
+          } else { removeRemembered(r.code); }
+        } else if (choice === 'LUPA') {
+          removeRemembered(r.code);
+        }
+      } else {
+        if (confirm('Lupakan room ' + r.code + ' dari daftar?\n\n(Room tetap ada di server)')) removeRemembered(r.code);
+      }
     };
     container.appendChild(item);
   });
@@ -639,6 +661,17 @@ window.__slDeleteAccount = async function() {
     console.warn('Hapus auth gagal:', e);
   }
   return result;
+};
+
+// ===== HAPUS 1 ROOM (Fase 3.17) =====
+window.__slDeleteRoom = async function(code) {
+  if (!code) return { ok: false, error: 'no code' };
+  try {
+    await remove(ref(db, 'rooms/' + code));
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e && (e.code || e.message) || 'unknown' };
+  }
 };
 
 (function() {
