@@ -471,6 +471,53 @@
       return;
     }
 
+    // ===== HAPUS AKUN =====
+    if (action === "hapus-akun") {
+      var okA = confirm(
+        "⚠️ HAPUS AKUN\n\n" +
+        "Semua data akan DIHAPUS PERMANEN:\n" +
+        "• Room yang Anda buat (dari server)\n" +
+        "• Identitas device (tidak bisa dipulihkan)\n" +
+        "• Semua pengaturan & data lokal\n\n" +
+        "Anda akan dianggap sebagai pengguna BARU.\n" +
+        "Pembelian di Play Store tetap aman.\n\n" +
+        "Lanjutkan?"
+      );
+      if (!okA) return;
+
+      var okB = prompt("Ketik HAPUS (huruf kapital) untuk konfirmasi:");
+      if (okB !== "HAPUS") {
+        alert("❌ Hapus akun dibatalkan.");
+        return;
+      }
+
+      var finishDelete = function() {
+        // Hapus SEMUA localStorage (termasuk sl_device_id)
+        var klist = [];
+        for (var i = 0; i < localStorage.length; i++) {
+          var kk = localStorage.key(i);
+          if (kk && kk.indexOf("sl_") === 0) klist.push(kk);
+        }
+        klist.forEach(function(k) { localStorage.removeItem(k); });
+        alert("✅ Akun dihapus. Aplikasi akan dimuat ulang.");
+        setTimeout(function() { location.reload(); }, 400);
+      };
+
+      if (window.__slDeleteAccount) {
+        window.__slDeleteAccount()
+          .then(function(result) {
+            console.log("✅ Hapus akun:", result);
+          })
+          .catch(function(e) {
+            console.error("Hapus akun gagal:", e);
+          })
+          .then(finishDelete);
+      } else {
+        finishDelete();
+      }
+      return;
+    }
+
     // ===== AUTO-HAPUS PESAN =====
     if (action === "auto-delete") {
       var curAD = localStorage.getItem("sl_auto_delete") || "24";
