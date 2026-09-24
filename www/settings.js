@@ -134,14 +134,6 @@
           </button>
         </div>
 
-        <div class="st-section">
-          <div class="st-section-title">Profil</div>
-          <button class="st-item" data-action="edit-name">
-            <div class="st-item-icon blue">👤</div>
-            <div class="st-item-label">Ubah Nama</div>
-            <div class="st-item-arrow">›</div>
-          </button>
-        </div>
 
         <div class="st-section">
           <div class="st-section-title">Keamanan</div>
@@ -329,24 +321,6 @@
     }
 
     // ===== UBAH NAMA =====
-    if (action === 'edit-name') {
-      var currentName = localStorage.getItem('sl_user_name') || (window.state && window.state.name) || '';
-      var newName = prompt('Masukkan nama baru:\n\n(maks 20 karakter)', currentName);
-      if (newName === null) return;
-      newName = newName.trim();
-      if (newName.length < 1) return;
-      if (newName.length > 20) {
-        alert('❌ Maksimal 20 karakter');
-        return;
-      }
-      localStorage.setItem('sl_user_name', newName);
-      if (window.updateProfileName) {
-        window.updateProfileName(newName);
-      }
-      alert('✅ Nama diubah ke: ' + newName);
-      return;
-    }
-
     // ===== UBAH KODE =====
     if (action === 'change-code') {
       closeSettings();
