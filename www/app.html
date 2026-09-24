@@ -392,7 +392,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/fireba
 import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
 import {
   getDatabase, ref, push, onChildAdded, onValue, set, remove, update,
-  onDisconnect, query, orderByChild, limitToLast, serverTimestamp, get,
+  onDisconnect, query, orderByChild, equalTo, limitToLast, serverTimestamp, get,
   goOffline, goOnline
 } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js';
 
@@ -670,6 +670,21 @@ window.__slDeleteRoom = async function(code) {
     await remove(ref(db, 'rooms/' + code));
     return { ok: true };
   } catch (e) {
+    return { ok: false, error: e && (e.code || e.message) || 'unknown' };
+  }
+};
+
+// ===== QUERY ROOM BY CREATOR (Fase 3.18) =====
+window.__slGetMyRooms = async function() {
+  try {
+    const q = query(ref(db, 'rooms'), orderByChild('creatorDeviceId'), equalTo(state.info.deviceId));
+    const snap = await get(q);
+    if (!snap.exists()) return { ok: true, rooms: [] };
+    const rooms = [];
+    snap.forEach(c => { rooms.push(Object.assign({ code: c.key }, c.val())); });
+    return { ok: true, rooms: rooms };
+  } catch (e) {
+    console.error('Query error:', e);
     return { ok: false, error: e && (e.code || e.message) || 'unknown' };
   }
 };
