@@ -472,7 +472,7 @@
     }
 
     // ===== HAPUS AKUN =====
-    if (action === "hapus-akun") {
+    if (action === "delete-account") {
       var okA = confirm(
         "⚠️ HAPUS AKUN\n\n" +
         "Semua data akan DIHAPUS PERMANEN:\n" +
