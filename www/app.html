@@ -617,6 +617,30 @@ window.__slPurgeMyRooms = async function() {
   return { deleted: deleted, total: list.length };
 };
 
+// ===== HAPUS AKUN (Fase 3.15) =====
+// Hapus room + auth user anonymous. localStorage dibersihkan oleh settings.js
+window.__slDeleteAccount = async function() {
+  const result = { roomsDeleted: 0, authDeleted: false, authError: null };
+  // 1. Purge room creator
+  try {
+    const purge = await window.__slPurgeMyRooms();
+    result.roomsDeleted = purge.deleted || 0;
+  } catch (e) {
+    console.warn('Purge gagal:', e);
+  }
+  // 2. Delete auth user anonymous
+  try {
+    if (auth && auth.currentUser) {
+      await auth.currentUser.delete();
+      result.authDeleted = true;
+    }
+  } catch (e) {
+    result.authError = e && (e.code || e.message) || 'unknown';
+    console.warn('Hapus auth gagal:', e);
+  }
+  return result;
+};
+
 (function() {
   const m = parseInt(localStorage.getItem('sl_auto_lock') || '0', 10);
   __slIdleMinutes = m > 0 ? m : 0;
