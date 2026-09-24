@@ -489,6 +489,16 @@ function getRemembered() { try { return JSON.parse(localStorage.getItem('sl_room
 function saveRemembered(list) { try { localStorage.setItem('sl_rooms', JSON.stringify(list.slice(-3))); } catch {} }
 function addRemembered(room) {
   const list = getRemembered().filter(r => r.code !== room.code);
+  // Fase 3.18c: sync ke Firebase userRooms
+  try {
+    if (room.isCreator || true) {
+      set(ref(db, 'userRooms/' + state.info.deviceId + '/' + room.code), {
+        name: room.name || 'Anonim',
+        isCreator: !!room.isCreator,
+        createdAt: Date.now()
+      }).catch(() => {});
+    }
+  } catch (e) {}
 window.addEventListener('load', async () => {
   const C = (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Camera) || null;
   document.getElementById('btn-attach').onclick = async () => {
@@ -668,6 +678,7 @@ window.__slDeleteRoom = async function(code) {
   if (!code) return { ok: false, error: 'no code' };
   try {
     await remove(ref(db, 'rooms/' + code));
+    await remove(ref(db, 'userRooms/' + state.info.deviceId + '/' + code)).catch(() => {});
     return { ok: true };
   } catch (e) {
     return { ok: false, error: e && (e.code || e.message) || 'unknown' };
@@ -677,11 +688,11 @@ window.__slDeleteRoom = async function(code) {
 // ===== QUERY ROOM BY CREATOR (Fase 3.18) =====
 window.__slGetMyRooms = async function() {
   try {
-    const q = query(ref(db, 'rooms'), orderByChild('creatorDeviceId'), equalTo(state.info.deviceId));
-    const snap = await get(q);
+    const snap = await get(ref(db, 'userRooms/' + state.info.deviceId));
     if (!snap.exists()) return { ok: true, rooms: [] };
     const rooms = [];
     snap.forEach(c => { rooms.push(Object.assign({ code: c.key }, c.val())); });
+    rooms.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     return { ok: true, rooms: rooms };
   } catch (e) {
     console.error('Query error:', e);
