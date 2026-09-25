@@ -42,6 +42,16 @@
 - [-] 4.7 Rename room (SKIP — tidak prioritas)
 - [x] 4.8 Test multi-room (SUKSES)
 
+## FASE 7a: License System (Sideload)
+- [x] 7a.1 Admin panel — login + dashboard + list license
+- [x] 7a.2 Admin — generate + revoke + reset + delete kode
+- [x] 7a.3 Layar aktivasi user + validasi + device binding
+- [x] 7a.4 Admin — monitoring Firebase + timestamp sync
+- [x] 7a.5 Fix teks Hapus Akun (aktivasi via penjual)
+- [ ] 7a.6 Signing key (release signed APK)
+- [ ] 7a.7 Update workflow → signed APK
+- [ ] 7a.8 Test install di HP lain
+
 ## FASE 5: Proteksi (7 task)
 - [x] 5.1 Auto-lock idle (cycle off/1m/5m/15m)
 - [-] 5.2 Panic wipe (SKIP — risky untuk personal)

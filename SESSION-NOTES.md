@@ -110,7 +110,70 @@
 
 ---
 
-## Sesi 5 — (belum)
+## Sesi 5 — 2026-09-24
+
+**Durasi:** ~4 jam
+
+**Yang Dikerjakan (Fase 3.10-3.18 + Fase 6.2/6.3/6.5):**
+- Fase 6.2/6.3: Presence 30s, Read receipt 15s
+- Fase 6.5: Compress foto 100 KB
+- Fase 3.10: Hapus Warna Aksen + Gaya Bubble
+- Fase 3.11: Info Penyimpanan B/KB/MB
+- Fase 3.12: Auto Hapus Pesan (Off/1h/6h/24h/7d)
+- Fase 3.13: Handler storage-info
+- Fase 3.14: Hapus Ukuran Font
+- Fase 3.15: Hapus Akun (purge + delete auth)
+- Fase 3.16: Hapus Ubah Nama dari Settings
+- Fase 3.17: Smart ✕ di daftar room
+- Fase 3.18: Kelola Room Saya + userRooms tree
+
+**Firebase Rules update:** Tambah userRooms + indexOn creatorDeviceId
+
+**Status Akhir:**
+- Fase 3 + Fase 6 selesai
+- Progress: 6/8 fase (75%)
+
+---
+
+## Sesi 6 — 2026-09-25
+
+**Durasi:** ~3 jam
+
+**Yang Dikerjakan (Fase 7a — License System):**
+- Setup Firebase Auth (Email/Password + Anonymous)
+- Bikin akun admin: fadingnotes9@gmail.com
+- Firebase Rules: tambah section licenses
+- Bikin folder docs/ + aktifkan GitHub Pages
+- Fase 7a.1: admin.html — login + dashboard + list license
+- Fase 7a.2: Generate + revoke + reset + delete kode
+- Fase 7a.3: Layar aktivasi di app.html + device binding + grace 7 hari
+- Fase 7a.4: Monitoring Firebase + timestamp sync
+- Fix teks Hapus Akun
+
+**Fitur Admin Panel:**
+- URL: https://fadingnotes9-cmd.github.io/silent-line-personal/admin.html
+- Generate kode (single + bulk up to 100)
+- Search, filter, revoke, reset device, delete
+- Monitoring Firebase links
+
+**Fitur User:**
+- Layar aktivasi sekali saat pertama pakai
+- Kode format: SL-XXXX-XXXX-XXXX
+- Device binding 1 kode = 1 device
+- Grace period 7 hari offline
+
+**Status Akhir:**
+- Sistem License COMPLETE & tested
+- Build terakhir: `fd58bf4`
+
+**Rencana Sesi Berikutnya:**
+- Fase 7a.6: Signing key
+- Fase 7a.7: Update workflow → signed APK
+- Fase 7a.8: Test install di HP lain
+
+---
+
+## Sesi 7 — (belum)
 
 **Rencana Awal:** Fase 7 Play Store Prep
 
