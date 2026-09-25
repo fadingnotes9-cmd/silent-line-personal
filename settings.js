@@ -457,9 +457,10 @@
         "Semua data akan DIHAPUS PERMANEN:\n" +
         "• Room yang Anda buat (dari server)\n" +
         "• Identitas device (tidak bisa dipulihkan)\n" +
-        "• Semua pengaturan & data lokal\n\n" +
+        "• Semua pengaturan & data lokal\n" +
+        "• Kode aktivasi Anda\n\n" +
         "Anda akan dianggap sebagai pengguna BARU.\n" +
-        "Pembelian di Play Store tetap aman.\n\n" +
+        "Hubungi penjual untuk kode aktivasi baru.\n\n" +
         "Lanjutkan?"
       );
       if (!okA) return;
