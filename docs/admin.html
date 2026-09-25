@@ -163,7 +163,33 @@ body {
     </section>
 
     <!-- License List -->
-    <section class="license-section">
+    <section class="monitor-section" id="monitorSection">
+  <h2>📊 Monitoring</h2>
+  <div class="monitor-grid">
+    <a href="https://console.firebase.google.com/project/sensus-ekonomi-final/usage" target="_blank" class="monitor-card">
+      <div class="monitor-icon">🔥</div>
+      <div class="monitor-title">Firebase Usage</div>
+      <div class="monitor-sub">Cek kuota & bandwidth</div>
+    </a>
+    <a href="https://console.firebase.google.com/project/sensus-ekonomi-final/authentication/users" target="_blank" class="monitor-card">
+      <div class="monitor-icon">👥</div>
+      <div class="monitor-title">Firebase Users</div>
+      <div class="monitor-sub">Daftar user anonymous</div>
+    </a>
+    <a href="https://console.firebase.google.com/project/sensus-ekonomi-final/database/sensus-ekonomi-final-default-rtdb/data" target="_blank" class="monitor-card">
+      <div class="monitor-icon">💾</div>
+      <div class="monitor-title">Firebase Data</div>
+      <div class="monitor-sub">Lihat struktur database</div>
+    </a>
+    <div class="monitor-card" id="lastCheckCard">
+      <div class="monitor-icon">🕐</div>
+      <div class="monitor-title">Terakhir Sync</div>
+      <div class="monitor-sub" id="lastCheckTime">-</div>
+    </div>
+  </div>
+</section>
+
+<section class="license-section">
       <h2>Daftar Kode</h2>
       <div id="licenseList" class="license-list">
         <div class="empty-state">Loading...</div>
@@ -323,6 +349,22 @@ body {
 @media (max-width: 600px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ===== MONITOR SECTION ===== */
+.monitor-section { margin-bottom: 22px; }
+.monitor-section h2 { font-size: 16px; margin-bottom: 12px; }
+.monitor-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.monitor-card {
+  display: block; background: var(--card); border-radius: var(--radius);
+  padding: 14px; text-decoration: none; color: inherit;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04); border: 1px solid var(--border);
+  transition: 0.15s; cursor: pointer;
+}
+.monitor-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+.monitor-icon { font-size: 22px; margin-bottom: 6px; }
+.monitor-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.monitor-sub { font-size: 11px; color: var(--text-muted); }
+
 </style>
 
 <script type="module">
@@ -415,6 +457,8 @@ async function loadLicenses() {
     });
     allLicenses.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     renderLicenses();
+    var lt = document.getElementById("lastCheckTime");
+    if (lt) lt.textContent = new Date().toLocaleTimeString("id-ID");
   } catch (e) {
     console.error(e);
     $('licenseList').innerHTML = '<div class="empty-state">❌ Gagal memuat: ' + (e.message || 'error') + '</div>';
