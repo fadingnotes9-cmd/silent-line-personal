@@ -7,8 +7,18 @@ node_modules/
 task*.js
 fix*.js
 add-wizard.js
+add_*.cjs
+fix_*.cjs
+update_docs.cjs
 
-# Task/fix scripts (arsip, jangan commit)
-task*.js
-fix*.js
-add-wizard.js
+# SIGNING KEY — JANGAN PERNAH COMMIT!
+*.keystore
+*.jks
+keystore.properties
+release.keystore
+
+# Build artifacts
+android/app/build/
+android/build/
+android/.gradle/
+android/key.properties
