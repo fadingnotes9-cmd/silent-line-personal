@@ -48,9 +48,9 @@
 - [x] 7a.3 Layar aktivasi user + validasi + device binding
 - [x] 7a.4 Admin — monitoring Firebase + timestamp sync
 - [x] 7a.5 Fix teks Hapus Akun (aktivasi via penjual)
-- [ ] 7a.6 Signing key (release signed APK)
-- [ ] 7a.7 Update workflow → signed APK
-- [ ] 7a.8 Test install di HP lain
+- [x] 7a.6 Signing key (release signed APK)
+- [x] 7a.7 Update workflow → signed APK (via GitHub Secrets)
+- [x] 7a.8 Test install di HP sendiri (Play Protect accept)
 
 ## FASE 5: Proteksi (7 task)
 - [x] 5.1 Auto-lock idle (cycle off/1m/5m/15m)

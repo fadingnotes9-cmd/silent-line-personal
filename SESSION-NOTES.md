@@ -164,6 +164,9 @@
 
 **Status Akhir:**
 - Sistem License COMPLETE & tested
+- Signing key + GitHub Secrets + signed release APK
+- APK berhasil install di HP (Play Protect accept)
+- Status: **SIAP JUAL di marketplace** (sideload)
 - Build terakhir: `fd58bf4`
 
 **Rencana Sesi Berikutnya:**
