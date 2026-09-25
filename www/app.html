@@ -1251,6 +1251,16 @@ function __slKickFromDeletedRoom() {
     // Hentikan semua listener
     state.subs.forEach(function(u) { try { u(); } catch {} });
     state.subs = [];
+    // Cleanup: hapus userRooms + localStorage (Fase 7b.2)
+    var __kickedRoom = state.room;
+    var __kickedDeviceId = state.info && state.info.deviceId;
+    if (__kickedRoom && __kickedDeviceId) {
+      remove(ref(db, 'userRooms/' + __kickedDeviceId + '/' + __kickedRoom)).catch(function(){});
+      try {
+        var list = getRemembered().filter(function(r) { return r.code !== __kickedRoom; });
+        saveRemembered(list);
+      } catch (e) { console.warn('Cleanup localStorage error:', e); }
+    }
     // Bersihkan state
     state.room = null;
     state.reply = null;
