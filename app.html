@@ -1233,7 +1233,49 @@ function enterChat() {
   $('chat-avatar').textContent = state.room.charAt(0);
   document.title = 'Kalkulator';
   setupPresence(); listenMessages(); listenTyping(); setupReadReceipt(); purgeOld();
+  // ===== ROOM WATCHDOG (Fase 7b.1) =====
+  // Auto-kick kalau meta room dihapus oleh creator
+  window.__slRoomWatchdogActive = true;
+  const metaRef = ref(db, `rooms/${state.room}/meta`);
+  state.subs.push(onValue(metaRef, function(snap) {
+    if (!snap.exists() && window.__slRoomWatchdogActive) {
+      window.__slRoomWatchdogActive = false;
+      setTimeout(function() { __slKickFromDeletedRoom(); }, 100);
+    }
+  }));
 }
+
+// ===== KICK FROM DELETED ROOM (Fase 7b.1) =====
+function __slKickFromDeletedRoom() {
+  try {
+    // Hentikan semua listener
+    state.subs.forEach(function(u) { try { u(); } catch {} });
+    state.subs = [];
+    // Bersihkan state
+    state.room = null;
+    state.reply = null;
+    state.isCreator = false;
+    state.meta = null;
+    window.__msgSeen = new Set();
+    if (typeof sent !== 'undefined' && sent.clear) sent.clear();
+    // Bersihkan UI
+    var msgs = document.getElementById('messages');
+    if (msgs) msgs.innerHTML = '';
+    var title = document.getElementById('chat-title');
+    if (title) title.textContent = 'Silent Line';
+    // Alert user
+    setTimeout(function() {
+      alert('⚠️ Room sudah dihapus oleh pemilik.\n\nAnda akan keluar dari room ini.');
+      if (typeof showScreen === 'function') showScreen('login');
+      if (typeof renderRemembered === 'function') renderRemembered();
+    }, 200);
+  } catch (e) {
+    console.error('Kick error:', e);
+    location.reload();
+  }
+}
+window.__slKickFromDeletedRoom = __slKickFromDeletedRoom;
+
 
 function setupPresence() {
   const presRef = ref(db, `rooms/${state.room}/presence`);
