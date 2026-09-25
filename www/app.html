@@ -233,6 +233,105 @@ body{
 .room-code-display .lbl{font-size:11px;color:var(--t2);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px}
 .modal-actions{display:flex;gap:8px;margin-top:12px}
 .modal-actions .btn{flex:1;padding:12px;font-size:14px}
+/* ===== ACTIVATION SCREEN ===== */
+.activation-wrap {
+  padding: 32px 20px;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+.activation-logo {
+  font-size: 56px;
+  margin-bottom: 12px;
+}
+.activation-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--t1);
+}
+.activation-sub {
+  font-size: 14px;
+  color: var(--t2);
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+.activation-card {
+  background: var(--bg-card);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.activation-card label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--t2);
+  margin-bottom: 6px;
+}
+.activation-card input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+  text-transform: uppercase;
+  background: #fafbfc;
+  transition: border-color 0.2s;
+}
+.activation-card input:focus {
+  outline: none;
+  border-color: var(--p);
+  background: #fff;
+}
+.activation-helper {
+  font-size: 12px;
+  color: var(--t2);
+  margin-top: 8px;
+  text-align: center;
+}
+.activation-helper.err {
+  color: #dc2626;
+  font-weight: 600;
+}
+.activation-helper.ok {
+  color: #16a34a;
+  font-weight: 600;
+}
+.activation-card .btn {
+  width: 100%;
+  margin-top: 16px;
+}
+.activation-card .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.activation-info {
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  text-align: left;
+}
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 13px;
+  color: var(--t2);
+  line-height: 1.5;
+}
+.info-icon {
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
 </style>
 <!-- __globalErrorHandler -->
 <script>
@@ -261,6 +360,45 @@ window.addEventListener('unhandledrejection', function(e) {
 </script>
 
 <div class="notif" id="notif"></div>
+
+<div class="screen" id="screen-activation" style="display:none;">
+  <div class="container">
+    <div class="header">
+      <div style="width:44px;"></div>
+      <div class="h-info"><div class="h-title">Aktivasi</div></div>
+      <div style="width:44px;"></div>
+    </div>
+    <div class="activation-wrap">
+      <div class="activation-logo">🔐</div>
+      <div class="activation-title">Aktivasi Aplikasi</div>
+      <div class="activation-sub">Masukkan kode aktivasi yang Anda terima setelah pembelian.</div>
+
+      <div class="activation-card">
+        <label for="activation-input">Kode Aktivasi</label>
+        <input type="text" id="activation-input" placeholder="SL-XXXX-XXXX-XXXX" maxlength="19" autocomplete="off" autocapitalize="characters" spellcheck="false">
+        <div class="activation-helper" id="activation-helper">Contoh: SL-A3F9-K2M7-X8P1</div>
+        <button class="btn" id="btn-activate">Aktivasi Sekarang</button>
+      </div>
+
+      <div class="activation-info">
+        <div class="info-row">
+          <span class="info-icon">💬</span>
+          <span>Belum punya kode? Hubungi penjual.</span>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📱</span>
+          <span>Kode terikat ke 1 HP saja.</span>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">🔄</span>
+          <span>Ganti HP? Hubungi penjual untuk reset.</span>
+        </div>
+      </div>
+
+      <div class="brand-footer">SILENT LINE v2.2.1</div>
+    </div>
+  </div>
+</div>
 
 <div class="screen active" id="screen-login">
   <div class="container">
@@ -418,6 +556,175 @@ try {
 }
 
 const $ = id => document.getElementById(id);
+
+// ===== ACTIVATION LOGIC (Fase 7a.3) =====
+const LICENSE_KEY = 'sl_license';
+
+function __slGetLicense() {
+  try { return JSON.parse(localStorage.getItem(LICENSE_KEY) || 'null'); } catch { return null; }
+}
+
+function __slSaveLicense(data) {
+  try { localStorage.setItem(LICENSE_KEY, JSON.stringify(data)); } catch {}
+}
+
+function __slShowActivation() {
+  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+  document.getElementById('screen-activation').classList.add('active');
+  document.getElementById('screen-activation').style.display = '';
+}
+
+function __slShowLogin() {
+  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+  document.getElementById('screen-activation').style.display = 'none';
+  document.getElementById('screen-login').classList.add('active');
+}
+
+function __slSetHelper(msg, type) {
+  var el = document.getElementById('activation-helper');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'activation-helper' + (type ? ' ' + type : '');
+}
+
+function __slGetDeviceId() {
+  try {
+    var id = localStorage.getItem('sl_device_id');
+    if (id && id.startsWith('dev_')) return id;
+  } catch {}
+  // Fallback
+  var raw = [navigator.userAgent, navigator.platform || ''].join('|');
+  var h = 0;
+  for (var i = 0; i < raw.length; i++) h = ((h << 5) - h + raw.charCodeAt(i)) | 0;
+  var newId = 'dev_' + Math.abs(h).toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+  try { localStorage.setItem('sl_device_id', newId); } catch {}
+  return newId;
+}
+
+async function __slActivate() {
+  var input = document.getElementById('activation-input');
+  var btn = document.getElementById('btn-activate');
+  if (!input || !btn) return;
+
+  var code = input.value.trim().toUpperCase();
+  if (!code) { __slSetHelper('Masukkan kode aktivasi.', 'err'); return; }
+  if (!/^SL-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code)) {
+    __slSetHelper('Format kode tidak valid. Contoh: SL-A3F9-K2M7-X8P1', 'err');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Memvalidasi...';
+  __slSetHelper('Menghubungi server...', '');
+
+  try {
+    var snap = await get(ref(db, 'licenses/' + code));
+    if (!snap.exists()) {
+      __slSetHelper('â Kode tidak ditemukan.', 'err');
+      btn.disabled = false; btn.textContent = 'Aktivasi Sekarang';
+      return;
+    }
+
+    var lic = snap.val();
+
+    if (lic.revoked === true) {
+      __slSetHelper('â Kode sudah di-revoke. Hubungi penjual.', 'err');
+      btn.disabled = false; btn.textContent = 'Aktivasi Sekarang';
+      return;
+    }
+
+    var deviceId = __slGetDeviceId();
+
+    if (lic.deviceId && lic.deviceId !== deviceId) {
+      __slSetHelper('â Kode sudah dipakai di HP lain. Hubungi penjual untuk reset.', 'err');
+      btn.disabled = false; btn.textContent = 'Aktivasi Sekarang';
+      return;
+    }
+
+    // Device kosong ATAU device cocok → aktivasi
+    if (!lic.deviceId) {
+      await update(ref(db, 'licenses/' + code), {
+        deviceId: deviceId,
+        activatedAt: Date.now(),
+        lastCheck: Date.now()
+      });
+    } else {
+      await update(ref(db, 'licenses/' + code), { lastCheck: Date.now() });
+    }
+
+    __slSaveLicense({
+      code: code,
+      deviceId: deviceId,
+      activatedAt: lic.activatedAt || Date.now(),
+      lastCheck: Date.now(),
+      buyerName: lic.buyerName || null
+    });
+
+    __slSetHelper('â Aktivasi berhasil!', 'ok');
+    setTimeout(function() { __slShowLogin(); }, 800);
+
+  } catch (e) {
+    console.error(e);
+    __slSetHelper('â Gagal: ' + (e.message || 'error jaringan'), 'err');
+    btn.disabled = false; btn.textContent = 'Aktivasi Sekarang';
+  }
+}
+
+async function __slCheckActivation() {
+  var lic = __slGetLicense();
+  if (!lic || !lic.code) { __slShowActivation(); return false; }
+
+  var deviceId = __slGetDeviceId();
+  if (lic.deviceId !== deviceId) {
+    // Device berubah → minta aktivasi ulang
+    localStorage.removeItem(LICENSE_KEY);
+    __slShowActivation();
+    return false;
+  }
+
+  // Cek grace period: lastCheck < 7 hari
+  var now = Date.now();
+  var graceMs = 7 * 24 * 60 * 60 * 1000;
+  if (lic.lastCheck && (now - lic.lastCheck) > graceMs) {
+    // Perlu cek online
+    try {
+      var snap = await get(ref(db, 'licenses/' + lic.code));
+      if (!snap.exists() || snap.val().revoked === true) {
+        localStorage.removeItem(LICENSE_KEY);
+        __slShowActivation();
+        return false;
+      }
+      var lic2 = __slGetLicense() || {};
+      lic2.lastCheck = now;
+      __slSaveLicense(lic2);
+      await update(ref(db, 'licenses/' + lic.code), { lastCheck: now }).catch(function(){});
+    } catch (e) {
+      // Offline — masih dalam grace atau user baru buka, biarkan lewat
+      console.warn('Grace check offline:', e);
+    }
+  }
+
+  __slShowLogin();
+  return true;
+}
+
+// Setup handler tombol aktivasi
+setTimeout(function() {
+  var btn = document.getElementById('btn-activate');
+  var inp = document.getElementById('activation-input');
+  if (btn) btn.onclick = __slActivate;
+  if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') __slActivate(); });
+
+  // Auto-uppercase input
+  if (inp) inp.addEventListener('input', function(e) {
+    var v = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+    e.target.value = v;
+  });
+}, 100);
+
+// Cek activation saat load
+setTimeout(function() { __slCheckActivation(); }, 500);
+
 const now = () => Date.now();
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
