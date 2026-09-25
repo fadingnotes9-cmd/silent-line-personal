@@ -493,12 +493,122 @@ function esc(s) {
 $('searchInput').addEventListener('input', renderLicenses);
 $('refreshBtn').onclick = loadLicenses;
 
-// Placeholder untuk actions (chunk berikutnya)
-window._revoke = () => alert('Fitur revoke akan ditambahkan di step berikutnya.');
-window._unrevoke = () => alert('Fitur unrevoke akan ditambahkan di step berikutnya.');
-window._resetDevice = () => alert('Fitur reset device akan ditambahkan di step berikutnya.');
-window._delete = () => alert('Fitur delete akan ditambahkan di step berikutnya.');
-window._copy = (code) => { navigator.clipboard.writeText(code).then(() => alert('✅ Kode disalin: ' + code)); };
+// ===== GENERATE KODE =====
+function generateCode() {
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  function seg(n) { var r = ''; for (var i = 0; i < n; i++) r += chars[Math.floor(Math.random() * chars.length)]; return r; }
+  return 'SL-' + seg(4) + '-' + seg(4) + '-' + seg(4);
+}
+
+$('generateBtn').onclick = function() {
+  $('genCount').value = 1;
+  $('genBuyer').value = '';
+  $('genContact').value = '';
+  $('genNote').value = '';
+  $('genResult').classList.add('hidden');
+  $('genResult').innerHTML = '';
+  $('generateModal').classList.remove('hidden');
+};
+
+$('genCancel').onclick = function() { $('generateModal').classList.add('hidden'); };
+
+$('genConfirm').onclick = async function() {
+  var count = Math.max(1, Math.min(100, parseInt($('genCount').value) || 1));
+  var buyer = $('genBuyer').value.trim();
+  var contact = $('genContact').value.trim();
+  var note = $('genNote').value.trim();
+
+  $('genConfirm').disabled = true;
+  $('genConfirm').textContent = 'Memproses...';
+
+  var created = [];
+  try {
+    for (var i = 0; i < count; i++) {
+      var code;
+      do { code = generateCode(); } while (allLicenses.some(function(l) { return l.code === code; }));
+
+      var payload = {
+        active: true,
+        status: 'active',
+        buyerName: buyer || null,
+        buyerContact: contact || null,
+        note: note || null,
+        createdAt: Date.now(),
+        deviceId: null,
+        activatedAt: null,
+        lastCheck: null,
+        revoked: false
+      };
+      await set(ref(db, 'licenses/' + code), payload);
+      created.push(code);
+    }
+
+    var result = $('genResult');
+    result.classList.remove('hidden');
+    var html = '<strong>✅ ' + created.length + ' kode berhasil dibuat:</strong>';
+    created.forEach(function(c) { html += '<code>' + c + '</code>'; });
+    html += '<button id="copyAllGen" class="btn-secondary" style="width:100%; margin-top:10px;">📋 Copy Semua</button>';
+    result.innerHTML = html;
+
+    $('copyAllGen').onclick = function() {
+      navigator.clipboard.writeText(created.join('\n')).then(function() {
+        $('copyAllGen').textContent = '✅ Tersalin!';
+        setTimeout(function() { $('copyAllGen').textContent = '📋 Copy Semua'; }, 1500);
+      });
+    };
+
+    await loadLicenses();
+  } catch (e) {
+    console.error(e);
+    alert('❌ Gagal generate: ' + (e.message || 'error'));
+  } finally {
+    $('genConfirm').disabled = false;
+    $('genConfirm').textContent = 'Generate';
+  }
+};
+
+// ===== REVOKE / UNREVOKE =====
+window._revoke = async function(code) {
+  if (!confirm('Revoke kode ' + code + '?\n\nUser tidak akan bisa akses setelah grace period.')) return;
+  try {
+    await update(ref(db, 'licenses/' + code), { revoked: true, revokedAt: Date.now() });
+    await loadLicenses();
+  } catch (e) { alert('Gagal: ' + e.message); }
+};
+
+window._unrevoke = async function(code) {
+  if (!confirm('Aktifkan kembali kode ' + code + '?')) return;
+  try {
+    await update(ref(db, 'licenses/' + code), { revoked: false, revokedAt: null });
+    await loadLicenses();
+  } catch (e) { alert('Gagal: ' + e.message); }
+};
+
+// ===== RESET DEVICE =====
+window._resetDevice = async function(code) {
+  if (!confirm('Reset device untuk kode ' + code + '?\n\nUser bisa aktivasi ulang di HP baru.')) return;
+  try {
+    await update(ref(db, 'licenses/' + code), { deviceId: null, activatedAt: null, lastCheck: null });
+    await loadLicenses();
+    alert('✅ Device di-reset. User bisa aktivasi ulang.');
+  } catch (e) { alert('Gagal: ' + e.message); }
+};
+
+// ===== DELETE =====
+window._delete = async function(code) {
+  if (!confirm('Hapus PERMANEN kode ' + code + '?\n\nKode akan hilang total.')) return;
+  if (!confirm('Yakin? Ini aksi terakhir.')) return;
+  try {
+    await remove(ref(db, 'licenses/' + code));
+    await loadLicenses();
+  } catch (e) { alert('Gagal: ' + e.message); }
+};
+
+// ===== COPY =====
+window._copy = function(code) {
+  navigator.clipboard.writeText(code).then(function() { alert('✅ Kode disalin: ' + code); })
+    .catch(function() { alert('Gagal copy. Kode: ' + code); });
+};
 
 console.log('✅ Admin panel loaded');
 </script>
