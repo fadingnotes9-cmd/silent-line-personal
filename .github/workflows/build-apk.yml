@@ -32,7 +32,7 @@ jobs:
       - name: Setup Signing Key
         run: |
           cd android
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > release.keystore
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/release.keystore
           cat > key.properties <<EOF
           storeFile=release.keystore
           storePassword=${{ secrets.KEYSTORE_PASSWORD }}
@@ -52,7 +52,7 @@ jobs:
         if: always()
         run: |
           cd android
-          rm -f release.keystore key.properties
+          rm -f app/release.keystore key.properties
           echo '✓ Signing key cleaned up'
 
       - name: Upload Signed APK
