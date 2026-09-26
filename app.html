@@ -332,6 +332,147 @@ body{
   font-size: 16px;
 }
 
+
+/* ===== MODAL CORE SYSTEM (Polish 1.1) ===== */
+#sl-modal-root {
+  position: fixed; inset: 0; z-index: 9999;
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+  -webkit-tap-highlight-color: transparent;
+}
+#sl-modal-root.show { display: flex; }
+
+.sl-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0; transition: opacity 0.25s ease;
+}
+#sl-modal-root.show .sl-backdrop { opacity: 1; }
+
+.sl-modal {
+  position: relative;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 28px 24px 20px;
+  width: 100%; max-width: 360px;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.08),
+    0 8px 24px rgba(0,0,0,0.12),
+    0 24px 60px rgba(0,0,0,0.18);
+  text-align: center;
+  transform: scale(0.92) translateY(20px);
+  opacity: 0;
+  transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#sl-modal-root.show .sl-modal {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.sl-modal-icon {
+  font-size: 44px; line-height: 1;
+  margin-bottom: 14px;
+  display: inline-block;
+}
+.sl-modal-icon:empty { display: none; }
+
+.sl-modal-title {
+  font-size: 19px; font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.sl-modal-message {
+  font-size: 14.5px;
+  color: #475569;
+  line-height: 1.55;
+  margin-bottom: 20px;
+  white-space: pre-line;
+}
+.sl-modal-message:empty { display: none; }
+
+.sl-modal-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: inherit;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  background: #f8fafc;
+  margin-bottom: 20px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.sl-modal-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  background: #ffffff;
+}
+
+.sl-modal-actions {
+  display: flex;
+  gap: 8px;
+  flex-direction: row;
+}
+.sl-modal-actions.stack { flex-direction: column; }
+
+.sl-modal-btn {
+  flex: 1;
+  min-height: 46px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.15s, background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.sl-modal-btn:active { transform: scale(0.97); }
+
+.sl-modal-btn.primary {
+  background: #2563eb;
+  color: #ffffff;
+}
+.sl-modal-btn.primary:hover { filter: brightness(1.08); }
+
+.sl-modal-btn.danger {
+  background: #dc2626;
+  color: #ffffff;
+}
+.sl-modal-btn.danger:hover { filter: brightness(1.08); }
+
+.sl-modal-btn.success {
+  background: #16a34a;
+  color: #ffffff;
+}
+.sl-modal-btn.success:hover { filter: brightness(1.08); }
+
+.sl-modal-btn.secondary {
+  background: #f1f5f9;
+  color: #334155;
+}
+.sl-modal-btn.secondary:hover { background: #e2e8f0; }
+
+/* Dark mode support */
+body.dark .sl-modal { background: #1e293b; }
+body.dark .sl-modal-title { color: #f1f5f9; }
+body.dark .sl-modal-message { color: #cbd5e1; }
+body.dark .sl-modal-input {
+  background: #0f172a; border-color: #334155; color: #f1f5f9;
+}
+body.dark .sl-modal-input:focus { border-color: #3b82f6; }
+body.dark .sl-modal-btn.secondary {
+  background: #334155; color: #e2e8f0;
+}
+body.dark .sl-modal-btn.secondary:hover { background: #475569; }
+
 </style>
 <!-- __globalErrorHandler -->
 <script>
@@ -556,6 +697,139 @@ try {
 }
 
 const $ = id => document.getElementById(id);
+
+// ===== MODAL API (Polish 1.1) =====
+// Promise-based. Usage: await __slAlert({...}); const ok = await __slConfirm({...}); const val = await __slPrompt({...});
+var __slModalResolve = null;
+var __slModalInputActive = false;
+
+function __slOpenModal(opts) {
+  opts = opts || {};
+  return new Promise(function(resolve) {
+    var root = document.getElementById('sl-modal-root');
+    if (!root) { resolve(null); return; }
+    var iconEl = document.getElementById('sl-modal-icon');
+    var titleEl = document.getElementById('sl-modal-title');
+    var msgEl = document.getElementById('sl-modal-message');
+    var inputEl = document.getElementById('sl-modal-input');
+    var actionsEl = document.getElementById('sl-modal-actions');
+
+    // Icon & title
+    iconEl.textContent = opts.icon || '';
+    titleEl.textContent = opts.title || '';
+    titleEl.style.display = opts.title ? '' : 'none';
+    msgEl.textContent = opts.message || '';
+
+    // Input (untuk prompt)
+    __slModalInputActive = !!opts.input;
+    if (opts.input) {
+      inputEl.style.display = 'block';
+      inputEl.placeholder = opts.placeholder || '';
+      inputEl.value = opts.defaultValue || '';
+      inputEl.type = opts.inputType || 'text';
+    } else {
+      inputEl.style.display = 'none';
+      inputEl.value = '';
+    }
+
+    // Buttons
+    var buttons = opts.buttons || [];
+    if (buttons.length === 0) {
+      buttons = [{ text: 'OK', type: 'primary', value: true }];
+    }
+    actionsEl.className = 'sl-modal-actions' + (buttons.length > 2 ? ' stack' : '');
+    actionsEl.innerHTML = '';
+    buttons.forEach(function(btn) {
+      var b = document.createElement('button');
+      b.className = 'sl-modal-btn ' + (btn.type || 'primary');
+      b.textContent = btn.text || 'OK';
+      b.onclick = function() {
+        var result = __slModalInputActive ? inputEl.value : (btn.value !== undefined ? btn.value : true);
+        __slCloseModal(result, resolve);
+      };
+      actionsEl.appendChild(b);
+    });
+
+    // Show
+    root.setAttribute('aria-hidden', 'false');
+    root.classList.add('show');
+    if (opts.input) setTimeout(function() { inputEl.focus(); inputEl.select(); }, 320);
+
+    // Backup resolver
+    __slModalResolve = resolve;
+  });
+}
+
+function __slCloseModal(result, resolveFn) {
+  var root = document.getElementById('sl-modal-root');
+  if (!root) return;
+  root.classList.remove('show');
+  setTimeout(function() {
+    root.setAttribute('aria-hidden', 'true');
+    var fn = resolveFn || __slModalResolve;
+    __slModalResolve = null;
+    if (fn) fn(result);
+  }, 250);
+}
+
+// Public API
+window.__slAlert = function(opts) {
+  if (typeof opts === 'string') opts = { message: opts };
+  return __slOpenModal({
+    icon: opts.icon !== undefined ? opts.icon : '',
+    title: opts.title || '',
+    message: opts.message || '',
+    buttons: [{ text: opts.okText || 'OK', type: 'primary', value: true }]
+  });
+};
+
+window.__slConfirm = function(opts) {
+  if (typeof opts === 'string') opts = { message: opts };
+  return __slOpenModal({
+    icon: opts.icon !== undefined ? opts.icon : (opts.type === 'danger' ? '⚠️' : ''),
+    title: opts.title || '',
+    message: opts.message || '',
+    buttons: [
+      { text: opts.cancelText || 'Batal', type: 'secondary', value: false },
+      { text: opts.confirmText || 'Lanjut', type: opts.type === 'danger' ? 'danger' : 'primary', value: true }
+    ]
+  });
+};
+
+window.__slPrompt = function(opts) {
+  if (typeof opts === 'string') opts = { message: opts };
+  return __slOpenModal({
+    icon: opts.icon !== undefined ? opts.icon : '✍️',
+    title: opts.title || '',
+    message: opts.message || '',
+    input: true,
+    placeholder: opts.placeholder || '',
+    defaultValue: opts.defaultValue || '',
+    inputType: opts.inputType || 'text',
+    buttons: [
+      { text: opts.cancelText || 'Batal', type: 'secondary', value: null },
+      { text: opts.confirmText || 'OK', type: 'primary' }
+    ]
+  });
+};
+
+// Keyboard handler + backdrop click
+document.addEventListener('keydown', function(e) {
+  var root = document.getElementById('sl-modal-root');
+  if (!root || !root.classList.contains('show')) return;
+  if (e.key === 'Escape') {
+    __slCloseModal(__slModalInputActive ? null : false);
+  } else if (e.key === 'Enter' && __slModalInputActive) {
+    var inputEl = document.getElementById('sl-modal-input');
+    __slCloseModal(inputEl.value);
+  }
+});
+
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.id === 'sl-backdrop') {
+    __slCloseModal(__slModalInputActive ? null : false);
+  }
+});
 
 // ===== ACTIVATION LOGIC (Fase 7a.3) =====
 const LICENSE_KEY = 'sl_license';
@@ -1655,5 +1929,21 @@ setTimeout(function() {
   }
 }, 300);
 </script>
+
+<!-- ===== MODAL CORE SYSTEM (Polish 1.1) =====
+     Design: iOS Alert + Material Design 3 hybrid
+     Animation: spring (cubic-bezier(0.34, 1.56, 0.64, 1))
+     Kualitas setara aplikasi kelas enterprise
+===== -->
+<div id="sl-modal-root" aria-hidden="true">
+  <div class="sl-backdrop" id="sl-backdrop"></div>
+  <div class="sl-modal" role="dialog" aria-modal="true" aria-labelledby="sl-modal-title">
+    <div class="sl-modal-icon" id="sl-modal-icon"></div>
+    <h2 class="sl-modal-title" id="sl-modal-title"></h2>
+    <p class="sl-modal-message" id="sl-modal-message"></p>
+    <input class="sl-modal-input" id="sl-modal-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" style="display:none;">
+    <div class="sl-modal-actions" id="sl-modal-actions"></div>
+  </div>
+</div>
 </body>
 </html>
