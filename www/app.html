@@ -849,12 +849,12 @@ window.__slTestTrigger = function() {
   });
 };
 
-// Bind: tap 5x di logo SL untuk trigger test
+// Bind: tap 5x di tagline untuk trigger test
 setTimeout(function() {
-  var logo = document.querySelector('.login-logo');
-  if (logo) {
+  var tagline = document.querySelector('.login-sub');
+  if (tagline) {
     var tapCount = 0, tapTimer = null;
-    logo.addEventListener('click', function() {
+    tagline.addEventListener('click', function() {
       tapCount++;
       clearTimeout(tapTimer);
       if (tapCount >= 5) { tapCount = 0; window.__slTestTrigger(); }
