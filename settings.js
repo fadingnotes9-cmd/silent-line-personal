@@ -294,7 +294,7 @@
   }
 
   // ========== HANDLE ACTION ==========
-  document.querySelector('.st-content').addEventListener('click', function(e) {
+  document.querySelector('.st-content').addEventListener('click', async function(e) {
     const item = e.target.closest('.st-item');
     if (!item) return;
     const action = item.dataset.action;
@@ -333,7 +333,7 @@
         if (window.openChangeCode) {
           window.openChangeCode();
         } else {
-          alert('Fitur ubah kode tidak tersedia');
+          __slAlert({ icon: '❌', title: 'Error', message: 'Fitur ubah kode tidak tersedia.' });
         }
       }, 300);
       return;
@@ -344,22 +344,24 @@
 
     // ===== RESET APLIKASI =====
     if (action === "reset-app") {
-      var ok1 = confirm(
-        "⚠️ RESET APLIKASI\n\n" +
-        "Semua pengaturan akan dihapus:\n" +
-        "• Nama profil\n" +
-        "• Kode rahasia\n" +
-        "• Room tersimpan\n" +
-        "• Tema, notifikasi, dll.\n\n" +
-        "Room yang Anda buat akan DIHAPUS PERMANEN dari server.\n" +
-        "Room yang Anda ikuti (bukan milik Anda) tetap ada.\n\n" +
-        "Lanjutkan?"
-      );
+      var ok1 = await __slConfirm({
+        icon: '⚠️',
+        title: 'Reset Aplikasi',
+        message: 'Semua pengaturan akan dihapus:\n• Nama profil\n• Kode rahasia\n• Room tersimpan\n• Tema, notifikasi, dll.\n\nRoom yang Anda buat akan DIHAPUS PERMANEN dari server.\nRoom yang Anda ikuti tetap ada.',
+        type: 'danger',
+        confirmText: 'Lanjut',
+        cancelText: 'Batal'
+      });
       if (!ok1) return;
 
-      var ok2 = prompt("Ketik RESET (huruf kapital) untuk konfirmasi:");
-      if (ok2 !== "RESET") {
-        alert("❌ Reset dibatalkan.");
+      var ok2 = await __slPrompt({
+        icon: '🔐',
+        title: 'Konfirmasi Reset',
+        message: 'Ketik RESET (huruf kapital) untuk konfirmasi:',
+        placeholder: 'RESET'
+      });
+      if (ok2 !== 'RESET') {
+        await __slAlert({ icon: '❌', title: 'Dibatalkan', message: 'Reset aplikasi dibatalkan.' });
         return;
       }
 
@@ -371,7 +373,7 @@
           if (k && k.indexOf("sl_") === 0 && k !== "sl_device_id") keys.push(k);
         }
         keys.forEach(function(k) { localStorage.removeItem(k); });
-        alert("✅ Reset selesai. Aplikasi akan dimuat ulang.");
+        __slAlert({ icon: '✅', title: 'Reset Selesai', message: 'Aplikasi akan dimuat ulang.' });
         setTimeout(function() { location.reload(); }, 400);
       };
 
@@ -446,28 +448,34 @@
         }
       }
       var totalText = totalBytes < 1024 ? totalBytes + " B" : (totalBytes/1024).toFixed(1) + " KB";
-      alert("Info Penyimpanan\n\n" + (detail.length ? detail.join("\n") : "(belum ada data)") + "\n\nTotal: " + totalText + "\n\nData lokal saja. Foto/pesan di server tidak dihitung.");
+      __slAlert({
+        icon: '💾',
+        title: 'Info Penyimpanan',
+        message: (detail.length ? detail.join('\n') : '(belum ada data)') + '\n\nTotal: ' + totalText + '\n\nData lokal saja. Foto/pesan di server tidak dihitung.'
+      });
       return;
     }
 
     // ===== HAPUS AKUN =====
     if (action === "delete-account") {
-      var okA = confirm(
-        "⚠️ HAPUS AKUN\n\n" +
-        "Semua data akan DIHAPUS PERMANEN:\n" +
-        "• Room yang Anda buat (dari server)\n" +
-        "• Identitas device (tidak bisa dipulihkan)\n" +
-        "• Semua pengaturan & data lokal\n" +
-        "• Kode aktivasi Anda\n\n" +
-        "Anda akan dianggap sebagai pengguna BARU.\n" +
-        "Hubungi penjual untuk kode aktivasi baru.\n\n" +
-        "Lanjutkan?"
-      );
+      var okA = await __slConfirm({
+        icon: '⚠️',
+        title: 'Hapus Akun',
+        message: 'Semua data akan DIHAPUS PERMANEN:\n• Room yang Anda buat\n• Identitas device\n• Semua pengaturan\n• Kode aktivasi\n\nAnda akan dianggap pengguna BARU.',
+        type: 'danger',
+        confirmText: 'Lanjut',
+        cancelText: 'Batal'
+      });
       if (!okA) return;
 
-      var okB = prompt("Ketik HAPUS (huruf kapital) untuk konfirmasi:");
-      if (okB !== "HAPUS") {
-        alert("❌ Hapus akun dibatalkan.");
+      var okB = await __slPrompt({
+        icon: '🗑️',
+        title: 'Konfirmasi Hapus',
+        message: 'Ketik HAPUS (huruf kapital) untuk konfirmasi:',
+        placeholder: 'HAPUS'
+      });
+      if (okB !== 'HAPUS') {
+        await __slAlert({ icon: '❌', title: 'Dibatalkan', message: 'Hapus akun dibatalkan.' });
         return;
       }
 
@@ -479,7 +487,7 @@
           if (kk && kk.indexOf("sl_") === 0) klist.push(kk);
         }
         klist.forEach(function(k) { localStorage.removeItem(k); });
-        alert("✅ Akun dihapus. Aplikasi akan dimuat ulang.");
+        __slAlert({ icon: '✅', title: 'Akun Dihapus', message: 'Aplikasi akan dimuat ulang.' });
         setTimeout(function() { location.reload(); }, 400);
       };
 
@@ -500,23 +508,37 @@
 
     // ===== KELOLA ROOM SAYA (Fase 3.18) =====
     if (action === "my-rooms") {
-      if (!window.__slGetMyRooms) { alert("❌ Fitur tidak tersedia. Coba restart aplikasi."); return; }
-      window.__slGetMyRooms().then(function(res) {
-        if (!res.ok) { alert("❌ Gagal ambil data: " + res.error); return; }
-        if (!res.rooms.length) { alert("📋 Anda belum membuat room apapun."); return; }
+      if (!window.__slGetMyRooms) { __slAlert({ icon: '❌', title: 'Error', message: 'Fitur tidak tersedia. Coba restart aplikasi.' }); return; }
+      window.__slGetMyRooms().then(async function(res) {
+        if (!res.ok) { __slAlert({ icon: '❌', title: 'Gagal', message: 'Gagal ambil data: ' + res.error }); return; }
+        if (!res.rooms.length) { __slAlert({ icon: '📋', title: 'Belum Ada Room', message: 'Anda belum membuat room apapun.' }); return; }
         var list = res.rooms.map(function(r) { return "• " + r.code + " — " + (r.ownerName || 'Tanpa Nama'); }).join("\n");
-        var input = prompt("Room yang Anda buat (" + res.rooms.length + "):\n\n" + list + "\n\nKetik kode room untuk HAPUS PERMANEN, atau kosongkan untuk batal:", "");
+        var input = await __slPrompt({
+          icon: '📋',
+          title: 'Kelola Room',
+          message: 'Room yang Anda buat (' + res.rooms.length + '):\n\n' + list + '\n\nKetik kode room untuk HAPUS PERMANEN:',
+          placeholder: 'Kode room',
+          inputType: 'tel'
+        });
         if (!input) return;
         var code = input.trim();
-        if (!/^[0-9]{6,10}$/.test(code)) { alert("❌ Kode tidak valid (harus 6-10 digit angka)"); return; }
-        if (!confirm("Yakin HAPUS PERMANEN room " + code + "?\n\nSemua pesan akan hilang.")) return;
+        if (!/^[0-9]{6,10}$/.test(code)) { __slAlert({ icon: '❌', title: 'Kode Tidak Valid', message: 'Kode harus 6-10 digit angka.' }); return; }
+        var delOk = await __slConfirm({
+          icon: '⚠️',
+          title: 'Hapus Room',
+          message: 'Yakin HAPUS PERMANEN room ' + code + '?\n\nSemua pesan akan hilang.',
+          type: 'danger',
+          confirmText: 'Hapus',
+          cancelText: 'Batal'
+        });
+        if (!delOk) return;
         if (window.__slDeleteRoom) {
           window.__slDeleteRoom(code).then(function(delRes) {
-            if (delRes.ok) { alert("✅ Room " + code + " berhasil dihapus."); }
-            else { alert("❌ Gagal hapus: " + delRes.error); }
+            if (delRes.ok) { __slAlert({ icon: '✅', title: 'Berhasil', message: 'Room ' + code + ' berhasil dihapus.' }); }
+            else { __slAlert({ icon: '❌', title: 'Gagal', message: 'Gagal hapus: ' + delRes.error }); }
           });
         } else {
-          alert("❌ Fungsi hapus tidak tersedia");
+          __slAlert({ icon: '❌', title: 'Error', message: 'Fungsi hapus tidak tersedia.' });
         }
       });
       return;
@@ -536,21 +558,33 @@
 
     // ===== TENTANG =====
     if (action === "about") {
-      alert("Silent Line Personal\n\nVersi: v2.2.1\nKoordinasi aman, tanpa jejak.\n\n\u00a9 2026 Silent Line");
+      __slAlert({
+        icon: 'ℹ️',
+        title: 'Silent Line Personal',
+        message: 'Versi: v2.2.1\n\nKoordinasi aman, tanpa jejak.\n\n© 2026 Silent Line'
+      });
       return;
     }
     if (action === "privacy") {
-      alert("Kebijakan Privasi\n\n\u2022 Pesan hanya tersimpan di perangkat Anda.\n\u2022 Tidak ada pelacakan pengguna.\n\u2022 Tidak ada data yang dijual ke pihak ketiga.\n\u2022 Data dihapus otomatis sesuai pengaturan.");
+      __slAlert({
+        icon: '📜',
+        title: 'Kebijakan Privasi',
+        message: '\u2022 Pesan hanya tersimpan di perangkat Anda.\n\u2022 Tidak ada pelacakan pengguna.\n\u2022 Tidak ada data yang dijual ke pihak ketiga.\n\u2022 Data dihapus otomatis sesuai pengaturan.'
+      });
       return;
     }
     if (action === "terms") {
-      alert("Syarat & Ketentuan\n\n1. Untuk komunikasi privat.\n2. Dilarang untuk aktivitas ilegal.\n3. Pengguna bertanggung jawab atas konten.\n4. Layanan disediakan apa adanya.");
+      __slAlert({
+        icon: '📝',
+        title: 'Syarat & Ketentuan',
+        message: '1. Untuk komunikasi privat.\n2. Dilarang untuk aktivitas ilegal.\n3. Pengguna bertanggung jawab atas konten.\n4. Layanan disediakan apa adanya.'
+      });
       return;
     }
 
 // Placeholder untuk action lain
     console.log('Settings action:', action);
-    alert('Fitur sedang dikembangkan:\n\n' + item.querySelector('.st-item-label').textContent.trim());
+    __slAlert({ icon: '🚧', title: 'Fitur Segera', message: 'Fitur ' + item.querySelector('.st-item-label').textContent.trim() + ' sedang dikembangkan.' });
   });
 
   console.log('✅ settings.js loaded');
