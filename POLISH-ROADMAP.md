@@ -20,11 +20,11 @@
 **Target:** ~10 jam kerja
 **Alasan:** Tanpa ini, user pertama akan complain "app terlihat murah".
 
-### 1.1 Modal & Toast Custom ⭐⭐⭐
-- [ ] Ganti semua `alert()` → modal custom
-- [ ] Ganti semua `confirm()` → modal kustom 2 tombol
-- [ ] Ganti semua `prompt()` → modal kustom dengan input
-- [ ] Toast notification (bukan alert) untuk notif ringan
+### 1.1 Modal & Toast Custom ⭐⭐⭐ [SELESAI 2026-09-26]
+- [x] Ganti semua `alert()` → modal custom
+- [x] Ganti semua `confirm()` → modal kustom 2 tombol
+- [x] Ganti semua `prompt()` → modal kustom dengan input
+- [~] Toast notification (sudah ada basic, polish nanti)
 - **Effort:** ~2-3 jam
 - **Impact:** Instantly terlihat 10× lebih pro
 

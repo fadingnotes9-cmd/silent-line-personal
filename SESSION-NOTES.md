@@ -176,7 +176,41 @@
 
 ---
 
-## Sesi 7 — (belum)
+## Sesi 7 — 2026-09-26
+
+**Durasi:** ~4 jam
+
+**Yang Dikerjakan (Polish 1.1 — Modal Custom):**
+- 1.1a: Modal Core System (iOS-class UI + Material Design 3)
+- 1.1b: Test trigger untuk verifikasi modal (dihapus setelah selesai)
+- 1.1c: Replace alert/confirm di login screen (4 titik)
+- 1.1d: Replace alert/confirm di chat screen (5 titik)
+- 1.1e: Replace alert/confirm/prompt di settings (15 titik)
+
+**Fitur Modal Core:**
+- API: __slAlert, __slConfirm, __slPrompt (Promise-based)
+- Design: iOS native alert + Material Design 3 hybrid
+- Animasi: spring (cubic-bezier(0.34, 1.56, 0.64, 1))
+- Fitur: backdrop blur, dark mode, keyboard support, chain promise
+- Icon contextual (emoji) di atas title
+- Tombol warna: primary (biru), danger (merah), secondary (abu), success (hijau)
+
+**Test Hasil:**
+- Alert modal: ✅ sempurna
+- Confirm modal: ✅ sempurna
+- Prompt modal + keyboard: ✅ sempurna
+- Dark mode: ✅ jalan
+- Chain promise: ✅ jalan
+
+**Status Akhir:**
+- Polish 1.1 SELESAI 100% (24 titik replacement)
+- App terasa 10× lebih profesional
+- Build terakhir: commit push
+
+**Rencana Sesi Berikutnya:**
+- Polish 1.6: Icon & Splash Kalkulator (~2 jam)
+- Atau Polish 1.2: Tutorial Onboarding (~2 jam)
+- Atau Polish 1.3+1.4+1.5: Loading/Empty/Error (~3 jam)
 
 **Rencana Awal:** Fase 7 Play Store Prep
 
