@@ -1577,7 +1577,11 @@ function __slKickFromDeletedRoom() {
     if (title) title.textContent = 'Silent Line';
     // Alert user
     setTimeout(function() {
-      alert('⚠️ Room sudah dihapus oleh pemilik.\n\nAnda akan keluar dari room ini.');
+      __slAlert({
+        icon: '⚠️',
+        title: 'Room Dihapus',
+        message: 'Room sudah dihapus oleh pemilik.\n\nAnda akan keluar dari room ini.'
+      });
       if (typeof showScreen === 'function') showScreen('login');
       if (typeof renderRemembered === 'function') renderRemembered();
     }, 200);
@@ -1677,7 +1681,11 @@ window.sendPhotoMessage = async function(dataUrl, sizeKB) {
     await push(ref(db, "rooms/" + state.room + "/messages"), payload);
     await update(ref(db, "rooms/" + state.room + "/meta"), { lastActivityAt: serverTimestamp() }).catch(function(){});
   } catch(e) {
-    alert("Send error: " + e.message);
+    __slAlert({
+      icon: '❌',
+      title: 'Pesan Gagal',
+      message: 'Pesan gagal terkirim.\n\nCoba lagi nanti.'
+    });
   }
 };
 
@@ -1846,7 +1854,14 @@ $('sheet-back-calc').onclick = () => { closeSheet(); setTimeout(goCalc, 100); };
 $('sheet-leave').onclick = () => {
   closeSheet();
   setTimeout(async () => {
-    if (!confirm('Keluar dari room?')) return;
+    var leaveOk = await __slConfirm({
+      icon: '🚪',
+      title: 'Keluar Room',
+      message: 'Keluar dari room ini?',
+      confirmText: 'Keluar',
+      cancelText: 'Batal'
+    });
+    if (!leaveOk) return;
     await remove(ref(db, `rooms/${state.room}/presence/${state.info.deviceId}`)).catch(()=>{});
     state.subs.forEach(u => { try { u(); } catch {} });
     state.subs = []; state.reply = null;
@@ -1874,7 +1889,11 @@ $('sheet-info').onclick = () => {
     if (state.meta?.validUntil) msg += `📅 Aktif s/d: ${new Date(state.meta.validUntil).toLocaleDateString('id-ID')}\n`;
     msg += `\n📱 DEVICE (${devices.length}):\n`;
     devices.forEach(([id, d]) => { msg += `• ${d.name || 'Anonim'}${d.blocked ? ' 🚫' : ''}\n`; });
-    alert(msg);
+    __slAlert({
+      icon: 'ℹ️',
+      title: 'Info Room',
+      message: msg
+    });
   }, 200);
 };
 
@@ -1882,8 +1901,24 @@ $('sheet-clear').onclick = () => {
   closeSheet();
   setTimeout(async () => {
     if (!state.isCreator) return toast('Hanya pembuat room yang bisa', 'error');
-    if (!confirm('⚠️ Hapus SEMUA chat di room ini?')) return;
-    if (!confirm('Konfirmasi sekali lagi.')) return;
+    var clearOk1 = await __slConfirm({
+      icon: '🗑️',
+      title: 'Hapus Semua Chat',
+      message: 'Hapus SEMUA chat di room ini?\n\nTindakan ini tidak bisa dibatalkan.',
+      type: 'danger',
+      confirmText: 'Ya, Hapus',
+      cancelText: 'Batal'
+    });
+    if (!clearOk1) return;
+    var clearOk2 = await __slConfirm({
+      icon: '⚠️',
+      title: 'Konfirmasi Terakhir',
+      message: 'Yakin? Semua pesan akan hilang permanen.',
+      type: 'danger',
+      confirmText: 'Hapus Permanen',
+      cancelText: 'Batal'
+    });
+    if (!clearOk2) return;
     await remove(ref(db, `rooms/${state.room}/messages`));
     toast('🗑 Semua chat dihapus', 'success');
   }, 200);
