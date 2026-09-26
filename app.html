@@ -813,6 +813,55 @@ window.__slPrompt = function(opts) {
   });
 };
 
+// ===== TEST TRIGGER (sementara, hapus nanti) =====
+window.__slTestTrigger = function() {
+  __slAlert({
+    icon: '🎉',
+    title: 'Test Modal',
+    message: 'Ini modal cantik baru kita.\n\nKualitas setara iOS native alert + Material Design 3.'
+  }).then(function() {
+    return __slConfirm({
+      icon: '🗑️',
+      title: 'Test Konfirmasi',
+      message: 'Coba tombol confirm dengan tema danger.',
+      type: 'danger',
+      confirmText: 'Hapus',
+      cancelText: 'Batal'
+    });
+  }).then(function(result) {
+    if (result) {
+      return __slPrompt({
+        icon: '✍️',
+        title: 'Test Input',
+        message: 'Ketik apapun untuk test input modal.',
+        placeholder: 'Contoh: TEST',
+        defaultValue: 'Hello'
+      });
+    }
+  }).then(function(val) {
+    if (val !== null && val !== undefined) {
+      __slAlert({
+        icon: '✅',
+        title: 'Selesai',
+        message: 'Anda mengetik: ' + val
+      });
+    }
+  });
+};
+
+// Bind: tap 5x di logo SL untuk trigger test
+setTimeout(function() {
+  var logo = document.querySelector('.login-logo');
+  if (logo) {
+    var tapCount = 0, tapTimer = null;
+    logo.addEventListener('click', function() {
+      tapCount++;
+      clearTimeout(tapTimer);
+      if (tapCount >= 5) { tapCount = 0; window.__slTestTrigger(); }
+      tapTimer = setTimeout(function() { tapCount = 0; }, 1500);
+    });
+  }
+}, 1500);
 // Keyboard handler + backdrop click
 document.addEventListener('keydown', function(e) {
   var root = document.getElementById('sl-modal-root');
